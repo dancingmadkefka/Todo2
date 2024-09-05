@@ -1,61 +1,67 @@
 import os
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QColorDialog
-from PySide6.QtCore import QSettings
+from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QPushButton, 
+                               QLabel, QColorDialog, QDialogButtonBox)
+from PySide6.QtCore import Qt, QSettings
+from PySide6.QtGui import QColor
 
 class ColorCustomizationDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Customize Colors")
+        self.color_buttons = {}
         self.setup_ui()
         self.load_colors()
 
     def setup_ui(self):
         layout = QVBoxLayout(self)
-        self.color_buttons = {}
         
-        for element in ["Background", "Task", "Text", "Button", "ScrollArea"]:
-            button = QPushButton(f"Change {element} Color")
+        for element in ["Background", "Text", "Button", "Task", "Completed Task"]:
+            row_layout = QHBoxLayout()
+            label = QLabel(f"{element} Color:")
+            row_layout.addWidget(label)
+            
+            button = QPushButton()
+            button.setFixedSize(50, 25)
             button.clicked.connect(lambda _, e=element: self.pick_color(e))
-            layout.addWidget(button)
-            self.color_buttons[element.lower()] = button
+            row_layout.addWidget(button)
+            
+            self.color_buttons[element.lower().replace(" ", "_")] = button
+            layout.addLayout(row_layout)
         
-        save_button = QPushButton("Save Colors")
-        save_button.clicked.connect(self.save_colors)
-        layout.addWidget(save_button)
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(self.save_colors)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
 
     def pick_color(self, element):
         color = QColorDialog.getColor()
         if color.isValid():
-            self.color_buttons[element.lower()].setStyleSheet(f"background-color: {color.name()};")
+            button = self.color_buttons[element.lower().replace(" ", "_")]
+            button.setStyleSheet(f"background-color: {color.name()};")
 
     def save_colors(self):
         settings = QSettings("YourCompany", "TodoApp")
         stylesheet = ""
+        
         for element, button in self.color_buttons.items():
             color = button.palette().button().color().name()
             settings.setValue(f"{element}_color", color)
             
             if element == "background":
-                stylesheet += f"QWidget, QMainWindow {{ background-color: {color}; }}\n"
+                stylesheet += f"QWidget {{ background-color: {color}; }}\n"
             elif element == "text":
                 stylesheet += f"QWidget {{ color: {color}; }}\n"
             elif element == "button":
                 stylesheet += f"QPushButton {{ background-color: {color}; }}\n"
             elif element == "task":
                 stylesheet += f"QWidget#TaskWidget {{ background-color: {color}; }}\n"
-            elif element == "scrollarea":
-                stylesheet += f"QScrollArea, QScrollArea > QWidget > QWidget {{ background-color: {color}; }}\n"
+            elif element == "completed_task":
+                stylesheet += f"QWidget#TaskWidget[completed=\"true\"] {{ background-color: {color}; }}\n"
 
-        # Get the absolute path to the user_colors.qss file
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        user_colors_path = os.path.join(base_dir, "src", "ui", "user_colors.qss")
-
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(user_colors_path), exist_ok=True)
-
-        # Save the generated stylesheet
+        user_colors_path = os.path.join(os.path.dirname(__file__), "user_colors.qss")
         with open(user_colors_path, "w") as f:
             f.write(stylesheet)
+        
         self.accept()
 
     def load_colors(self):

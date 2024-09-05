@@ -1,15 +1,14 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
-from PySide6.QtCore import Signal, Slot
-from ui.task_widget import TaskWidget
-from models.task import Task
+from PySide6.QtCore import Qt, Signal
+from .task_widget import TaskWidget
 
 class TodoListWidget(QScrollArea):
-    task_updated = Signal(Task)
-    task_deleted = Signal(int)
+    taskChanged = Signal(object)  # Changed to match the old signal name
+    taskDeleted = Signal(int)
+    taskEdited = Signal(object)  # Added to match the old signal structure
 
-    def __init__(self, db_manager, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.db_manager = db_manager
         self.setup_ui()
 
     def setup_ui(self):
@@ -17,54 +16,29 @@ class TodoListWidget(QScrollArea):
         content_widget = QWidget()
         self.setWidget(content_widget)
         self.layout = QVBoxLayout(content_widget)
-        self.layout.addStretch(1)
-
-        # Remove any inline styles
-        self.setStyleSheet("")
-        content_widget.setStyleSheet("")
+        self.layout.setSpacing(5)
+        self.layout.setContentsMargins(5, 5, 5, 5)
+        self.layout.setAlignment(Qt.AlignTop)
 
     def add_task(self, task):
         task_widget = TaskWidget(task)
         task_widget.taskChanged.connect(self.on_task_changed)
         task_widget.taskDeleted.connect(self.on_task_deleted)
-        task_widget.taskEdited.connect(self.on_edit_requested)  # Change this line
-        self.layout.insertWidget(self.layout.count() - 1, task_widget)
-        return task_widget  # Return the created widget
+        task_widget.taskEdited.connect(self.on_task_edited)
+        self.layout.addWidget(task_widget)
+        return task_widget
 
     def clear(self):
-        while self.layout.count() > 1:
-            item = self.layout.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
+        while self.layout.count():
+            child = self.layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
 
-    @Slot(Task)
     def on_task_changed(self, task):
-        self.task_updated.emit(task)
+        self.taskChanged.emit(task)
 
-    @Slot(int)
     def on_task_deleted(self, task_id):
-        self.task_deleted.emit(task_id)
-        for i in range(self.layout.count() - 1):
-            widget = self.layout.itemAt(i).widget()
-            if isinstance(widget, TaskWidget) and widget.task.id == task_id:
-                self.layout.removeWidget(widget)
-                widget.deleteLater()
-                break
+        self.taskDeleted.emit(task_id)
 
-    @Slot(Task)
-    def on_edit_requested(self, task):
-        self.parent().edit_task(task)
-
-    def update_task(self, updated_task):
-        for i in range(self.layout.count() - 1):
-            widget = self.layout.itemAt(i).widget()
-            if isinstance(widget, TaskWidget) and widget.task.id == updated_task.id:
-                widget.update_task(updated_task)
-                break
-
-    def apply_filter_and_sort(self, filter_category, sort_criteria):
-        tasks = self.db_manager.get_tasks(filter_category, sort_criteria)
-        self.clear()
-        for task in tasks:
-            self.add_task(task)
-
+    def on_task_edited(self, task):
+        self.taskEdited.emit(task)

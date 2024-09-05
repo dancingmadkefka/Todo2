@@ -1,21 +1,18 @@
-import os
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton, QSizePolicy
-from PySide6.QtCore import Qt, Signal, Slot, QSize, QRect, QPoint
-from PySide6.QtGui import QFont, QIcon, QPainter, QColor, QLinearGradient, QPainterPath
-from models.task import Task
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton
+from PySide6.QtCore import Qt, Signal, Slot
+from PySide6.QtGui import QFont
 
 class TaskWidget(QWidget):
-    taskChanged = Signal(Task)
+    taskChanged = Signal(object)
     taskDeleted = Signal(int)
-    taskEdited = Signal(Task)
+    taskEdited = Signal(object)
 
     def __init__(self, task, parent=None):
         super().__init__(parent)
         self.task = task
-        self.setObjectName("TaskWidget")  # Add this line
-        self.initUI()
+        self.setup_ui()
 
-    def initUI(self):
+    def setup_ui(self):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setSpacing(10)
@@ -42,76 +39,21 @@ class TaskWidget(QWidget):
 
         self.priority_label = QLabel(self.task.priority)
         self.priority_label.setAlignment(Qt.AlignCenter)
-        self.priority_label.setFixedSize(QSize(45, 30))
         self.priority_label.setProperty("class", "priority-label")
         self.priority_label.setProperty("priority", self.task.priority.lower())
         layout.addWidget(self.priority_label)
 
-        edit_button = self.create_button("edit", "Edit", self.on_edit_clicked)
+        edit_button = QPushButton("Edit")
+        edit_button.clicked.connect(self.on_edit_clicked)
         layout.addWidget(edit_button)
 
-        delete_button = self.create_button("delete", "Delete", self.on_delete_clicked)
+        delete_button = QPushButton("Delete")
+        delete_button.clicked.connect(self.on_delete_clicked)
         layout.addWidget(delete_button)
-
-        self.setMinimumHeight(60)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.updateStyle()
-
-        # Remove any inline styles
-        self.setStyleSheet("")  # Add this line
-
-    def create_button(self, icon_name, text, slot):
-        icon = self.load_icon(icon_name)
-        button = QPushButton(text if not icon else "")
-        if icon:
-            button.setIcon(icon)
-        button.clicked.connect(slot)
-        button.setFixedSize(QSize(40, 30))
-        return button
-
-    @staticmethod
-    def load_icon(icon_name):
-        icon_path = os.path.join(os.path.dirname(__file__), "icons", f"{icon_name}.png")
-        if os.path.exists(icon_path):
-            icon = QIcon(icon_path)
-            if not icon.isNull():
-                return icon
-        return None
-
-    def updateStyle(self):
-        self.setProperty("completed", self.task.completed)
-        self.style().unpolish(self)
-        self.style().polish(self)
-        self.update()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        # Draw shadow
-        shadow_color = QColor(0, 0, 0, 30)
-        shadow_width = 4
-        
-        gradient = QLinearGradient(QPoint(0, self.height()), QPoint(0, self.height() + shadow_width))
-        gradient.setColorAt(0, shadow_color)
-        gradient.setColorAt(1, QColor(0, 0, 0, 0))
-        
-        shadow_path = QPainterPath()
-        shadow_path.addRect(QRect(0, self.height(), self.width(), shadow_width))
-        painter.fillPath(shadow_path, gradient)
-
-        # Draw main rectangle
-        main_rect = QRect(0, 0, self.width(), self.height())
-        path = QPainterPath()
-        path.addRoundedRect(main_rect, 4, 4)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(QColor(255, 255, 255))
-        painter.drawPath(path)
 
     @Slot(int)
     def on_checkbox_state_changed(self, state):
         self.task.completed = (state == Qt.Checked)
-        self.updateStyle()
         self.taskChanged.emit(self.task)
 
     @Slot()

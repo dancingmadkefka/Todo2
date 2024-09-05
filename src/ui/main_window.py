@@ -1,8 +1,9 @@
 import os, sys
 import logging
-from PySide6.QtWidgets import (QMainWindow, QMessageBox, QVBoxLayout, QWidget,
-                               QHBoxLayout, QPushButton, QLineEdit, QComboBox,
-                               QDateEdit, QLabel, QScrollArea)
+from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+                               QPushButton, QLineEdit, QComboBox, QDateEdit,
+                               QLabel, QScrollArea, QFrame, QMessageBox,
+                               QApplication)
 from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings
 from PySide6.QtGui import QIcon
 
@@ -24,14 +25,10 @@ class MainWindow(QMainWindow):
         self.connect_signals()
         self.load_tasks()
         self.resize(self.restore_window_size())
-        
-        # Load and apply the saved colors
         self.load_and_apply_stylesheet()
 
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
-        self.load_stylesheet()
-
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
@@ -79,10 +76,10 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(filter_sort_layout)
 
         # Todo list
-        self.todo_list = TodoListWidget(self.db_manager)
+        self.todo_list = TodoListWidget()
         main_layout.addWidget(self.todo_list)
 
-        # Add a button to open the color customization dialog
+        # Color customization button
         customize_colors_button = QPushButton("Customize Colors")
         customize_colors_button.clicked.connect(self.open_color_dialog)
         main_layout.addWidget(customize_colors_button)
@@ -93,14 +90,11 @@ class MainWindow(QMainWindow):
         self.filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.sort_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.task_input.returnPressed.connect(self.add_task)
-        self.todo_list.task_updated.connect(self.update_task)
-        self.todo_list.task_deleted.connect(self.delete_task)
 
     def set_button_icon(self, button, icon_name):
         icon = self.load_icon(icon_name)
         if icon:
             button.setIcon(icon)
-            button.setText("")  # Remove text if icon is set
 
     @staticmethod
     def load_icon(icon_name):
@@ -228,37 +222,26 @@ class MainWindow(QMainWindow):
             self.category_combo.clear()
             self.category_combo.addItems(self.categories)
 
-    def load_stylesheet(self):
+    def open_color_dialog(self):
+        dialog = ColorCustomizationDialog(self)
+        if dialog.exec_():
+            self.load_and_apply_stylesheet()
+
+    def load_and_apply_stylesheet(self):
         base_stylesheet = ""
         user_stylesheet = ""
         
-        # Load base stylesheet
         base_path = os.path.join(os.path.dirname(__file__), "styles.qss")
         if os.path.exists(base_path):
             with open(base_path, "r") as f:
                 base_stylesheet = f.read()
         
-        # Load user color stylesheet
         user_path = os.path.join(os.path.dirname(__file__), "user_colors.qss")
         if os.path.exists(user_path):
             with open(user_path, "r") as f:
                 user_stylesheet = f.read()
         
-        return base_stylesheet + "\n" + user_stylesheet
-
-    def open_color_dialog(self):
-        dialog = ColorCustomizationDialog(self)
-        if dialog.exec_():
-            # Reload the stylesheet after colors have been changed
-            self.load_and_apply_stylesheet()
-
-    def load_and_apply_stylesheet(self):
-        # Load and apply the updated stylesheet
-        stylesheet = self.load_stylesheet()
-        self.setStyleSheet(stylesheet)
-        # Update child widgets as well
+        combined_stylesheet = base_stylesheet + "\n" + user_stylesheet
+        self.setStyleSheet(combined_stylesheet)
         for child in self.findChildren(QWidget):
-            child.setStyleSheet(stylesheet)
-        # Explicitly update TodoListWidget
-        self.todo_list.setStyleSheet(stylesheet)
-        self.todo_list.widget().setStyleSheet(stylesheet)
+            child.setStyleSheet(combined_stylesheet)

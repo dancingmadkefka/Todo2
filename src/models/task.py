@@ -58,13 +58,13 @@ class Task:
         if not self.due_date:
             return ""
         try:
-            # Try parsing with just the date
             date_obj = datetime.strptime(self.due_date, "%Y-%m-%d")
+            return date_obj.strftime("%d%b%y").upper()
         except ValueError:
-            try:
-                # If that fails, try parsing with date and time
-                date_obj = datetime.strptime(self.due_date, "%Y-%m-%d %H:%M:%S")
-            except ValueError:
-                # If both fail, return the original string
-                return self.due_date
-        return date_obj.strftime("%d%b%y").upper()
+            return self.due_date  # Return original string if parsing fails
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        self.__post_init__()  # Ensure due_date is properly formatted after update
