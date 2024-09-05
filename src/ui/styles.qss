@@ -1,0 +1,15 @@
+QMainWindow {
+    padding: 10px;
+}
+
+QPushButton {
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+QLineEdit, QComboBox, QDateEdit {
+    padding: 5px;
+    border-radius: 3px;
+}
+
+/* Add more basic styles as needed */

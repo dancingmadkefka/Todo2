@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Database
+*.db
+
+# Build files
+*.spec
+build/
+dist/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Project specific
+todo.db
+src/ui/todo.db
+src/ui/user_colors.qss
