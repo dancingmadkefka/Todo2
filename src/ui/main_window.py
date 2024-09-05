@@ -3,9 +3,9 @@ import logging
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLineEdit, QComboBox, QDateEdit,
                                QLabel, QScrollArea, QFrame, QMessageBox,
-                               QApplication)
-from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings
-from PySide6.QtGui import QIcon
+                               QApplication, QStyledItemDelegate, QStyle)
+from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect
+from PySide6.QtGui import QIcon, QPainter, QColor, QFont
 
 from models.task import Task
 from .todo_list_widget import TodoListWidget
@@ -14,6 +14,41 @@ from .color_dialog import ColorCustomizationDialog
 
 WINDOW_TITLE = "Todo App"
 INITIAL_WINDOW_SIZE = QSize(900, 700)
+
+class CustomComboBox(QComboBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setItemDelegate(CustomItemDelegate(self))
+
+class CustomItemDelegate(QStyledItemDelegate):
+    def paint(self, painter, option, index):
+        if index.row() == 0:  # "Manage Categories" option
+            painter.save()
+            if option.state & QStyle.State_Selected:
+                painter.fillRect(option.rect, option.palette.highlight())
+                painter.setPen(option.palette.highlightedText().color())
+            else:
+                painter.setPen(option.palette.text().color())
+            
+            font = painter.font()
+            font.setBold(True)
+            painter.setFont(font)
+            
+            text_rect = option.rect.adjusted(5, 0, -5, 0)  # Add some padding
+            painter.drawText(text_rect, Qt.AlignVCenter, "Manage Categories")
+            
+            painter.setPen(QColor(200, 200, 200))  # Light gray color for the line
+            painter.drawLine(option.rect.left(), option.rect.bottom(),
+                             option.rect.right(), option.rect.bottom())
+            painter.restore()
+        else:
+            super().paint(painter, option, index)
+
+    def sizeHint(self, option, index):
+        size = super().sizeHint(option, index)
+        if index.row() == 0:
+            size.setHeight(size.height() + 5)  # Make the "Manage Categories" option slightly taller
+        return size
 
 class MainWindow(QMainWindow):
     def __init__(self, db_manager):
@@ -43,7 +78,8 @@ class MainWindow(QMainWindow):
         self.priority_combo.addItems(["Low", "Med", "High"])
         input_layout.addWidget(self.priority_combo)
 
-        self.category_combo = QComboBox()
+        self.category_combo = CustomComboBox()
+        self.category_combo.addItem("Manage Categories")
         self.category_combo.addItems(self.categories)
         input_layout.addWidget(self.category_combo)
 
@@ -54,10 +90,6 @@ class MainWindow(QMainWindow):
         self.add_button = QPushButton("Add Task")
         self.set_button_icon(self.add_button, "add")
         input_layout.addWidget(self.add_button)
-
-        self.manage_categories_button = QPushButton("Manage Categories")
-        self.set_button_icon(self.manage_categories_button, "categories")
-        input_layout.addWidget(self.manage_categories_button)
 
         main_layout.addLayout(input_layout)
 
@@ -86,7 +118,7 @@ class MainWindow(QMainWindow):
 
     def connect_signals(self):
         self.add_button.clicked.connect(self.add_task)
-        self.manage_categories_button.clicked.connect(self.manage_categories)
+        self.category_combo.activated.connect(self.on_category_combo_changed)
         self.filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.sort_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.task_input.returnPressed.connect(self.add_task)
@@ -132,16 +164,19 @@ class MainWindow(QMainWindow):
         title = self.task_input.text().strip()
         if title:
             try:
+                category = self.category_combo.currentText()
+                if category == "Manage Categories":
+                    category = ""  # Set to empty string if "Manage Categories" is selected
                 task = Task(
                     id=self.db_manager.add_task(
                         title,
                         priority=self.priority_combo.currentText(),
-                        category=self.category_combo.currentText(),
+                        category=category,
                         due_date=self.due_date_edit.date().toString("yyyy-MM-dd")
                     ),
                     title=title,
                     priority=self.priority_combo.currentText(),
-                    category=self.category_combo.currentText(),
+                    category=category,
                     due_date=self.due_date_edit.date().toString("yyyy-MM-dd")
                 )
                 self.all_tasks.append(task)
@@ -219,8 +254,18 @@ class MainWindow(QMainWindow):
         dialog = CategoryManageDialog(self.db_manager, self)
         if dialog.exec_():
             self.categories = dialog.categories
+            current_index = self.category_combo.currentIndex()
             self.category_combo.clear()
+            self.category_combo.addItem("Manage Categories")
             self.category_combo.addItems(self.categories)
+            self.category_combo.setCurrentIndex(current_index)
+
+    @Slot(int)
+    def on_category_combo_changed(self, index):
+        if self.category_combo.itemText(index) == "Manage Categories":
+            self.manage_categories()
+            # Reset to the previously selected category or the first category
+            self.category_combo.setCurrentIndex(1 if self.category_combo.count() > 1 else 0)
 
     def open_color_dialog(self):
         dialog = ColorCustomizationDialog(self)
