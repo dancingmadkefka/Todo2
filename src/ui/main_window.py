@@ -3,7 +3,8 @@ import logging
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLineEdit, QComboBox, QDateEdit,
                                QLabel, QScrollArea, QFrame, QMessageBox,
-                               QApplication, QStyledItemDelegate, QStyle)
+                               QApplication, QStyledItemDelegate, QStyle, QToolButton,
+                               QCalendarWidget)
 from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect
 from PySide6.QtGui import QIcon, QPainter, QColor, QFont
 
@@ -83,9 +84,18 @@ class MainWindow(QMainWindow):
         self.category_combo.addItems(self.categories)
         input_layout.addWidget(self.category_combo)
 
-        self.due_date_edit = QDateEdit()
-        self.due_date_edit.setDate(QDate.currentDate())
-        input_layout.addWidget(self.due_date_edit)
+        # Replace the QDateEdit with a custom calendar button
+        self.due_date_button = QToolButton()
+        self.set_button_icon(self.due_date_button, "calendar")
+        self.due_date_button.setToolTip("Set due date")
+        self.due_date_button.clicked.connect(self.show_date_picker)
+        input_layout.addWidget(self.due_date_button)
+
+        # Create a QCalendarWidget for date picking
+        self.calendar_widget = QCalendarWidget(self)
+        self.calendar_widget.setWindowFlags(Qt.Popup)
+        self.calendar_widget.activated.connect(self.on_date_selected)
+        self.calendar_widget.hide()
 
         self.add_button = QPushButton("Add Task")
         self.set_button_icon(self.add_button, "add")
@@ -152,6 +162,7 @@ class MainWindow(QMainWindow):
         super().resizeEvent(event)
 
     def closeEvent(self, event):
+        self.calendar_widget.hide()
         self.save_window_size()
         super().closeEvent(event)
 
@@ -167,17 +178,19 @@ class MainWindow(QMainWindow):
                 category = self.category_combo.currentText()
                 if category == "Manage Categories":
                     category = ""  # Set to empty string if "Manage Categories" is selected
+                due_date_str = self.due_date_button.toolTip().split(": ")[-1]
+                due_date = QDate.fromString(due_date_str, "yyyy-MM-dd") if due_date_str != "Set due date" else QDate.currentDate()
                 task = Task(
                     id=self.db_manager.add_task(
                         title,
                         priority=self.priority_combo.currentText(),
                         category=category,
-                        due_date=self.due_date_edit.date().toString("yyyy-MM-dd")
+                        due_date=due_date.toString("yyyy-MM-dd")
                     ),
                     title=title,
                     priority=self.priority_combo.currentText(),
                     category=category,
-                    due_date=self.due_date_edit.date().toString("yyyy-MM-dd")
+                    due_date=due_date.toString("yyyy-MM-dd")
                 )
                 self.all_tasks.append(task)
                 self.task_input.clear()
@@ -290,3 +303,12 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(combined_stylesheet)
         for child in self.findChildren(QWidget):
             child.setStyleSheet(combined_stylesheet)
+
+    def show_date_picker(self):
+        button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())
+        self.calendar_widget.move(button_pos)
+        self.calendar_widget.show()
+
+    def on_date_selected(self, date):
+        self.calendar_widget.hide()
+        self.due_date_button.setToolTip(f"Due: {date.toString('yyyy-MM-dd')}")
