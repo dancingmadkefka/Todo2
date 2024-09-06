@@ -7,52 +7,44 @@ class TaskWidget(QWidget):
     taskDeleted = Signal(int)
     taskEdited = Signal(object)
 
-    def __init__(self, task, parent=None):
-        super().__init__(parent)
+    def __init__(self, task):
+        super().__init__()
         self.task = task
         self.setup_ui()
 
     def setup_ui(self):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(10)
 
         self.checkbox = QCheckBox()
         self.checkbox.setChecked(self.task.completed)
         self.checkbox.stateChanged.connect(self.on_checkbox_state_changed)
         layout.addWidget(self.checkbox)
 
-        info_layout = QVBoxLayout()
-        info_layout.setContentsMargins(0, 0, 0, 0)
-        info_layout.setSpacing(2)
-
+        text_layout = QVBoxLayout()
         self.title_label = QLabel(self.task.title)
-        self.title_label.setWordWrap(True)
-        self.title_label.setFont(QFont("Segoe UI", 12, QFont.Bold))
-        info_layout.addWidget(self.title_label)
+        text_layout.addWidget(self.title_label)
 
-        details_label = QLabel(f"{self.task.category} | Due: {self.task.format_due_date()}")
-        details_label.setFont(QFont("Segoe UI", 10))
-        info_layout.addWidget(details_label)
+        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {self.task.due_date or 'No Date'}"
+        self.subtext_label = QLabel(subtext)
+        self.subtext_label.setStyleSheet("color: gray; font-size: 10px;")
+        text_layout.addWidget(self.subtext_label)
 
-        layout.addLayout(info_layout, 1)
+        layout.addLayout(text_layout, 1)  # Give the text layout a stretch factor
 
-        self.priority_label = QLabel(self.task.priority)
-        self.priority_label.setAlignment(Qt.AlignCenter)
-        self.priority_label.setProperty("class", "priority-label")
-        self.priority_label.setProperty("priority", self.task.priority.lower())
-        layout.addWidget(self.priority_label)
+        button_layout = QHBoxLayout()
+        self.edit_button = QPushButton("Edit")
+        self.edit_button.clicked.connect(self.on_edit_clicked)
+        button_layout.addWidget(self.edit_button)
 
-        edit_button = QPushButton("Edit")
-        edit_button.clicked.connect(self.on_edit_clicked)
-        layout.addWidget(edit_button)
+        self.delete_button = QPushButton("Delete")
+        self.delete_button.clicked.connect(self.on_delete_clicked)
+        button_layout.addWidget(self.delete_button)
 
-        delete_button = QPushButton("Delete")
-        delete_button.clicked.connect(self.on_delete_clicked)
-        layout.addWidget(delete_button)
+        layout.addLayout(button_layout)
 
     @Slot(int)
-    def on_checkbox_state_changed(self, state):
+    def on_checkbox_state_changed(self, state):  # Corrected method name
         self.task.completed = (state == Qt.Checked)
         self.taskChanged.emit(self.task)
 
