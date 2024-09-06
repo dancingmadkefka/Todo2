@@ -103,18 +103,32 @@ class MainWindow(QMainWindow):
 
         main_layout.addLayout(input_layout)
 
-        # Filter and sort options
-        filter_sort_layout = QHBoxLayout()
+        # Create filter and sort combos
         self.filter_combo = QComboBox()
         self.filter_combo.addItems(["All", "Active", "Completed"])
-        filter_sort_layout.addWidget(QLabel("Filter:"))
-        filter_sort_layout.addWidget(self.filter_combo)
-
+        
         self.sort_combo = QComboBox()
         self.sort_combo.addItems(["Due Date", "Priority", "Category"])
-        filter_sort_layout.addWidget(QLabel("Sort by:"))
-        filter_sort_layout.addWidget(self.sort_combo)
 
+        # Filter and sort options
+        filter_sort_layout = QHBoxLayout()
+        
+        filter_layout = QHBoxLayout()
+        filter_layout.addWidget(QLabel("Filter:"))
+        filter_layout.addWidget(self.filter_combo)
+        filter_layout.setSpacing(5)  # Reduce spacing between label and combo box
+        filter_sort_layout.addLayout(filter_layout)
+        
+        filter_sort_layout.addSpacing(20)  # Add some space between filter and sort
+        
+        sort_layout = QHBoxLayout()
+        sort_layout.addWidget(QLabel("Sort by:"))
+        sort_layout.addWidget(self.sort_combo)
+        sort_layout.setSpacing(5)  # Reduce spacing between label and combo box
+        filter_sort_layout.addLayout(sort_layout)
+        
+        filter_sort_layout.addStretch(1)  # Push everything to the left
+        
         main_layout.addLayout(filter_sort_layout)
 
         # Todo list
