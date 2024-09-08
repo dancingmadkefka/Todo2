@@ -185,6 +185,11 @@ class MainWindow(QMainWindow):
             background_color = self.palette().window().color()
             adjusted_color = adjust_icon_color_for_theme(base_color, background_color)
             
+            # Debug logging
+            logging.debug(f"Base color: {base_color.name()}")
+            logging.debug(f"Background color: {background_color.name()}")
+            logging.debug(f"Adjusted color: {adjusted_color.name()}")
+            
             # Try to load from resource system first
             resource_path = f":icons/src/ui/icons/{icon_name}.svg"
             logging.info(f"Attempting to load icon from resource: {resource_path}")
@@ -221,6 +226,9 @@ class MainWindow(QMainWindow):
             painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
             painter.fillRect(pixmap.rect(), adjusted_color)
             painter.end()
+            
+            # Debug: Save the pixmap to a file to check its appearance
+            pixmap.save(f"debug_{icon_name}_icon.png")
             
             icon = QIcon(pixmap)
             if icon.isNull():
