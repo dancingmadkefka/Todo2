@@ -165,15 +165,22 @@ class MainWindow(QMainWindow):
         if not icon.isNull():
             button.setIcon(icon)
             if button == self.add_button:
-                button.setIconSize(QSize(16, 16))  # Smaller icon size for the add button
+                button.setIconSize(QSize(24, 24))
             else:
-                button.setIconSize(QSize(24, 24))  # Default size for other buttons
+                button.setIconSize(QSize(24, 24))
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
 
     def create_colored_icon(self, icon_name):
         try:
+            '''
+            This function creates a colored icon based on the current theme.
+            It first gets the base color and background color from the palette.
+            Then it adjusts the icon color for the current theme.
+            Finally, it tries to load the icon from the resource system or file system.
+            If the icon is not found, it returns a null icon.
+            '''
             base_color = self.palette().text().color()
             background_color = self.palette().window().color()
             adjusted_color = adjust_icon_color_for_theme(base_color, background_color)
@@ -202,7 +209,12 @@ class MainWindow(QMainWindow):
                 logging.error(f"SVG renderer is not valid for: {icon_path}")
                 return QIcon()
             
-            pixmap = QPixmap(24, 24)  # Adjust size as needed
+            '''
+            This code creates a pixmap of the icon and fills it with the adjusted color.
+            It then creates an icon from the pixmap and returns it.
+            If the icon is not found, it returns a null icon.
+            '''
+            pixmap = QPixmap(50, 50)  # Adjust size as needed
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)
@@ -222,6 +234,13 @@ class MainWindow(QMainWindow):
             return QIcon()
 
     def color_svg_icon(self, svg_path, color):
+        '''
+        This function colors an SVG icon with a given color.
+        It first creates a pixmap of the icon.
+        Then it creates a painter for the pixmap.
+        It then renders the SVG icon onto the pixmap.
+        Finally, it sets the composition mode to SourceIn and fills the pixmap with the given color.
+        '''
         renderer = QSvgRenderer(svg_path)
         pixmap = QPixmap(24, 24)  # Adjust size as needed
         pixmap.fill(Qt.transparent)

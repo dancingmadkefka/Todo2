@@ -10,6 +10,42 @@ QPushButton {
 QLineEdit, QComboBox, QDateEdit {
     padding: 5px;
     border-radius: 3px;
+    border: 1px solid #CCCCCC;
+}
+
+/* Top widget styling */
+QWidget#topWidget {
+    background-color: #F5F5F5;
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+QHBoxLayout#inputLayout, QHBoxLayout#filterSortLayout {
+    padding: 10px;
+}
+
+QLineEdit#taskInput {
+    font-size: 14px;
+}
+
+QComboBox {
+    min-width: 100px;
+}
+
+QToolButton {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+}
+
+QToolButton:hover {
+    background-color: #E0E0E0;
+    border-radius: 3px;
+}
+
+QLabel {
+    font-weight: bold;
 }
 
 /* Style for the Customize Colors button */
@@ -79,5 +115,3 @@ QScrollBar::sub-line:horizontal {
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
-
-/* Add more basic styles as needed */
