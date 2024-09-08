@@ -3,15 +3,17 @@ import logging
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLineEdit, QComboBox, QDateEdit,
                                QLabel, QScrollArea, QFrame, QMessageBox,
-                               QApplication, QStyledItemDelegate, QStyle, QToolButton,
-                               QCalendarWidget)
-from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect
-from PySide6.QtGui import QIcon, QPainter, QColor, QFont
+                               QApplication, QStyledItemDelegate, QStyle,
+                               QToolButton, QCalendarWidget)  # Add QToolButton and QCalendarWidget here
+from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect, QFile
+from PySide6.QtGui import QIcon, QPainter, QColor, QFont, QPixmap
+from PySide6.QtSvg import QSvgRenderer  # Add this line
 
 from models.task import Task
 from .todo_list_widget import TodoListWidget
 from .dialogs import TaskEditDialog, CategoryManageDialog
 from .color_dialog import ColorCustomizationDialog
+from .icon_color_adjuster import adjust_icon_color_for_theme
 
 WINDOW_TITLE = "Todo App"
 INITIAL_WINDOW_SIZE = QSize(900, 700)
@@ -97,7 +99,7 @@ class MainWindow(QMainWindow):
         self.calendar_widget.activated.connect(self.on_date_selected)
         self.calendar_widget.hide()
 
-        self.add_button = QPushButton("Add Task")
+        self.add_button = QPushButton()
         self.set_button_icon(self.add_button, "add")
         input_layout.addWidget(self.add_button)
 
@@ -148,19 +150,73 @@ class MainWindow(QMainWindow):
         self.task_input.returnPressed.connect(self.add_task)
 
     def set_button_icon(self, button, icon_name):
-        icon = self.load_icon(icon_name)
-        if icon:
+        icon = self.create_colored_icon(icon_name)
+        if not icon.isNull():
             button.setIcon(icon)
+            button.setIconSize(QSize(24, 24))  # Adjust size as needed
+            logging.info(f"Set icon for button: {icon_name}")
+        else:
+            logging.warning(f"Failed to set icon for button: {icon_name}")
 
-    @staticmethod
-    def load_icon(icon_name):
-        icon_path = os.path.join(os.path.dirname(__file__), "icons", f"{icon_name}.png")
-        if os.path.exists(icon_path):
-            icon = QIcon(icon_path)
-            if not icon.isNull():
-                return icon
-        logging.warning(f"Warning: Icon file not found or invalid: {icon_path}")
-        return None
+    def create_colored_icon(self, icon_name):
+        try:
+            base_color = self.palette().text().color()
+            background_color = self.palette().window().color()
+            adjusted_color = adjust_icon_color_for_theme(base_color, background_color)
+            
+            # Try to load from resource system first
+            resource_path = f":icons/src/ui/icons/{icon_name}.svg"
+            logging.info(f"Attempting to load icon from resource: {resource_path}")
+            
+            if QFile.exists(resource_path):
+                logging.info(f"Icon found in resources: {resource_path}")
+                icon_path = resource_path
+            else:
+                logging.warning(f"Icon not found in resources: {resource_path}")
+                # Fall back to file system
+                file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src", "ui", "icons", f"{icon_name}.svg"))
+                logging.info(f"Attempting to load icon from file system: {file_path}")
+                if os.path.exists(file_path):
+                    logging.info(f"Icon found in file system: {file_path}")
+                    icon_path = file_path
+                else:
+                    logging.error(f"Icon not found in file system: {file_path}")
+                    return QIcon()
+            
+            renderer = QSvgRenderer(icon_path)
+            if not renderer.isValid():
+                logging.error(f"SVG renderer is not valid for: {icon_path}")
+                return QIcon()
+            
+            pixmap = QPixmap(24, 24)  # Adjust size as needed
+            pixmap.fill(Qt.transparent)
+            painter = QPainter(pixmap)
+            renderer.render(painter)
+            painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+            painter.fillRect(pixmap.rect(), adjusted_color)
+            painter.end()
+            
+            icon = QIcon(pixmap)
+            if icon.isNull():
+                logging.error(f"Failed to create icon: {icon_path}")
+                return QIcon()
+            
+            logging.info(f"Successfully created icon: {icon_path}")
+            return icon
+        except Exception as e:
+            logging.error(f"Exception while loading icon {icon_name}: {str(e)}")
+            return QIcon()
+
+    def color_svg_icon(self, svg_path, color):
+        renderer = QSvgRenderer(svg_path)
+        pixmap = QPixmap(24, 24)  # Adjust size as needed
+        pixmap.fill(Qt.transparent)
+        painter = QPainter(pixmap)
+        renderer.render(painter)
+        painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+        painter.fillRect(pixmap.rect(), color)
+        painter.end()
+        return QIcon(pixmap)
 
     def restore_window_size(self):
         settings = QSettings("TodoApp", "MainWindow")

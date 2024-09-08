@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file>src/ui/icons/edit.svg</file>
+        <file>src/ui/icons/delete.svg</file>
+        <file>src/ui/icons/add.svg</file>
+        <file>src/ui/icons/calendar.svg</file>
+        </qresource>
+</RCC>

@@ -1,16 +1,28 @@
 import sys
 import os
 import logging
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Add the parent directory to the Python path
+# Add the parent directory (project root) to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+print("Python path:", sys.path)
+print("Current working directory:", os.getcwd())
 
 from PySide6.QtWidgets import QApplication
 from ui.main_window import MainWindow
 from database.db_manager import DatabaseManager
 
-# Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+try:
+    import resources_rc
+    print("resources_rc imported successfully")
+    resources_rc.qInitResources()
+except ImportError as e:
+    print(f"Failed to import resources_rc: {e}")
+    print(f"Looked in these locations: {sys.path}")
+
+
 
 def load_stylesheets():
     base_stylesheet = ""
