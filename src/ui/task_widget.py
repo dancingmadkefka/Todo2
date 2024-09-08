@@ -42,6 +42,7 @@ class TaskWidget(QWidget):
         self.edit_button.setToolTip("Edit")
         self.edit_button.clicked.connect(self.on_edit_clicked)
         self.edit_button.setStyleSheet("background-color: transparent; border: none;")
+        self.edit_button.setFixedSize(28, 28)  # Increase button size
         button_layout.addWidget(self.edit_button)
 
         self.delete_button = QToolButton()
@@ -49,6 +50,7 @@ class TaskWidget(QWidget):
         self.delete_button.setToolTip("Delete")
         self.delete_button.clicked.connect(self.on_delete_clicked)
         self.delete_button.setStyleSheet("background-color: transparent; border: none;")
+        self.delete_button.setFixedSize(28, 28)  # Increase button size
         button_layout.addWidget(self.delete_button)
 
         layout.addLayout(button_layout)
@@ -57,7 +59,7 @@ class TaskWidget(QWidget):
         icon = self.create_colored_icon(icon_name)
         if not icon.isNull():
             button.setIcon(icon)
-            button.setIconSize(QSize(16, 16))  # Adjust size as needed
+            button.setIconSize(QSize(20, 20))  # Increase icon size
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
@@ -89,7 +91,7 @@ class TaskWidget(QWidget):
                 logging.error(f"SVG renderer is not valid for: {icon_path}")
                 return QIcon()
             
-            pixmap = QPixmap(16, 16)  # Adjust size as needed
+            pixmap = QPixmap(20, 20)  # Increase pixmap size
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)

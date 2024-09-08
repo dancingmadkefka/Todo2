@@ -86,26 +86,32 @@ class MainWindow(QMainWindow):
         self.category_combo.addItems(self.categories)
         input_layout.addWidget(self.category_combo)
 
-        # Replace the QDateEdit with a custom calendar button
+        # Create all buttons first
         self.due_date_button = QToolButton()
+        self.add_button = QToolButton()
+
+        # Now set icons for all buttons
         self.set_button_icon(self.due_date_button, "calendar")
+        self.set_button_icon(self.add_button, "add")
+
+        # Configure buttons
         self.due_date_button.setToolTip("Set due date")
         self.due_date_button.clicked.connect(self.show_date_picker)
+        self.add_button.setFixedSize(24, 24)
+
+        # Add buttons to layout
         input_layout.addWidget(self.due_date_button)
+        input_layout.addWidget(self.add_button)
+
+        # Set transparent backgrounds for buttons
+        self.due_date_button.setStyleSheet("background-color: transparent; border: none;")
+        self.add_button.setStyleSheet("background-color: transparent; border: none;")
 
         # Create a QCalendarWidget for date picking
         self.calendar_widget = QCalendarWidget(self)
         self.calendar_widget.setWindowFlags(Qt.Popup)
         self.calendar_widget.activated.connect(self.on_date_selected)
         self.calendar_widget.hide()
-
-        self.add_button = QPushButton()
-        self.set_button_icon(self.add_button, "add")
-        input_layout.addWidget(self.add_button)
-
-        # Set transparent backgrounds for buttons after they are created
-        self.due_date_button.setStyleSheet("background-color: transparent; border: none;")
-        self.add_button.setStyleSheet("background-color: transparent; border: none;")
 
         main_layout.addLayout(input_layout)
 
@@ -158,7 +164,10 @@ class MainWindow(QMainWindow):
         icon = self.create_colored_icon(icon_name)
         if not icon.isNull():
             button.setIcon(icon)
-            button.setIconSize(QSize(24, 24))  # Adjust size as needed
+            if button == self.add_button:
+                button.setIconSize(QSize(16, 16))  # Smaller icon size for the add button
+            else:
+                button.setIconSize(QSize(24, 24))  # Default size for other buttons
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
