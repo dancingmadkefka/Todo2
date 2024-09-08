@@ -1,6 +1,6 @@
 import os
 import logging
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton, QToolButton
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QToolButton
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QFile
 from PySide6.QtGui import QFont, QIcon, QPixmap, QPainter, QColor
 from PySide6.QtSvg import QSvgRenderer
@@ -19,10 +19,14 @@ class TaskWidget(QWidget):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(5, 5, 5, 5)
 
-        self.checkbox = QCheckBox()
-        self.checkbox.setChecked(self.task.completed)
-        self.checkbox.stateChanged.connect(self.on_checkbox_state_changed)
-        layout.addWidget(self.checkbox)
+        self.check_button = QToolButton()
+        self.set_button_icon(self.check_button, "check")
+        self.check_button.setCheckable(True)
+        self.check_button.setChecked(self.task.completed)
+        self.check_button.clicked.connect(self.on_check_button_clicked)
+        self.check_button.setStyleSheet("background-color: transparent; border: none;")
+        self.check_button.setFixedSize(28, 28)
+        layout.addWidget(self.check_button)
 
         text_layout = QVBoxLayout()
         self.title_label = QLabel(self.task.title)
@@ -42,7 +46,7 @@ class TaskWidget(QWidget):
         self.edit_button.setToolTip("Edit")
         self.edit_button.clicked.connect(self.on_edit_clicked)
         self.edit_button.setStyleSheet("background-color: transparent; border: none;")
-        self.edit_button.setFixedSize(28, 28)  # Increase button size
+        self.edit_button.setFixedSize(28, 28)
         button_layout.addWidget(self.edit_button)
 
         self.delete_button = QToolButton()
@@ -50,16 +54,18 @@ class TaskWidget(QWidget):
         self.delete_button.setToolTip("Delete")
         self.delete_button.clicked.connect(self.on_delete_clicked)
         self.delete_button.setStyleSheet("background-color: transparent; border: none;")
-        self.delete_button.setFixedSize(28, 28)  # Increase button size
+        self.delete_button.setFixedSize(28, 28)
         button_layout.addWidget(self.delete_button)
 
         layout.addLayout(button_layout)
+
+        self.update_check_button_state()
 
     def set_button_icon(self, button, icon_name):
         icon = self.create_colored_icon(icon_name)
         if not icon.isNull():
             button.setIcon(icon)
-            button.setIconSize(QSize(20, 20))  # Increase icon size
+            button.setIconSize(QSize(20, 20))
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
@@ -67,7 +73,6 @@ class TaskWidget(QWidget):
 
     def create_colored_icon(self, icon_name):
         try:
-            # Try to load from resource system first
             resource_path = f":icons/src/ui/icons/{icon_name}.svg"
             logging.info(f"Attempting to load icon from resource: {resource_path}")
             
@@ -76,7 +81,6 @@ class TaskWidget(QWidget):
                 icon_path = resource_path
             else:
                 logging.warning(f"Icon not found in resources: {resource_path}")
-                # Fall back to file system
                 file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "icons", f"{icon_name}.svg"))
                 logging.info(f"Attempting to load icon from file system: {file_path}")
                 if os.path.exists(file_path):
@@ -91,12 +95,11 @@ class TaskWidget(QWidget):
                 logging.error(f"SVG renderer is not valid for: {icon_path}")
                 return QIcon()
             
-            pixmap = QPixmap(20, 20)  # Increase pixmap size
+            pixmap = QPixmap(20, 20)
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)
             
-            # Adjust icon color based on the background
             base_color = self.palette().text().color()
             background_color = self.palette().window().color()
             icon_color = self.adjust_icon_color_for_theme(base_color, background_color)
@@ -117,16 +120,39 @@ class TaskWidget(QWidget):
             return QIcon()
 
     def adjust_icon_color_for_theme(self, base_color, background_color):
-        # Simple logic to adjust icon color based on background brightness
         background_brightness = (background_color.red() * 299 + background_color.green() * 587 + background_color.blue() * 114) / 1000
         if background_brightness > 128:
             return QColor(60, 60, 60)  # Darker color for light backgrounds
         else:
             return QColor(200, 200, 200)  # Lighter color for dark backgrounds
 
-    @Slot(int)
-    def on_checkbox_state_changed(self, state):
-        self.task.completed = (state == Qt.Checked)
+    def update_check_button_state(self):
+        if self.task.completed:
+            self.check_button.setStyleSheet("""
+                QToolButton {
+                    background-color: #4CAF50;
+                    border-radius: 14px;
+                }
+                QToolButton:hover {
+                    background-color: #45a049;
+                }
+            """)
+        else:
+            self.check_button.setStyleSheet("""
+                QToolButton {
+                    background-color: transparent;
+                    border: 2px solid #CCCCCC;
+                    border-radius: 14px;
+                }
+                QToolButton:hover {
+                    border-color: #4CAF50;
+                }
+            """)
+
+    @Slot(bool)
+    def on_check_button_clicked(self, checked):
+        self.task.completed = checked
+        self.update_check_button_state()
         self.taskChanged.emit(self.task)
 
     @Slot()
