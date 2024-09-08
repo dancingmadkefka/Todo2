@@ -2,7 +2,7 @@ import os
 import logging
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QPushButton, QToolButton
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QFile
-from PySide6.QtGui import QFont, QIcon, QPixmap, QPainter
+from PySide6.QtGui import QFont, QIcon, QPixmap, QPainter, QColor
 from PySide6.QtSvg import QSvgRenderer
 
 class TaskWidget(QWidget):
@@ -30,7 +30,8 @@ class TaskWidget(QWidget):
 
         subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {self.task.due_date or 'No Date'}"
         self.subtext_label = QLabel(subtext)
-        self.subtext_label.setStyleSheet("color: gray; font-size: 10px;")
+        self.subtext_label.setObjectName("subtext")
+        self.subtext_label.setStyleSheet("font-size: 10px;")
         text_layout.addWidget(self.subtext_label)
 
         layout.addLayout(text_layout, 1)  # Give the text layout a stretch factor
@@ -40,12 +41,14 @@ class TaskWidget(QWidget):
         self.set_button_icon(self.edit_button, "edit")
         self.edit_button.setToolTip("Edit")
         self.edit_button.clicked.connect(self.on_edit_clicked)
+        self.edit_button.setStyleSheet("background-color: transparent; border: none;")
         button_layout.addWidget(self.edit_button)
 
         self.delete_button = QToolButton()
         self.set_button_icon(self.delete_button, "delete")
         self.delete_button.setToolTip("Delete")
         self.delete_button.clicked.connect(self.on_delete_clicked)
+        self.delete_button.setStyleSheet("background-color: transparent; border: none;")
         button_layout.addWidget(self.delete_button)
 
         layout.addLayout(button_layout)
@@ -90,6 +93,14 @@ class TaskWidget(QWidget):
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)
+            
+            # Adjust icon color based on the background
+            base_color = self.palette().text().color()
+            background_color = self.palette().window().color()
+            icon_color = self.adjust_icon_color_for_theme(base_color, background_color)
+            
+            painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+            painter.fillRect(pixmap.rect(), icon_color)
             painter.end()
             
             icon = QIcon(pixmap)
@@ -102,6 +113,14 @@ class TaskWidget(QWidget):
         except Exception as e:
             logging.error(f"Exception while loading icon {icon_name}: {str(e)}")
             return QIcon()
+
+    def adjust_icon_color_for_theme(self, base_color, background_color):
+        # Simple logic to adjust icon color based on background brightness
+        background_brightness = (background_color.red() * 299 + background_color.green() * 587 + background_color.blue() * 114) / 1000
+        if background_brightness > 128:
+            return QColor(60, 60, 60)  # Darker color for light backgrounds
+        else:
+            return QColor(200, 200, 200)  # Lighter color for dark backgrounds
 
     @Slot(int)
     def on_checkbox_state_changed(self, state):

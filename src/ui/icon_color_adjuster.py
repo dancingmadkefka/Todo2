@@ -5,21 +5,31 @@ def adjust_icon_color_for_theme(base_color, background_color):
     base_saturation = base_color.saturation()
     base_value = base_color.value()
     
+    bg_hue = background_color.hue()
+    bg_saturation = background_color.saturation()
     bg_value = background_color.value()
     
-    # Adjust saturation based on background brightness
-    if bg_value > 128:
-        # Dark icon on light background
-        new_saturation = min(base_saturation * 1.2, 255)
-        new_value = max(base_value * 0.8, 0)
+    # Determine if the background is light or dark
+    is_light_background = bg_value > 128
+    
+    # Adjust hue to be complementary to the background
+    new_hue = (bg_hue + 180) % 360
+    
+    # Adjust saturation based on background saturation
+    new_saturation = min(255, base_saturation + (255 - bg_saturation) // 2)
+    
+    # Adjust value (brightness) for contrast
+    if is_light_background:
+        new_value = min(base_value, bg_value - 50)  # Darker than background
     else:
-        # Light icon on dark background
-        new_saturation = max(base_saturation * 0.8, 0)
-        new_value = min(base_value * 1.2, 255)
+        new_value = max(base_value, bg_value + 50)  # Lighter than background
     
     # Ensure sufficient contrast
     contrast_threshold = 128
     if abs(new_value - bg_value) < contrast_threshold:
-        new_value = bg_value + contrast_threshold if bg_value < 128 else bg_value - contrast_threshold
+        new_value = bg_value - contrast_threshold if is_light_background else bg_value + contrast_threshold
     
-    return QColor.fromHsv(base_hue, new_saturation, new_value)
+    # Clamp values to valid range
+    new_value = max(0, min(255, new_value))
+    
+    return QColor.fromHsv(new_hue, new_saturation, new_value)

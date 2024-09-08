@@ -4,10 +4,10 @@ from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLineEdit, QComboBox, QDateEdit,
                                QLabel, QScrollArea, QFrame, QMessageBox,
                                QApplication, QStyledItemDelegate, QStyle,
-                               QToolButton, QCalendarWidget)  # Add QToolButton and QCalendarWidget here
+                               QToolButton, QCalendarWidget)
 from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect, QFile
 from PySide6.QtGui import QIcon, QPainter, QColor, QFont, QPixmap
-from PySide6.QtSvg import QSvgRenderer  # Add this line
+from PySide6.QtSvg import QSvgRenderer
 
 from models.task import Task
 from .todo_list_widget import TodoListWidget
@@ -103,6 +103,10 @@ class MainWindow(QMainWindow):
         self.set_button_icon(self.add_button, "add")
         input_layout.addWidget(self.add_button)
 
+        # Set transparent backgrounds for buttons after they are created
+        self.due_date_button.setStyleSheet("background-color: transparent; border: none;")
+        self.add_button.setStyleSheet("background-color: transparent; border: none;")
+
         main_layout.addLayout(input_layout)
 
         # Create filter and sort combos
@@ -139,6 +143,7 @@ class MainWindow(QMainWindow):
 
         # Color customization button
         customize_colors_button = QPushButton("Customize Colors")
+        customize_colors_button.setObjectName("customizeColorsButton")
         customize_colors_button.clicked.connect(self.open_color_dialog)
         main_layout.addWidget(customize_colors_button)
 

@@ -12,4 +12,21 @@ QLineEdit, QComboBox, QDateEdit {
     border-radius: 3px;
 }
 
+/* Style for the Customize Colors button */
+QPushButton#customizeColorsButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 4px 2px;
+    border-radius: 4px;
+}
+
+QPushButton#customizeColorsButton:hover {
+    background-color: #45a049;
+}
+
 /* Add more basic styles as needed */

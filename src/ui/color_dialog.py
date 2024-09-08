@@ -15,7 +15,7 @@ class ColorCustomizationDialog(QDialog):
     def setup_ui(self):
         layout = QVBoxLayout(self)
         
-        for element in ["Background", "Text", "Button", "Task", "Completed Task"]:
+        for element in ["Background", "Text", "Subtext", "Button", "Task", "Completed Task"]:
             row_layout = QHBoxLayout()
             label = QLabel(f"{element} Color:")
             row_layout.addWidget(label)
@@ -51,6 +51,8 @@ class ColorCustomizationDialog(QDialog):
                 stylesheet += f"QWidget {{ background-color: {color}; }}\n"
             elif element == "text":
                 stylesheet += f"QWidget {{ color: {color}; }}\n"
+            elif element == "subtext":
+                stylesheet += f"QLabel#subtext {{ color: {color}; }}\n"
             elif element == "button":
                 stylesheet += f"QPushButton {{ background-color: {color}; }}\n"
             elif element == "task":
