@@ -2,7 +2,7 @@ import sys
 import os
 import logging
 # Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Add the parent directory (project root) to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

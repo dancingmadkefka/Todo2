@@ -174,21 +174,18 @@ class MainWindow(QMainWindow):
 
     def create_colored_icon(self, icon_name):
         try:
-            '''
-            This function creates a colored icon based on the current theme.
-            It first gets the base color and background color from the palette.
-            Then it adjusts the icon color for the current theme.
-            Finally, it tries to load the icon from the resource system or file system.
-            If the icon is not found, it returns a null icon.
-            '''
-            base_color = self.palette().text().color()
-            background_color = self.palette().window().color()
-            adjusted_color = adjust_icon_color_for_theme(base_color, background_color)
+            # Force the palette to update
+            self.style().unpolish(self)
+            self.style().polish(self)
             
-            # Debug logging
-            logging.debug(f"Base color: {base_color.name()}")
-            logging.debug(f"Background color: {background_color.name()}")
-            logging.debug(f"Adjusted color: {adjusted_color.name()}")
+            base_color = self.palette().color(self.backgroundRole())
+            text_color = self.palette().color(self.foregroundRole())
+            adjusted_color = adjust_icon_color_for_theme(text_color, base_color)
+            
+            print(f"Icon: {icon_name}")
+            print(f"Base color: {base_color.name()} (R:{base_color.red()}, G:{base_color.green()}, B:{base_color.blue()})")
+            print(f"Text color: {text_color.name()} (R:{text_color.red()}, G:{text_color.green()}, B:{text_color.blue()})")
+            print(f"Adjusted color: {adjusted_color.name()} (R:{adjusted_color.red()}, G:{adjusted_color.green()}, B:{adjusted_color.blue()})")
             
             # Try to load from resource system first
             resource_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -228,7 +225,9 @@ class MainWindow(QMainWindow):
             painter.end()
             
             # Debug: Save the pixmap to a file to check its appearance
-            pixmap.save(f"debug_{icon_name}_icon.png")
+            debug_path = os.path.join(os.path.dirname(__file__), f"debug_{icon_name}_icon.png")
+            pixmap.save(debug_path)
+            print(f"Saved debug icon to: {debug_path}")
             
             icon = QIcon(pixmap)
             if icon.isNull():
@@ -238,7 +237,7 @@ class MainWindow(QMainWindow):
             logging.info(f"Successfully created icon: {icon_path}")
             return icon
         except Exception as e:
-            logging.error(f"Exception while loading icon {icon_name}: {str(e)}")
+            print(f"Exception while loading icon {icon_name}: {str(e)}")
             return QIcon()
 
     def color_svg_icon(self, svg_path, color):
@@ -414,6 +413,13 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(combined_stylesheet)
         for child in self.findChildren(QWidget):
             child.setStyleSheet(combined_stylesheet)
+        
+        self.refresh_icons()
+
+    def refresh_icons(self):
+        self.set_button_icon(self.due_date_button, "calendar")
+        self.set_button_icon(self.add_button, "add")
+        # Refresh any other icons you have in your UI
 
     def show_date_picker(self):
         button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())
