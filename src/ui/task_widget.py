@@ -25,7 +25,7 @@ class TaskWidget(QWidget):
         self.check_button.setChecked(self.task.completed)
         self.check_button.clicked.connect(self.on_check_button_clicked)
         self.check_button.setStyleSheet("background-color: transparent; border: none;")
-        self.check_button.setFixedSize(28, 28)
+        self.check_button.setFixedSize(32, 32)  # Increased size from 28x28 to 32x32
         layout.addWidget(self.check_button)
 
         text_layout = QVBoxLayout()
@@ -46,7 +46,7 @@ class TaskWidget(QWidget):
         self.edit_button.setToolTip("Edit")
         self.edit_button.clicked.connect(self.on_edit_clicked)
         self.edit_button.setStyleSheet("background-color: transparent; border: none;")
-        self.edit_button.setFixedSize(28, 28)
+        self.edit_button.setFixedSize(32, 32)  # Increased size from 28x28 to 32x32
         button_layout.addWidget(self.edit_button)
 
         self.delete_button = QToolButton()
@@ -54,7 +54,7 @@ class TaskWidget(QWidget):
         self.delete_button.setToolTip("Delete")
         self.delete_button.clicked.connect(self.on_delete_clicked)
         self.delete_button.setStyleSheet("background-color: transparent; border: none;")
-        self.delete_button.setFixedSize(28, 28)
+        self.delete_button.setFixedSize(32, 32)  # Increased size from 28x28 to 32x32
         button_layout.addWidget(self.delete_button)
 
         layout.addLayout(button_layout)
@@ -65,7 +65,7 @@ class TaskWidget(QWidget):
         icon = self.create_colored_icon(icon_name)
         if not icon.isNull():
             button.setIcon(icon)
-            button.setIconSize(QSize(20, 20))
+            button.setIconSize(QSize(24, 24))  # Increased size from 20x20 to 24x24
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
@@ -95,7 +95,7 @@ class TaskWidget(QWidget):
                 logging.error(f"SVG renderer is not valid for: {icon_path}")
                 return QIcon()
             
-            pixmap = QPixmap(20, 20)
+            pixmap = QPixmap(24, 24)  # Increased size from 20x20 to 24x24
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)
@@ -131,7 +131,7 @@ class TaskWidget(QWidget):
             self.check_button.setStyleSheet("""
                 QToolButton {
                     background-color: #4CAF50;
-                    border-radius: 14px;
+                    border-radius: 16px;  /* Increased from 14px to 16px */
                 }
                 QToolButton:hover {
                     background-color: #45a049;
@@ -142,7 +142,7 @@ class TaskWidget(QWidget):
                 QToolButton {
                     background-color: transparent;
                     border: 2px solid #CCCCCC;
-                    border-radius: 14px;
+                    border-radius: 16px;  /* Increased from 14px to 16px */
                 }
                 QToolButton:hover {
                     border-color: #4CAF50;
