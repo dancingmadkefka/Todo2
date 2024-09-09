@@ -22,6 +22,7 @@ class ColorCustomizationDialog(QDialog):
             
             button = QPushButton()
             button.setFixedSize(50, 25)
+            button.setStyleSheet("border: 2px dashed white;")  # Add white dashed border
             button.clicked.connect(lambda _, e=element: self.pick_color(e))
             row_layout.addWidget(button)
             
@@ -37,7 +38,7 @@ class ColorCustomizationDialog(QDialog):
         color = QColorDialog.getColor()
         if color.isValid():
             button = self.color_buttons[element.lower().replace(" ", "_")]
-            button.setStyleSheet(f"background-color: {color.name()};")
+            button.setStyleSheet(f"background-color: {color.name()}; border: 2px dashed white;")  # Keep the white dashed border
 
     def save_colors(self):
         settings = QSettings("YourCompany", "TodoApp")
@@ -70,4 +71,4 @@ class ColorCustomizationDialog(QDialog):
         settings = QSettings("YourCompany", "TodoApp")
         for element, button in self.color_buttons.items():
             color = settings.value(f"{element}_color", "#FFFFFF")
-            button.setStyleSheet(f"background-color: {color};")
+            button.setStyleSheet(f"background-color: {color}; border: 2px dashed white;")  # Keep the white dashed border

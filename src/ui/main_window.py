@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         # Configure buttons
         self.due_date_button.setToolTip("Set due date")
         self.due_date_button.clicked.connect(self.show_date_picker)
-        self.add_button.setFixedSize(24, 24)
+        self.add_button.setFixedSize(32, 32)  # Increased size from 24x24 to 32x32
 
         # Add buttons to layout
         input_layout.addWidget(self.due_date_button)
@@ -165,9 +165,9 @@ class MainWindow(QMainWindow):
         if not icon.isNull():
             button.setIcon(icon)
             if button == self.add_button:
-                button.setIconSize(QSize(24, 24))
+                button.setIconSize(QSize(32, 32))  # Increased size from 24x24 to 32x32
             else:
-                button.setIconSize(QSize(24, 24))
+                button.setIconSize(QSize(32, 32))  # Increased size from 24x24 to 32x32
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
             It then creates an icon from the pixmap and returns it.
             If the icon is not found, it returns a null icon.
             '''
-            pixmap = QPixmap(50, 50)  # Adjust size as needed
+            pixmap = QPixmap(64, 64)  # Increased size from 50x50 to 64x64
             pixmap.fill(Qt.transparent)
             painter = QPainter(pixmap)
             renderer.render(painter)
@@ -249,7 +249,7 @@ class MainWindow(QMainWindow):
         Finally, it sets the composition mode to SourceIn and fills the pixmap with the given color.
         '''
         renderer = QSvgRenderer(svg_path)
-        pixmap = QPixmap(24, 24)  # Adjust size as needed
+        pixmap = QPixmap(32, 32)  # Increased size from 24x24 to 32x32
         pixmap.fill(Qt.transparent)
         painter = QPainter(pixmap)
         renderer.render(painter)
