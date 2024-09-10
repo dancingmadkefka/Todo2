@@ -13,7 +13,8 @@ from models.task import Task
 from .todo_list_widget import TodoListWidget
 from .dialogs import TaskEditDialog, CategoryManageDialog
 from .color_dialog import ColorCustomizationDialog
-from .icon_color_adjuster import adjust_icon_color_for_theme
+from .icon_utils import create_colored_icon
+from .task_widget import TaskWidget
 
 WINDOW_TITLE = "Todo App"
 INITIAL_WINDOW_SIZE = QSize(900, 700)
@@ -161,102 +162,16 @@ class MainWindow(QMainWindow):
         self.task_input.returnPressed.connect(self.add_task)
 
     def set_button_icon(self, button, icon_name):
-        icon = self.create_colored_icon(icon_name)
+        icon_path = f":icons/src/ui/icons/{icon_name}.svg"
+        base_color = self.palette().text().color()
+        background_color = self.palette().window().color()
+        icon = create_colored_icon(icon_path, base_color, background_color)
         if not icon.isNull():
             button.setIcon(icon)
-            if button == self.add_button:
-                button.setIconSize(QSize(32, 32))  # Increased size from 24x24 to 32x32
-            else:
-                button.setIconSize(QSize(32, 32))  # Increased size from 24x24 to 32x32
+            button.setIconSize(QSize(32, 32))
             logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
-
-    def create_colored_icon(self, icon_name):
-        try:
-            # Force the palette to update
-            self.style().unpolish(self)
-            self.style().polish(self)
-            
-            base_color = self.palette().color(self.backgroundRole())
-            text_color = self.palette().color(self.foregroundRole())
-            adjusted_color = adjust_icon_color_for_theme(text_color, base_color)
-            
-            print(f"Icon: {icon_name}")
-            print(f"Base color: {base_color.name()} (R:{base_color.red()}, G:{base_color.green()}, B:{base_color.blue()})")
-            print(f"Text color: {text_color.name()} (R:{text_color.red()}, G:{text_color.green()}, B:{text_color.blue()})")
-            print(f"Adjusted color: {adjusted_color.name()} (R:{adjusted_color.red()}, G:{adjusted_color.green()}, B:{adjusted_color.blue()})")
-            
-            # Try to load from resource system first
-            resource_path = f":icons/src/ui/icons/{icon_name}.svg"
-            logging.info(f"Attempting to load icon from resource: {resource_path}")
-            
-            if QFile.exists(resource_path):
-                logging.info(f"Icon found in resources: {resource_path}")
-                icon_path = resource_path
-            else:
-                logging.warning(f"Icon not found in resources: {resource_path}")
-                # Fall back to file system
-                file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "src", "ui", "icons", f"{icon_name}.svg"))
-                logging.info(f"Attempting to load icon from file system: {file_path}")
-                if os.path.exists(file_path):
-                    logging.info(f"Icon found in file system: {file_path}")
-                    icon_path = file_path
-                else:
-                    logging.error(f"Icon not found in file system: {file_path}")
-                    return QIcon()
-            
-            renderer = QSvgRenderer(icon_path)
-            if not renderer.isValid():
-                logging.error(f"SVG renderer is not valid for: {icon_path}")
-                return QIcon()
-            
-            '''
-            This code creates a pixmap of the icon and fills it with the adjusted color.
-            It then creates an icon from the pixmap and returns it.
-            If the icon is not found, it returns a null icon.
-            '''
-            pixmap = QPixmap(64, 64)  # Increased size from 50x50 to 64x64
-            pixmap.fill(Qt.transparent)
-            painter = QPainter(pixmap)
-            renderer.render(painter)
-            painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-            painter.fillRect(pixmap.rect(), adjusted_color)
-            painter.end()
-            
-            # Debug: Save the pixmap to a file to check its appearance
-            debug_path = os.path.join(os.path.dirname(__file__), f"debug_{icon_name}_icon.png")
-            pixmap.save(debug_path)
-            print(f"Saved debug icon to: {debug_path}")
-            
-            icon = QIcon(pixmap)
-            if icon.isNull():
-                logging.error(f"Failed to create icon: {icon_path}")
-                return QIcon()
-            
-            logging.info(f"Successfully created icon: {icon_path}")
-            return icon
-        except Exception as e:
-            print(f"Exception while loading icon {icon_name}: {str(e)}")
-            return QIcon()
-
-    def color_svg_icon(self, svg_path, color):
-        '''
-        This function colors an SVG icon with a given color.
-        It first creates a pixmap of the icon.
-        Then it creates a painter for the pixmap.
-        It then renders the SVG icon onto the pixmap.
-        Finally, it sets the composition mode to SourceIn and fills the pixmap with the given color.
-        '''
-        renderer = QSvgRenderer(svg_path)
-        pixmap = QPixmap(32, 32)  # Increased size from 24x24 to 32x32
-        pixmap.fill(Qt.transparent)
-        painter = QPainter(pixmap)
-        renderer.render(painter)
-        painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-        painter.fillRect(pixmap.rect(), color)
-        painter.end()
-        return QIcon(pixmap)
 
     def restore_window_size(self):
         settings = QSettings("TodoApp", "MainWindow")
@@ -411,15 +326,25 @@ class MainWindow(QMainWindow):
         
         combined_stylesheet = base_stylesheet + "\n" + user_stylesheet
         self.setStyleSheet(combined_stylesheet)
-        for child in self.findChildren(QWidget):
-            child.setStyleSheet(combined_stylesheet)
+        
+        # Apply stylesheet to all existing widgets
+        for widget in self.findChildren(QWidget):
+            widget.setStyleSheet(combined_stylesheet)
         
         self.refresh_icons()
 
     def refresh_icons(self):
+        base_color = self.palette().text().color()
+        background_color = self.palette().window().color()
+        
         self.set_button_icon(self.due_date_button, "calendar")
         self.set_button_icon(self.add_button, "add")
-        # Refresh any other icons you have in your UI
+        
+        # Refresh icons for all TaskWidgets
+        for task_widget in self.todo_list.findChildren(TaskWidget):
+            task_widget.set_button_icon(task_widget.check_button, "check")
+            task_widget.set_button_icon(task_widget.edit_button, "edit")
+            task_widget.set_button_icon(task_widget.delete_button, "delete")
 
     def show_date_picker(self):
         button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())

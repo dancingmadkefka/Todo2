@@ -115,3 +115,34 @@ QScrollBar::sub-line:horizontal {
 QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
     background: none;
 }
+
+/* TaskWidget styles */
+QToolButton#checkButton {
+    background-color: transparent;
+    border: 2px solid #CCCCCC;
+    border-radius: 16px;
+}
+
+QToolButton#checkButton:hover {
+    background-color: #E8E8E8;
+    border-color: #4CAF50;
+}
+
+QToolButton#checkButton[checked="true"] {
+    background-color: #4CAF50;
+    border: 2px solid #4CAF50;
+}
+
+QToolButton#checkButton[checked="true"]:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+}
+
+QToolButton#editButton, QToolButton#deleteButton {
+    background-color: transparent;
+    border: none;
+}
+
+QLabel#subtextLabel {
+    font-size: 10px;
+}

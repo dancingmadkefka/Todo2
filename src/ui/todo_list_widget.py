@@ -25,6 +25,10 @@ class TodoListWidget(QScrollArea):
         task_widget.taskChanged.connect(self.on_task_changed)
         task_widget.taskDeleted.connect(self.on_task_deleted)
         task_widget.taskEdited.connect(self.on_task_edited)
+        
+        # Apply the current stylesheet to the new TaskWidget
+        task_widget.setStyleSheet(self.styleSheet())
+        
         self.layout.addWidget(task_widget)
 
         # Add a horizontal line after the task widget
