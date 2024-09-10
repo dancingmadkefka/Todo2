@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QFrame
 from PySide6.QtCore import Qt, Signal
 from .task_widget import TaskWidget
 
@@ -31,6 +31,14 @@ class TodoListWidget(QScrollArea):
         task_widget.setStyleSheet(self.styleSheet())
         
         self.layout.addWidget(task_widget)
+        
+        # Add a separator line
+        separator = QFrame()
+        separator.setFrameShape(QFrame.HLine)
+        separator.setFrameShadow(QFrame.Sunken)
+        separator.setObjectName("TaskSeparator")
+        self.layout.addWidget(separator)
+        
         return task_widget
 
     def clear(self):

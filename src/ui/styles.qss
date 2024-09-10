@@ -153,3 +153,9 @@ QLabel#subtextLabel {
     font-size: 12px;
     font-weight: normal;
 }
+
+QFrame#TaskSeparator {
+    background-color: #CCCCCC;
+    height: 1px;
+    margin: 5px 0;
+}
