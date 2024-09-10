@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QLabel, QScrollArea, QFrame, QMessageBox,
                                QApplication, QStyledItemDelegate, QStyle,
                                QToolButton, QCalendarWidget)
-from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect, QFile
+from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect, QFile, QEvent
 from PySide6.QtGui import QIcon, QPainter, QColor, QFont, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
@@ -62,9 +62,10 @@ class MainWindow(QMainWindow):
         self.categories = self.db_manager.get_all_categories()
         self.setup_ui()
         self.connect_signals()
+        self.load_and_apply_stylesheet()
         self.load_tasks()
         self.resize(self.restore_window_size())
-        self.load_and_apply_stylesheet()
+        self.installEventFilter(self)
 
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
@@ -354,3 +355,8 @@ class MainWindow(QMainWindow):
     def on_date_selected(self, date):
         self.calendar_widget.hide()
         self.due_date_button.setToolTip(f"Due: {date.toString('yyyy-MM-dd')}")
+
+    def eventFilter(self, obj, event):
+        if obj == self and event.type() == QEvent.PaletteChange:
+            self.refresh_icons()
+        return super().eventFilter(obj, event)

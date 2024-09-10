@@ -46,6 +46,7 @@ QToolButton:hover {
 
 QLabel {
     font-weight: bold;
+    font-size: 14px;
 }
 
 /* Style for the Customize Colors button */
@@ -117,6 +118,11 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 }
 
 /* TaskWidget styles */
+QWidget#TaskWidget {
+    border-bottom: 1px solid #CCCCCC;
+    padding: 5px 0;
+}
+
 QToolButton#checkButton {
     background-color: transparent;
     border: 2px solid #CCCCCC;
@@ -144,5 +150,6 @@ QToolButton#editButton, QToolButton#deleteButton {
 }
 
 QLabel#subtextLabel {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: normal;
 }

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QFrame
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 from PySide6.QtCore import Qt, Signal
 from .task_widget import TaskWidget
 
@@ -22,6 +22,7 @@ class TodoListWidget(QScrollArea):
 
     def add_task(self, task):
         task_widget = TaskWidget(task)
+        task_widget.setObjectName("TaskWidget")
         task_widget.taskChanged.connect(self.on_task_changed)
         task_widget.taskDeleted.connect(self.on_task_deleted)
         task_widget.taskEdited.connect(self.on_task_edited)
@@ -30,14 +31,6 @@ class TodoListWidget(QScrollArea):
         task_widget.setStyleSheet(self.styleSheet())
         
         self.layout.addWidget(task_widget)
-
-        # Add a horizontal line after the task widget
-        line = QFrame()
-        line.setFrameShape(QFrame.HLine)
-        line.setFrameShadow(QFrame.Sunken)
-        line.setStyleSheet("background-color: #CCCCCC;")
-        self.layout.addWidget(line)
-
         return task_widget
 
     def clear(self):
@@ -55,15 +48,6 @@ class TodoListWidget(QScrollArea):
     def on_task_edited(self, task):
         self.taskEdited.emit(task)
 
-    def update_layout(self):
-        # Remove the last line if it exists
-        if self.layout.count() > 0:
-            last_item = self.layout.itemAt(self.layout.count() - 1)
-            if isinstance(last_item.widget(), QFrame):
-                last_item.widget().deleteLater()
-                self.layout.takeAt(self.layout.count() - 1)
-
     def add_tasks(self, tasks):
         for task in tasks:
             self.add_task(task)
-        self.update_layout()

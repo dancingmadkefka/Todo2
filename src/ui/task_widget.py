@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton
-from PySide6.QtCore import Qt, Signal, Slot, QSize
+from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
+from PySide6.QtGui import QColor
 from .icon_utils import create_colored_icon
 
 class TaskWidget(QWidget):
@@ -11,6 +12,7 @@ class TaskWidget(QWidget):
         super().__init__()
         self.task = task
         self.setup_ui()
+        self.installEventFilter(self)
 
     def setup_ui(self):
         layout = QHBoxLayout(self)
@@ -67,7 +69,13 @@ class TaskWidget(QWidget):
         self.check_button.setProperty("checked", checked)
         self.check_button.style().unpolish(self.check_button)
         self.check_button.style().polish(self.check_button)
+        self.update_icon_colors()
         self.taskChanged.emit(self.task)
+
+    def update_icon_colors(self):
+        self.set_button_icon(self.check_button, "check")
+        self.set_button_icon(self.edit_button, "edit")
+        self.set_button_icon(self.delete_button, "delete")
 
     @Slot()
     def on_delete_clicked(self):
@@ -76,3 +84,8 @@ class TaskWidget(QWidget):
     @Slot()
     def on_edit_clicked(self):
         self.taskEdited.emit(self.task)
+
+    def eventFilter(self, obj, event):
+        if obj == self and event.type() == QEvent.PaletteChange:
+            self.update_icon_colors()
+        return super().eventFilter(obj, event)
