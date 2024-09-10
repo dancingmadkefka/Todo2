@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QSizePolicy
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QFont
 from .icon_utils import create_colored_icon
 
 class TaskWidget(QWidget):
@@ -12,6 +12,7 @@ class TaskWidget(QWidget):
         super().__init__()
         self.task = task
         self.setup_ui()
+        self.update_text_style()
         self.installEventFilter(self)
 
     def setup_ui(self):
@@ -80,12 +81,22 @@ class TaskWidget(QWidget):
         self.check_button.style().unpolish(self.check_button)
         self.check_button.style().polish(self.check_button)
         self.update_icon_colors()
+        self.update_text_style()
         self.taskChanged.emit(self.task)
 
     def update_icon_colors(self):
         self.set_button_icon(self.check_button, "check")
         self.set_button_icon(self.edit_button, "edit")
         self.set_button_icon(self.delete_button, "delete")
+
+    def update_text_style(self):
+        font = QFont()
+        if self.task.completed:
+            font.setStrikeOut(True)
+        else:
+            font.setStrikeOut(False)
+        self.title_label.setFont(font)
+        self.subtext_label.setFont(font)
 
     @Slot()
     def on_delete_clicked(self):
