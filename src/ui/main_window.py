@@ -125,6 +125,11 @@ class MainWindow(QMainWindow):
         self.sort_combo = QComboBox()
         self.sort_combo.addItems(["Due Date", "Priority", "Category"])
 
+        # Add category filter combo box
+        self.category_filter_combo = QComboBox()
+        self.category_filter_combo.addItem("All Categories")
+        self.category_filter_combo.addItems(self.categories)
+
         # Filter and sort options
         filter_sort_layout = QHBoxLayout()
         
@@ -133,6 +138,12 @@ class MainWindow(QMainWindow):
         filter_layout.addWidget(self.filter_combo)
         filter_layout.setSpacing(5)  # Reduce spacing between label and combo box
         filter_sort_layout.addLayout(filter_layout)
+        
+        category_filter_layout = QHBoxLayout()
+        category_filter_layout.addWidget(QLabel("Category:"))
+        category_filter_layout.addWidget(self.category_filter_combo)
+        category_filter_layout.setSpacing(5)
+        filter_sort_layout.addLayout(category_filter_layout)
         
         filter_sort_layout.addSpacing(20)  # Add some space between filter and sort
         
@@ -163,6 +174,7 @@ class MainWindow(QMainWindow):
         self.category_combo.activated.connect(self.on_category_combo_changed)
         self.filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.sort_combo.currentTextChanged.connect(self.apply_filter_and_sort)
+        self.category_filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.task_input.returnPressed.connect(self.add_task)
 
     def set_button_icon(self, button, icon_name):
@@ -262,12 +274,14 @@ class MainWindow(QMainWindow):
     def apply_filter_and_sort(self):
         filter_option = self.filter_combo.currentText()
         sort_option = self.sort_combo.currentText()
+        category_filter = self.category_filter_combo.currentText()
 
         filtered_tasks = [
             task for task in self.all_tasks
-            if filter_option == "All" or
-            (filter_option == "Active" and not task.completed) or
-            (filter_option == "Completed" and task.completed)
+            if (filter_option == "All" or
+                (filter_option == "Active" and not task.completed) or
+                (filter_option == "Completed" and task.completed)) and
+               (category_filter == "All Categories" or task.category == category_filter)
         ]
 
         sort_key = {
@@ -289,6 +303,7 @@ class MainWindow(QMainWindow):
         if new_category and new_category not in self.categories:
             self.categories.append(new_category)
             self.category_combo.addItem(new_category)
+            self.category_filter_combo.addItem(new_category)
             self.db_manager.add_category(new_category)
 
     @Slot()
@@ -301,6 +316,12 @@ class MainWindow(QMainWindow):
             self.category_combo.addItem("Manage Categories")
             self.category_combo.addItems(self.categories)
             self.category_combo.setCurrentIndex(current_index)
+            
+            current_filter_index = self.category_filter_combo.currentIndex()
+            self.category_filter_combo.clear()
+            self.category_filter_combo.addItem("All Categories")
+            self.category_filter_combo.addItems(self.categories)
+            self.category_filter_combo.setCurrentIndex(current_filter_index)
 
     @Slot(int)
     def on_category_combo_changed(self, index):
