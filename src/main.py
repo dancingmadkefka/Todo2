@@ -11,6 +11,7 @@ print("Python path:", sys.path)
 print("Current working directory:", os.getcwd())
 
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
 from ui.main_window import MainWindow
 from database.db_manager import DatabaseManager
 
@@ -21,8 +22,6 @@ try:
 except ImportError as e:
     print(f"Failed to import resources_rc: {e}")
     print(f"Looked in these locations: {sys.path}")
-
-
 
 def load_stylesheets():
     base_stylesheet = ""
@@ -52,6 +51,11 @@ def main():
 
     logging.info("Setting application style to Fusion")
     app.setStyle("Fusion")
+
+    logging.info("Setting application icon")
+    icon_path = os.path.join(os.path.dirname(__file__), "ui", "icons", "app_icon.ico")
+    app_icon = QIcon(icon_path)
+    app.setWindowIcon(app_icon)
 
     logging.info("Loading stylesheets")
     stylesheet = load_stylesheets()
