@@ -125,6 +125,12 @@ class MainWindow(QMainWindow):
         self.sort_combo = QComboBox()
         self.sort_combo.addItems(["Due Date", "Priority", "Category"])
 
+        # Create sort order button
+        self.sort_order_button = QToolButton()
+        self.sort_order_button.setArrowType(Qt.UpArrow)
+        self.sort_order_button.setToolTip("Ascending Order")
+        self.sort_order_button.clicked.connect(self.toggle_sort_order)
+
         # Add category filter combo box
         self.category_filter_combo = QComboBox()
         self.category_filter_combo.addItem("All Categories")
@@ -150,6 +156,7 @@ class MainWindow(QMainWindow):
         sort_layout = QHBoxLayout()
         sort_layout.addWidget(QLabel("Sort by:"))
         sort_layout.addWidget(self.sort_combo)
+        sort_layout.addWidget(self.sort_order_button)
         sort_layout.setSpacing(5)  # Reduce spacing between label and combo box
         filter_sort_layout.addLayout(sort_layout)
         
@@ -169,6 +176,7 @@ class MainWindow(QMainWindow):
         # Set initial button color
         self.update_customize_colors_button()
 
+
     def connect_signals(self):
         self.add_button.clicked.connect(self.add_task)
         self.category_combo.activated.connect(self.on_category_combo_changed)
@@ -176,6 +184,7 @@ class MainWindow(QMainWindow):
         self.sort_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.category_filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.task_input.returnPressed.connect(self.add_task)
+        self.sort_order_button.clicked.connect(self.apply_filter_and_sort)
 
     def set_button_icon(self, button, icon_name):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -287,6 +296,7 @@ class MainWindow(QMainWindow):
         filter_option = self.filter_combo.currentText()
         sort_option = self.sort_combo.currentText()
         category_filter = self.category_filter_combo.currentText()
+        sort_order = Qt.AscendingOrder if self.sort_order_button.arrowType() == Qt.UpArrow else Qt.DescendingOrder
 
         filtered_tasks = [
             task for task in self.all_tasks
@@ -302,7 +312,7 @@ class MainWindow(QMainWindow):
             "Category": lambda x: x.category.lower()
         }[sort_option]
 
-        filtered_tasks.sort(key=sort_key)
+        filtered_tasks.sort(key=sort_key, reverse=(sort_order == Qt.DescendingOrder))
 
         self.todo_list.clear()
         for task in filtered_tasks:
@@ -419,3 +429,12 @@ class MainWindow(QMainWindow):
             self.refresh_icons()
             self.update_customize_colors_button()
         return super().eventFilter(obj, event)
+
+    def toggle_sort_order(self):
+        if self.sort_order_button.arrowType() == Qt.UpArrow:
+            self.sort_order_button.setArrowType(Qt.DownArrow)
+            self.sort_order_button.setToolTip("Descending Order")
+        else:
+            self.sort_order_button.setArrowType(Qt.UpArrow)
+            self.sort_order_button.setToolTip("Ascending Order")
+        self.apply_filter_and_sort()
