@@ -24,7 +24,6 @@ class TaskWidget(QWidget):
         self.check_button.setCheckable(True)
         self.check_button.setChecked(self.task.completed)
         self.check_button.clicked.connect(self.on_check_button_clicked)
-        self.check_button.setStyleSheet("background-color: transparent; border: none;")
         self.check_button.setFixedSize(32, 32)  # Increased size from 28x28 to 32x32
         layout.addWidget(self.check_button)
 
@@ -131,10 +130,12 @@ class TaskWidget(QWidget):
             self.check_button.setStyleSheet("""
                 QToolButton {
                     background-color: #4CAF50;
-                    border-radius: 16px;  /* Increased from 14px to 16px */
+                    border: 2px solid #4CAF50;
+                    border-radius: 16px;
                 }
                 QToolButton:hover {
                     background-color: #45a049;
+                    border-color: #45a049;
                 }
             """)
         else:
@@ -142,9 +143,10 @@ class TaskWidget(QWidget):
                 QToolButton {
                     background-color: transparent;
                     border: 2px solid #CCCCCC;
-                    border-radius: 16px;  /* Increased from 14px to 16px */
+                    border-radius: 16px;
                 }
                 QToolButton:hover {
+                    background-color: #E8E8E8;
                     border-color: #4CAF50;
                 }
             """)

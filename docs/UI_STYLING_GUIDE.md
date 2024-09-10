@@ -7,20 +7,25 @@ This guide provides detailed information about the Todo App's user interface com
 1. [Overview](#overview)
 2. [Main UI Components](#main-ui-components)
 3. [Styling with QSS](#styling-with-qss)
-4. [Color Scheme](#color-scheme)
-5. [Fonts](#fonts)
+4. [Color Customization](#color-customization)
+5. [Icons](#icons)
 6. [Modifying UI Components](#modifying-ui-components)
 7. [Adding New UI Elements](#adding-new-ui-elements)
 8. [Best Practices](#best-practices)
 
 ## Overview
 
-The Todo App's user interface is defined in `ui/main_window.py`, and its styling is controlled by `ui/styles.qss`. The main window consists of several key areas:
+The Todo App's user interface is primarily defined in `src/ui/main_window.py`, with additional components in `src/ui/todo_list_widget.py` and `src/ui/task_widget.py`. The styling is controlled by two QSS files:
+
+- `src/ui/styles.qss`: Contains the base styles for the application.
+- `src/ui/user_colors.qss`: Contains user-customized color styles.
+
+The main window consists of several key areas:
 
 - Input area for adding new tasks
 - Filtering and sorting options
 - Task list displaying individual tasks
-- Dialogs for editing tasks and managing categories
+- Dialogs for editing tasks, managing categories, and customizing colors
 
 ## Main UI Components
 
@@ -33,165 +38,129 @@ The Todo App's user interface is defined in `ui/main_window.py`, and its styling
 3. **QComboBox**
    - Used for priority selection, category selection, and filtering/sorting options
 
-4. **QDateEdit**
+4. **QToolButton**
+   - Used for setting due date and adding tasks
+
+5. **QCalendarWidget**
    - Used for selecting due dates
 
-5. **QPushButton**
-   - Used for actions like adding tasks, editing, and deleting
-
-6. **QListWidget** (TodoListWidget)
+6. **TodoListWidget** (QScrollArea)
    - Displays the list of tasks
 
 7. **TaskWidget** (Custom QWidget)
    - Represents individual tasks in the list
 
-8. **QCheckBox**
-   - Used for marking tasks as complete
+8. **QLabel**
+   - Used for displaying task details and labels
 
-9. **QLabel**
-   - Used for displaying task details and priority labels
+9. **QPushButton**
+   - Used for various actions like adding tasks and customizing colors
 
-10. **QDialog** (TaskEditDialog, CategoryManageDialog)
-    - Used for editing tasks and managing categories
+10. **QDialog**
+    - Used for editing tasks, managing categories, and customizing colors
 
 ## Styling with QSS
 
-The app's styling is defined in `ui/styles.qss`. This file uses Qt Style Sheets (QSS) syntax, which is similar to CSS. Here's an overview of how different components are styled:
+The app's styling is defined in two QSS files:
+
+1. `src/ui/styles.qss`: This file contains the base styles for the application.
+2. `src/ui/user_colors.qss`: This file contains user-customized color styles.
+
+Here's an overview of how different components are styled:
 
 ```qss
-/* Global Styles */
-QWidget {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    font-size: 14px;
-    color: #333333;
-    background-color: #f0f0f0;
+/* Example from styles.qss */
+QMainWindow {
+    padding: 10px;
 }
 
-/* Input Area Styles */
-QLineEdit, QComboBox, QDateEdit {
-    padding: 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    background-color: #ffffff;
-}
-
-/* Button Styles */
 QPushButton {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    background-color: #4a90e2;
-    color: #ffffff;
-    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 
-/* Task List Styles */
-QListWidget {
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    background-color: #ffffff;
+QLineEdit, QComboBox, QDateEdit {
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #CCCCCC;
 }
 
-/* Task Widget Styles */
-TaskWidget {
-    background-color: transparent;
-    border-radius: 4px;
-    border: 1px solid #eeeeee;
-}
-
-/* Priority Label Styles */
-QLabel[class="priority-label"] {
-    color: #ffffff;
-    font-weight: bold;
-    border-radius: 4px;
-    padding: 2px 6px;
-}
-
-/* ... more styles ... */
+/* Example from user_colors.qss */
+QWidget { background-color: #fffab0; }
+QWidget { color: #070707; }
+QLabel#subtext { color: #027000; }
+QPushButton { background-color: #717171; }
+QWidget#TaskWidget { background-color: #ffed29; }
+QWidget#TaskWidget[completed="true"] { background-color: #4d4d4d; }
 ```
 
-## Color Scheme
+## Color Customization
 
-The app uses a color scheme based on blue tones with accents. Here are the main colors used:
+The app allows users to customize colors for various UI elements. This is managed through the `ColorCustomizationDialog` class in `src/ui/color_dialog.py`. Users can customize the following elements:
 
-- Primary Blue: #4a90e2
-- Background: #f0f0f0 (light gray)
-- Text: #333333 (dark gray)
-- Borders: #cccccc (light gray)
-- Priority Colors:
-  - Low: #28a745 (green)
-  - Medium: #ffc107 (yellow)
-  - High: #dc3545 (red)
+- Background color
+- Text color
+- Subtext color
+- Button color
+- Task background color
+- Completed task background color
 
-## Fonts
+When colors are customized, they are saved to the `user_colors.qss` file and applied to the UI.
 
-The app primarily uses the 'Segoe UI' font, with Arial and sans-serif as fallbacks. The base font size is 14px.
+## Icons
+
+The app uses SVG icons for various UI elements. These icons are defined in the `resources.qrc` file and include:
+
+- Edit icon
+- Delete icon
+- Add icon
+- Calendar icon
+- Check icon
+
+The icons are colorized dynamically based on the current color scheme using the `create_colored_icon` method in the `MainWindow` class.
 
 ## Modifying UI Components
 
-To modify the appearance of UI components, you'll need to edit the `ui/styles.qss` file. Here are some common modifications:
+To modify the appearance of UI components, you'll need to edit the `src/ui/styles.qss` file or use the color customization dialog. Here are some common modifications:
 
 1. **Changing Colors**:
-   Find the relevant selector and modify the `color`, `background-color`, or `border-color` properties.
+   Use the built-in color customization dialog or modify the `user_colors.qss` file.
 
-   Example: To change the primary button color:
-   ```qss
-   QPushButton {
-       background-color: #00a86b;  /* Change to your desired color */
-   }
-   ```
+2. **Adjusting Sizes and Padding**:
+   Modify `padding`, `margin`, `width`, `height`, or `font-size` properties in `styles.qss`.
 
-2. **Adjusting Sizes**:
-   Modify `padding`, `margin`, `width`, `height`, or `font-size` properties.
-
-   Example: To make input fields larger:
+   Example:
    ```qss
    QLineEdit, QComboBox, QDateEdit {
-       padding: 10px;  /* Increase padding */
-       font-size: 16px;  /* Increase font size */
+       padding: 8px;
+       border-radius: 4px;
    }
    ```
 
 3. **Changing Fonts**:
-   Modify the `font-family`, `font-size`, or `font-weight` properties.
-
-   Example: To change the global font:
-   ```qss
-   QWidget {
-       font-family: 'Arial', sans-serif;
-       font-size: 15px;
-   }
-   ```
+   Modify the `font-family`, `font-size`, or `font-weight` properties in `styles.qss`.
 
 4. **Modifying Borders**:
-   Adjust the `border`, `border-radius`, or individual border properties.
-
-   Example: To change task widget borders:
-   ```qss
-   TaskWidget {
-       border: 2px solid #4a90e2;
-       border-radius: 8px;
-   }
-   ```
+   Adjust the `border`, `border-radius`, or individual border properties in `styles.qss`.
 
 ## Adding New UI Elements
 
-When adding new UI elements in `ui/main_window.py`, you can style them by:
+When adding new UI elements:
 
-1. Using existing styles if the new element is of the same type as an existing one.
-2. Adding new style rules in `ui/styles.qss` for the new elements.
-3. Setting object names or properties in Python and using them as selectors in QSS.
+1. Add the element to the appropriate Python file (e.g., `main_window.py` or `task_widget.py`).
+2. If needed, add new style rules in `styles.qss` for the new elements.
+3. For color customization, update the `ColorCustomizationDialog` class and the `save_colors` method to include the new element.
 
 Example:
 ```python
-# In ui/main_window.py
+# In main_window.py
 new_label = QLabel("New Label")
-new_label.setObjectName("specialLabel")
+new_label.setObjectName("customLabel")
 
-# In ui/styles.qss
-QLabel#specialLabel {
-    color: #4a90e2;
+# In styles.qss
+QLabel#customLabel {
     font-weight: bold;
+    color: #4a90e2;
 }
 ```
 
@@ -200,9 +169,12 @@ QLabel#specialLabel {
 1. **Consistency**: Maintain a consistent look and feel throughout the app.
 2. **Readability**: Use colors with good contrast for text and background.
 3. **Responsiveness**: Ensure the UI looks good at different window sizes.
-4. **Modularity**: Group related styles together in the QSS file.
-5. **Comments**: Add comments in the QSS file to explain complex styles or groupings.
+4. **Modularity**: Group related styles together in the QSS files.
+5. **Comments**: Add comments in the QSS files to explain complex styles or groupings.
 6. **Testing**: Always test UI changes on different platforms and screen sizes.
 7. **Accessibility**: Consider color-blind users when choosing colors, and ensure proper contrast ratios.
+8. **Icon Management**: When adding or modifying icons, update the `resources.qrc` file and recompile resources using `pyside6-rcc resources.qrc -o resources_rc.py`.
+9. **Dynamic Styling**: Utilize the `load_and_apply_stylesheet` method in `MainWindow` to apply style changes dynamically.
+10. **Color Customization**: Make use of the `ColorCustomizationDialog` for user-friendly color adjustments.
 
-Remember to restart the application after making changes to the QSS file to see the effects. If you're making frequent changes, you can implement a "hot reload" feature that reloads the stylesheet without restarting the app.
+Remember to restart the application after making changes to the QSS files to see the effects. The app automatically loads both `styles.qss` and `user_colors.qss` on startup, combining them to create the final appearance.
