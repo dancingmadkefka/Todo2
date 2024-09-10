@@ -53,7 +53,7 @@ class ColorCustomizationDialog(QDialog):
             elif element == "text":
                 stylesheet += f"QWidget {{ color: {color}; }}\n"
             elif element == "subtext":
-                stylesheet += f"QLabel#subtext {{ color: {color}; }}\n"
+                stylesheet += f"QLabel#subtextLabel {{ color: {color} !important; }}\n"
 
         # Add fixed style for buttons
         stylesheet += """
