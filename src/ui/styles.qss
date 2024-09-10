@@ -159,3 +159,8 @@ QFrame#TaskSeparator {
     height: 1px;
     margin: 5px 0;
 }
+
+QToolButton#editButton:hover, QToolButton#deleteButton:hover {
+    background-color: #E0E0E0;
+    border-radius: 20px;
+}

@@ -100,7 +100,8 @@ class MainWindow(QMainWindow):
         # Configure buttons
         self.due_date_button.setToolTip("Set due date")
         self.due_date_button.clicked.connect(self.show_date_picker)
-        self.add_button.setFixedSize(32, 32)  # Increased size from 24x24 to 32x32
+        self.due_date_button.setFixedSize(40, 40)
+        self.add_button.setFixedSize(40, 40)
 
         # Add buttons to layout
         input_layout.addWidget(self.due_date_button)

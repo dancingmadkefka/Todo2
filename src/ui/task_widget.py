@@ -51,14 +51,14 @@ class TaskWidget(QWidget):
         self.edit_button.setObjectName("editButton")
         self.set_button_icon(self.edit_button, "edit")
         self.edit_button.clicked.connect(self.on_edit_clicked)
-        self.edit_button.setFixedSize(32, 32)
+        self.edit_button.setFixedSize(40, 40)
         button_layout.addWidget(self.edit_button)
 
         self.delete_button = QToolButton()
         self.delete_button.setObjectName("deleteButton")
         self.set_button_icon(self.delete_button, "delete")
         self.delete_button.clicked.connect(self.on_delete_clicked)
-        self.delete_button.setFixedSize(32, 32)
+        self.delete_button.setFixedSize(40, 40)
         button_layout.addWidget(self.delete_button)
 
         layout.addLayout(button_layout)
@@ -72,7 +72,7 @@ class TaskWidget(QWidget):
         background_color = self.palette().window().color()
         icon = create_colored_icon(icon_path, base_color, background_color)
         button.setIcon(icon)
-        button.setIconSize(QSize(24, 24))
+        button.setIconSize(QSize(32, 32))
 
     @Slot(bool)
     def on_check_button_clicked(self, checked):
