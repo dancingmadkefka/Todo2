@@ -15,6 +15,7 @@ from .dialogs import TaskEditDialog, CategoryManageDialog
 from .color_dialog import ColorCustomizationDialog
 from .icon_utils import create_colored_icon
 from .task_widget import TaskWidget
+from .icon_color_adjuster import adjust_icon_color_for_theme
 
 WINDOW_TITLE = "Todo App"
 INITIAL_WINDOW_SIZE = QSize(900, 700)
@@ -150,10 +151,12 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.todo_list)
 
         # Color customization button
-        customize_colors_button = QPushButton("Customize Colors")
-        customize_colors_button.setObjectName("customizeColorsButton")
-        customize_colors_button.clicked.connect(self.open_color_dialog)
-        main_layout.addWidget(customize_colors_button)
+        self.customize_colors_button = QPushButton("Customize Colors")
+        self.customize_colors_button.clicked.connect(self.open_color_dialog)
+        main_layout.addWidget(self.customize_colors_button)
+
+        # Set initial button color
+        self.update_customize_colors_button()
 
     def connect_signals(self):
         self.add_button.clicked.connect(self.add_task)
@@ -333,6 +336,7 @@ class MainWindow(QMainWindow):
             widget.setStyleSheet(combined_stylesheet)
         
         self.refresh_icons()
+        self.update_customize_colors_button()
 
     def refresh_icons(self):
         base_color = self.palette().text().color()
@@ -347,6 +351,27 @@ class MainWindow(QMainWindow):
             task_widget.set_button_icon(task_widget.edit_button, "edit")
             task_widget.set_button_icon(task_widget.delete_button, "delete")
 
+    def update_customize_colors_button(self):
+        background_color = self.palette().color(self.backgroundRole())
+        text_color = self.palette().color(self.foregroundRole())
+        button_color = adjust_icon_color_for_theme(text_color, background_color)
+        
+        self.customize_colors_button.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {button_color.name()};
+                color: {text_color.name()};
+                border: 1px solid {text_color.name()};
+                padding: 5px;
+                border-radius: 3px;
+            }}
+            QPushButton:hover {{
+                background-color: {button_color.lighter(110).name()};
+            }}
+            QPushButton:pressed {{
+                background-color: {button_color.darker(110).name()};
+            }}
+        """)
+
     def show_date_picker(self):
         button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())
         self.calendar_widget.move(button_pos)
@@ -359,4 +384,5 @@ class MainWindow(QMainWindow):
     def eventFilter(self, obj, event):
         if obj == self and event.type() == QEvent.PaletteChange:
             self.refresh_icons()
+            self.update_customize_colors_button()
         return super().eventFilter(obj, event)

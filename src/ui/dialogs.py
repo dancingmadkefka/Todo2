@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLineEdit,
-                               QComboBox, QDateEdit, QLabel, QDialogButtonBox,
-                               QListWidget, QPushButton, QInputDialog, QMessageBox)
-from PySide6.QtCore import QDate
+                               QComboBox, QLabel, QDialogButtonBox,
+                               QListWidget, QPushButton, QInputDialog, QMessageBox,
+                               QCalendarWidget)
+from PySide6.QtCore import QDate, Qt
 
 class TaskEditDialog(QDialog):
     def __init__(self, task, categories, parent=None):
@@ -30,24 +31,45 @@ class TaskEditDialog(QDialog):
         layout.addWidget(QLabel("Category:"))
         layout.addWidget(self.category_combo)
 
-        self.due_date_edit = QDateEdit()
-        if self.task.due_date:
-            self.due_date_edit.setDate(QDate.fromString(self.task.due_date, "yyyy-MM-dd"))
-        else:
-            self.due_date_edit.setDate(QDate.currentDate())
+        self.due_date_button = QPushButton()
+        self.due_date_button.clicked.connect(self.show_calendar)
         layout.addWidget(QLabel("Due Date:"))
-        layout.addWidget(self.due_date_edit)
+        layout.addWidget(self.due_date_button)
+
+        self.calendar_widget = QCalendarWidget(self)
+        self.calendar_widget.setWindowFlags(Qt.Popup)
+        self.calendar_widget.activated.connect(self.on_date_selected)
+        self.calendar_widget.hide()
+
+        if self.task.due_date:
+            self.set_date(QDate.fromString(self.task.due_date, "yyyy-MM-dd"))
+        else:
+            self.set_date(QDate.currentDate())
 
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
 
+    def show_calendar(self):
+        button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())
+        self.calendar_widget.move(button_pos)
+        self.calendar_widget.show()
+
+    def on_date_selected(self, date):
+        self.calendar_widget.hide()
+        self.set_date(date)
+
+    def set_date(self, date):
+        formatted_date = date.toString("yyyy-MM-dd")
+        self.due_date_button.setText(formatted_date)
+        self.due_date_button.setToolTip(f"Due: {formatted_date}")
+
     def get_updated_task(self):
         self.task.title = self.title_input.text()
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
-        self.task.due_date = self.due_date_edit.date().toString("yyyy-MM-dd")
+        self.task.due_date = self.due_date_button.text()
         return self.task
 
 class CategoryManageDialog(QDialog):

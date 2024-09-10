@@ -15,7 +15,7 @@ class ColorCustomizationDialog(QDialog):
     def setup_ui(self):
         layout = QVBoxLayout(self)
         
-        for element in ["Background", "Text", "Subtext", "Button", "Task", "Completed Task"]:
+        for element in ["Background", "Text", "Subtext"]:
             row_layout = QHBoxLayout()
             label = QLabel(f"{element} Color:")
             row_layout.addWidget(label)
@@ -26,7 +26,7 @@ class ColorCustomizationDialog(QDialog):
             button.clicked.connect(lambda _, e=element: self.pick_color(e))
             row_layout.addWidget(button)
             
-            self.color_buttons[element.lower().replace(" ", "_")] = button
+            self.color_buttons[element.lower()] = button
             layout.addLayout(row_layout)
         
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -37,7 +37,7 @@ class ColorCustomizationDialog(QDialog):
     def pick_color(self, element):
         color = QColorDialog.getColor()
         if color.isValid():
-            button = self.color_buttons[element.lower().replace(" ", "_")]
+            button = self.color_buttons[element.lower()]
             button.setStyleSheet(f"background-color: {color.name()}; border: 2px dashed white;")  # Keep the white dashed border
 
     def save_colors(self):
@@ -54,12 +54,22 @@ class ColorCustomizationDialog(QDialog):
                 stylesheet += f"QWidget {{ color: {color}; }}\n"
             elif element == "subtext":
                 stylesheet += f"QLabel#subtext {{ color: {color}; }}\n"
-            elif element == "button":
-                stylesheet += f"QPushButton {{ background-color: {color}; }}\n"
-            elif element == "task":
-                stylesheet += f"QWidget#TaskWidget {{ background-color: {color}; }}\n"
-            elif element == "completed_task":
-                stylesheet += f"QWidget#TaskWidget[completed=\"true\"] {{ background-color: {color}; }}\n"
+
+        # Add fixed style for buttons
+        stylesheet += """
+        QPushButton {
+            background-color: #F0F0F0;
+            border: 1px solid #CCCCCC;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        QPushButton:hover {
+            background-color: #E0E0E0;
+        }
+        QPushButton:pressed {
+            background-color: #D0D0D0;
+        }
+        """
 
         user_colors_path = os.path.join(os.path.dirname(__file__), "user_colors.qss")
         with open(user_colors_path, "w") as f:
