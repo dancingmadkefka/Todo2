@@ -257,12 +257,24 @@ class MainWindow(QMainWindow):
 
     @Slot(int)
     def delete_task(self, task_id):
-        try:
-            self.db_manager.delete_task(task_id)
-            self.all_tasks = [task for task in self.all_tasks if task.id != task_id]
-            self.apply_filter_and_sort()
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to delete task: {str(e)}")
+        task = next((task for task in self.all_tasks if task.id == task_id), None)
+        if task:
+            reply = QMessageBox.question(
+                self,
+                "Confirm Deletion",
+                f"Are you sure you want to delete the task '{task.title}'?",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No
+            )
+            if reply == QMessageBox.Yes:
+                try:
+                    self.db_manager.delete_task(task_id)
+                    self.all_tasks = [task for task in self.all_tasks if task.id != task_id]
+                    self.apply_filter_and_sort()
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"Failed to delete task: {str(e)}")
+        else:
+            QMessageBox.warning(self, "Warning", "Task not found.")
 
     @Slot(Task)
     def edit_task(self, task):
