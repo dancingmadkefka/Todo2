@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QSizePolicy
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QSizePolicy, QApplication
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
 from PySide6.QtGui import QColor, QFont
 from .icon_utils import create_colored_icon
@@ -7,10 +7,13 @@ class TaskWidget(QWidget):
     taskChanged = Signal(object)
     taskDeleted = Signal(int)
     taskEdited = Signal(object)
+    taskSelectedForDeletion = Signal(int, bool)  # New signal for task selection
 
     def __init__(self, task):
         super().__init__()
         self.task = task
+        self.is_selected_for_deletion = False  # New attribute for deletion selection state
+        self.delete_button = None  # Initialize delete_button as None
         self.setup_ui()
         self.update_text_style()
         self.installEventFilter(self)
@@ -70,6 +73,8 @@ class TaskWidget(QWidget):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
         base_color = self.palette().text().color()
         background_color = self.palette().window().color()
+        if hasattr(self, 'delete_button') and button == self.delete_button and self.is_selected_for_deletion:
+            base_color = base_color.lighter(150)
         icon = create_colored_icon(icon_path, base_color, background_color)
         button.setIcon(icon)
         button.setIconSize(QSize(32, 32))
@@ -100,7 +105,22 @@ class TaskWidget(QWidget):
 
     @Slot()
     def on_delete_clicked(self):
-        self.taskDeleted.emit(self.task.id)
+        modifiers = QApplication.keyboardModifiers()
+        if modifiers == Qt.ShiftModifier:  # Using Shift key for multi-select
+            self.toggle_selection_for_deletion()
+        else:
+            self.taskDeleted.emit(self.task.id)
+
+    def toggle_selection_for_deletion(self):
+        self.is_selected_for_deletion = not self.is_selected_for_deletion
+        self.update_deletion_selection_style()
+        self.taskSelectedForDeletion.emit(self.task.id, self.is_selected_for_deletion)
+
+    def update_deletion_selection_style(self):
+        self.setProperty("selected", self.is_selected_for_deletion)
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update_icon_colors()
 
     @Slot()
     def on_edit_clicked(self):
@@ -110,3 +130,7 @@ class TaskWidget(QWidget):
         if obj == self and event.type() == QEvent.PaletteChange:
             self.update_icon_colors()
         return super().eventFilter(obj, event)
+
+    def set_selected_for_deletion(self, selected):
+        self.is_selected_for_deletion = selected
+        self.update_deletion_selection_style()

@@ -166,6 +166,17 @@ class MainWindow(QMainWindow):
         filter_sort_layout.addLayout(sort_layout)
         
         filter_sort_layout.addStretch(1)  # Push everything to the left
+
+        # Add multi-delete button and label
+        self.multi_delete_layout = QHBoxLayout()
+        self.multi_delete_label = QLabel("Hold Shift to delete multiple")
+        self.multi_delete_button = QToolButton()
+        self.set_button_icon(self.multi_delete_button, "delete")
+        self.multi_delete_button.setVisible(False)
+        self.multi_delete_button.clicked.connect(self.on_multi_delete_clicked)
+        self.multi_delete_layout.addWidget(self.multi_delete_label)
+        self.multi_delete_layout.addWidget(self.multi_delete_button)
+        filter_sort_layout.addLayout(self.multi_delete_layout)
         
         main_layout.addLayout(filter_sort_layout)
 
@@ -181,7 +192,6 @@ class MainWindow(QMainWindow):
         # Set initial button color
         self.update_customize_colors_button()
 
-
     def connect_signals(self):
         self.add_button.clicked.connect(self.add_task)
         self.category_combo.activated.connect(self.on_category_combo_changed)
@@ -190,6 +200,8 @@ class MainWindow(QMainWindow):
         self.category_filter_combo.currentTextChanged.connect(self.apply_filter_and_sort)
         self.task_input.returnPressed.connect(self.add_task)
         self.sort_order_button.clicked.connect(self.apply_filter_and_sort)
+        self.todo_list.taskDeleted.connect(self.delete_tasks)
+        self.todo_list.multipleTasksSelected.connect(self.update_multi_delete_visibility)
 
     def set_button_icon(self, button, icon_name):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -269,8 +281,14 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to update task: {str(e)}")
 
-    @Slot(int)
-    def delete_task(self, task_id):
+    @Slot(list)
+    def delete_tasks(self, task_ids):
+        if len(task_ids) == 1:
+            self.delete_single_task(task_ids[0])
+        else:
+            self.delete_multiple_tasks(task_ids)
+
+    def delete_single_task(self, task_id):
         task = next((task for task in self.all_tasks if task.id == task_id), None)
         if task:
             reply = QMessageBox.question(
@@ -281,14 +299,27 @@ class MainWindow(QMainWindow):
                 QMessageBox.No
             )
             if reply == QMessageBox.Yes:
-                try:
-                    self.db_manager.delete_task(task_id)
-                    self.all_tasks = [task for task in self.all_tasks if task.id != task_id]
-                    self.apply_filter_and_sort()
-                except Exception as e:
-                    QMessageBox.critical(self, "Error", f"Failed to delete task: {str(e)}")
-        else:
-            QMessageBox.warning(self, "Warning", "Task not found.")
+                self.perform_delete([task_id])
+
+    def delete_multiple_tasks(self, task_ids):
+        reply = QMessageBox.question(
+            self,
+            "Confirm Multiple Deletion",
+            f"Are you sure you want to delete {len(task_ids)} tasks?",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            self.perform_delete(task_ids)
+
+    def perform_delete(self, task_ids):
+        try:
+            for task_id in task_ids:
+                self.db_manager.delete_task(task_id)
+            self.all_tasks = [task for task in self.all_tasks if task.id not in task_ids]
+            self.apply_filter_and_sort()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to delete tasks: {str(e)}")
 
     @Slot(Task)
     def edit_task(self, task):
@@ -323,8 +354,9 @@ class MainWindow(QMainWindow):
         for task in filtered_tasks:
             task_widget = self.todo_list.add_task(task)
             task_widget.taskChanged.connect(self.update_task)
-            task_widget.taskDeleted.connect(self.delete_task)
+            task_widget.taskDeleted.connect(lambda id: self.delete_tasks([id]))
             task_widget.taskEdited.connect(self.edit_task)
+            task_widget.taskSelectedForDeletion.connect(self.on_task_selected_for_deletion)
 
     def update_categories(self, new_category):
         if new_category and new_category not in self.categories:
@@ -392,6 +424,7 @@ class MainWindow(QMainWindow):
         
         self.set_button_icon(self.due_date_button, "calendar")
         self.set_button_icon(self.add_button, "add")
+        self.set_button_icon(self.multi_delete_button, "delete")
         
         # Refresh icons for all TaskWidgets
         for task_widget in self.todo_list.findChildren(TaskWidget):
@@ -443,3 +476,25 @@ class MainWindow(QMainWindow):
             self.sort_order_button.setArrowType(Qt.UpArrow)
             self.sort_order_button.setToolTip("Ascending Order")
         self.apply_filter_and_sort()
+
+    @Slot(bool)
+    def update_multi_delete_visibility(self, visible):
+        self.multi_delete_button.setVisible(visible)
+        self.multi_delete_label.setVisible(not visible)
+        if visible:
+            count = len([task for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion])
+            self.multi_delete_button.setText(f"x {count}")
+
+    @Slot()
+    def on_multi_delete_clicked(self):
+        selected_tasks = [task.task.id for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion]
+        self.delete_tasks(selected_tasks)
+
+    @Slot(int, bool)
+    def on_task_selected_for_deletion(self, task_id, selected):
+        self.update_multi_delete_visibility(True)
+        count = len([task for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion])
+        if count > 0:
+            self.multi_delete_button.setText(f"x {count}")
+        else:
+            self.update_multi_delete_visibility(False)
