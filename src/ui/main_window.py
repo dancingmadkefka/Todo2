@@ -68,6 +68,10 @@ class MainWindow(QMainWindow):
         self.resize(self.restore_window_size())
         self.installEventFilter(self)
 
+        # Set the application icon
+        icon_path = os.path.join(os.path.dirname(__file__), "icons", "app_icon.ico")
+        self.setWindowIcon(QIcon(icon_path))
+
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
         central_widget = QWidget()
