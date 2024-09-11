@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolBu
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
 from PySide6.QtGui import QColor, QFont
 from .icon_utils import create_colored_icon
+from datetime import datetime
 
 class TaskWidget(QWidget):
     taskChanged = Signal(object)
@@ -39,7 +40,8 @@ class TaskWidget(QWidget):
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         text_layout.addWidget(self.title_label)
 
-        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {self.task.due_date or 'No Date'}"
+        due_date = self.format_due_date(self.task.due_date)
+        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {due_date}"
         self.subtext_label = QLabel(subtext)
         self.subtext_label.setObjectName("subtextLabel")
         self.subtext_label.setWordWrap(True)
@@ -68,6 +70,15 @@ class TaskWidget(QWidget):
 
         # Set minimum width for the widget to ensure buttons are always visible
         self.setMinimumWidth(300)
+
+    def format_due_date(self, due_date):
+        if not due_date:
+            return "No Date"
+        date = datetime.strptime(due_date, "%Y-%m-%d")
+        current_year = datetime.now().year
+        if date.year == current_year:
+            return date.strftime("%d%b").lower()  # e.g., "15jun"
+        return date.strftime("%d%b%y").lower()  # e.g., "15jun24"
 
     def set_button_icon(self, button, icon_name):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
