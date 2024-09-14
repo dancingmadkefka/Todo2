@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QSizePolicy, QApplication
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtGui import QFont
 from .icon_utils import create_colored_icon
 from datetime import datetime
 

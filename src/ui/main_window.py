@@ -1,13 +1,12 @@
-import os, sys
+import os, sys 
 import logging
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                               QPushButton, QLineEdit, QComboBox, QDateEdit,
-                               QLabel, QScrollArea, QFrame, QMessageBox,
-                               QApplication, QStyledItemDelegate, QStyle,
+                               QPushButton, QLineEdit, QComboBox,
+                               QLabel, QMessageBox,
+                               QStyledItemDelegate, QStyle,
                                QToolButton, QCalendarWidget)
-from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QRect, QFile, QEvent
-from PySide6.QtGui import QIcon, QPainter, QColor, QFont, QPixmap
-from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QEvent, QTimer
+from PySide6.QtGui import QIcon, QColor
 
 from models.task import Task
 from .todo_list_widget import TodoListWidget
@@ -71,6 +70,11 @@ class MainWindow(QMainWindow):
         # Set the application icon
         icon_path = os.path.join(os.path.dirname(__file__), "icons", "app_icon.ico")
         self.setWindowIcon(QIcon(icon_path))
+
+        # Initialize flash timer
+        self.flash_timer = QTimer(self)
+        self.flash_timer.timeout.connect(self.flash_add_button)
+        self.flash_state = True
 
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
@@ -203,11 +207,15 @@ class MainWindow(QMainWindow):
         self.todo_list.taskDeleted.connect(self.delete_tasks)
         self.todo_list.multipleTasksSelected.connect(self.update_multi_delete_visibility)
 
-    def set_button_icon(self, button, icon_name):
+        # Connect signals for updating the add button icon
+        self.task_input.textChanged.connect(self.update_add_button_icon)
+        self.due_date_button.clicked.connect(self.update_add_button_icon)
+
+    def set_button_icon(self, button, icon_name, icon_color=None):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
         base_color = self.palette().text().color()
         background_color = self.palette().window().color()
-        icon = create_colored_icon(icon_path, base_color, background_color)
+        icon = create_colored_icon(icon_path, base_color, background_color, icon_color)
         if not icon.isNull():
             button.setIcon(icon)
             button.setIconSize(QSize(32, 32))
@@ -261,8 +269,12 @@ class MainWindow(QMainWindow):
                 )
                 self.all_tasks.append(task)
                 self.task_input.clear()
+                self.due_date_button.setToolTip("Set due date")
+                self.category_combo.setCurrentIndex(0)  # Reset category to "Manage Categories"
                 self.apply_filter_and_sort()
                 self.update_categories(task.category)
+                self.update_add_button_icon()  # Update the button icon
+                self.flash_timer.stop()  # Stop flashing when task is added
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to add task: {str(e)}")
 
@@ -461,6 +473,7 @@ class MainWindow(QMainWindow):
     def on_date_selected(self, date):
         self.calendar_widget.hide()
         self.due_date_button.setToolTip(f"Due: {date.toString('yyyy-MM-dd')}")
+        self.update_add_button_icon()
 
     def eventFilter(self, obj, event):
         if obj == self and event.type() == QEvent.PaletteChange:
@@ -498,3 +511,19 @@ class MainWindow(QMainWindow):
             self.multi_delete_button.setText(f"x {count}")
         else:
             self.update_multi_delete_visibility(False)
+
+    def update_add_button_icon(self):
+        task_text_filled = bool(self.task_input.text().strip())
+        due_date_selected = self.due_date_button.toolTip() != "Set due date"
+
+        if task_text_filled and due_date_selected:
+            self.flash_timer.start(500)  # Flash every 500 ms
+        else:
+            self.flash_timer.stop()
+            icon_color = QColor('orange') if task_text_filled else None
+            self.set_button_icon(self.add_button, "add", icon_color)
+
+    def flash_add_button(self):
+        self.flash_state = not self.flash_state
+        icon_color = QColor('green') if self.flash_state else QColor('orange')
+        self.set_button_icon(self.add_button, "add", icon_color)
