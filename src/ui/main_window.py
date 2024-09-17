@@ -342,7 +342,7 @@ class MainWindow(QMainWindow):
     @Slot()
     def apply_filter_and_sort(self):
         filter_option = self.filter_combo.currentText()
-        sort_option = self.sort_combo.currentText()
+        sort_option = self.sort_combo.currentText()  # Remove .lower() and .replace()
         category_filter = self.category_filter_combo.currentText()
         sort_order = Qt.AscendingOrder if self.sort_order_button.arrowType() == Qt.UpArrow else Qt.DescendingOrder
 
@@ -363,8 +363,9 @@ class MainWindow(QMainWindow):
         filtered_tasks.sort(key=sort_key, reverse=(sort_order == Qt.DescendingOrder))
 
         self.todo_list.clear()
-        for task in filtered_tasks:
-            task_widget = self.todo_list.add_task(task)
+        self.todo_list.add_tasks(filtered_tasks, sort_criteria=sort_option)
+
+        for task_widget in self.todo_list.findChildren(TaskWidget):
             task_widget.taskChanged.connect(self.update_task)
             task_widget.taskDeleted.connect(lambda id: self.delete_tasks([id]))
             task_widget.taskEdited.connect(self.edit_task)
@@ -376,23 +377,6 @@ class MainWindow(QMainWindow):
             self.category_combo.addItem(new_category)
             self.category_filter_combo.addItem(new_category)
             self.db_manager.add_category(new_category)
-
-    @Slot()
-    def manage_categories(self):
-        dialog = CategoryManageDialog(self.db_manager, self)
-        if dialog.exec_():
-            self.categories = dialog.categories
-            current_index = self.category_combo.currentIndex()
-            self.category_combo.clear()
-            self.category_combo.addItem("Manage Categories")
-            self.category_combo.addItems(self.categories)
-            self.category_combo.setCurrentIndex(current_index)
-            
-            current_filter_index = self.category_filter_combo.currentIndex()
-            self.category_filter_combo.clear()
-            self.category_filter_combo.addItem("All Categories")
-            self.category_filter_combo.addItems(self.categories)
-            self.category_filter_combo.setCurrentIndex(current_filter_index)
 
     @Slot(int)
     def on_category_combo_changed(self, index):
@@ -527,3 +511,19 @@ class MainWindow(QMainWindow):
         self.flash_state = not self.flash_state
         icon_color = QColor('green') if self.flash_state else QColor('orange')
         self.set_button_icon(self.add_button, "add", icon_color)
+
+    def manage_categories(self):
+        dialog = CategoryManageDialog(self.db_manager, self)
+        if dialog.exec_():
+            self.categories = dialog.categories
+            current_index = self.category_combo.currentIndex()
+            self.category_combo.clear()
+            self.category_combo.addItem("Manage Categories")
+            self.category_combo.addItems(self.categories)
+            self.category_combo.setCurrentIndex(current_index)
+            
+            current_filter_index = self.category_filter_combo.currentIndex()
+            self.category_filter_combo.clear()
+            self.category_filter_combo.addItem("All Categories")
+            self.category_filter_combo.addItems(self.categories)
+            self.category_filter_combo.setCurrentIndex(current_filter_index)

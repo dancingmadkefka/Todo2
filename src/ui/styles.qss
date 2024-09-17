@@ -119,8 +119,8 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 
 /* TaskWidget styles */
 QWidget#TaskWidget {
-    border-bottom: 1px solid #CCCCCC;
-    padding: 5px 0;
+    border-bottom: 1px solid #E0E0E0;
+    padding: 8px 0;
 }
 
 QToolButton#checkButton {
@@ -152,10 +152,11 @@ QToolButton#editButton, QToolButton#deleteButton {
 QLabel#subtextLabel {
     font-size: 12px;
     font-weight: normal;
+    color: #666666;
 }
 
 QFrame#TaskSeparator {
-    background-color: #CCCCCC;
+    background-color: #E0E0E0;
     height: 1px;
     margin: 5px 0;
 }
@@ -163,4 +164,31 @@ QFrame#TaskSeparator {
 QToolButton#editButton:hover, QToolButton#deleteButton:hover {
     background-color: #E0E0E0;
     border-radius: 20px;
+}
+
+/* Styles for bold separators and group headers */
+QFrame#BoldTaskSeparator {
+    background-color: #999999;
+    height: 2px;
+    margin: 15px 0 10px 0;
+}
+
+QLabel#GroupHeader {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-left: 5px;
+}
+
+/* Style for bolded sort criteria in subtext */
+QLabel#subtextLabel[sortCriteria="true"] b {
+    font-weight: bold;
+    color: #333333;
+}
+
+/* Style for selected tasks (multi-delete) */
+QWidget#TaskWidget[selected="true"] {
+    background-color: #F0F0F0;
 }

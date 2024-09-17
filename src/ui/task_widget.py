@@ -8,13 +8,13 @@ class TaskWidget(QWidget):
     taskChanged = Signal(object)
     taskDeleted = Signal(int)
     taskEdited = Signal(object)
-    taskSelectedForDeletion = Signal(int, bool)  # New signal for task selection
+    taskSelectedForDeletion = Signal(int, bool)
 
     def __init__(self, task):
         super().__init__()
         self.task = task
-        self.is_selected_for_deletion = False  # New attribute for deletion selection state
-        self.delete_button = None  # Initialize delete_button as None
+        self.is_selected_for_deletion = False
+        self.delete_button = None
         self.setup_ui()
         self.update_text_style()
         self.installEventFilter(self)
@@ -40,13 +40,13 @@ class TaskWidget(QWidget):
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         text_layout.addWidget(self.title_label)
 
-        due_date = self.format_due_date(self.task.due_date)
-        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {due_date}"
-        self.subtext_label = QLabel(subtext)
+        self.subtext_label = QLabel()
         self.subtext_label.setObjectName("subtextLabel")
         self.subtext_label.setWordWrap(True)
         self.subtext_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         text_layout.addWidget(self.subtext_label)
+
+        self.update_subtext()
 
         layout.addLayout(text_layout, 1)
 
@@ -68,8 +68,12 @@ class TaskWidget(QWidget):
 
         layout.addLayout(button_layout)
 
-        # Set minimum width for the widget to ensure buttons are always visible
         self.setMinimumWidth(300)
+
+    def update_subtext(self):
+        due_date = self.format_due_date(self.task.due_date)
+        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {due_date}"
+        self.subtext_label.setText(subtext)
 
     def format_due_date(self, due_date):
         if not due_date:
@@ -77,8 +81,8 @@ class TaskWidget(QWidget):
         date = datetime.strptime(due_date, "%Y-%m-%d")
         current_year = datetime.now().year
         if date.year == current_year:
-            return date.strftime("%d%b").lower()  # e.g., "15jun"
-        return date.strftime("%d%b%y").lower()  # e.g., "15jun24"
+            return date.strftime("%d%b").lower()
+        return date.strftime("%d%b%y").lower()
 
     def set_button_icon(self, button, icon_name):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -117,7 +121,7 @@ class TaskWidget(QWidget):
     @Slot()
     def on_delete_clicked(self):
         modifiers = QApplication.keyboardModifiers()
-        if modifiers == Qt.ShiftModifier:  # Using Shift key for multi-select
+        if modifiers == Qt.ShiftModifier:
             self.toggle_selection_for_deletion()
         else:
             self.taskDeleted.emit(self.task.id)
@@ -145,3 +149,28 @@ class TaskWidget(QWidget):
     def set_selected_for_deletion(self, selected):
         self.is_selected_for_deletion = selected
         self.update_deletion_selection_style()
+
+    def update_sort_criteria_style(self, sort_criteria):
+        if sort_criteria == "Priority":
+            self.bold_subtext_part(0)
+        elif sort_criteria == "Category":
+            self.bold_subtext_part(1)
+        elif sort_criteria == "Due Date":
+            self.bold_subtext_part(2)
+        else:
+            self.reset_subtext_style()
+
+    def bold_subtext_part(self, index):
+        parts = self.subtext_label.text().split('|')
+        if 0 <= index < len(parts):
+            parts[index] = f"<b>{parts[index].strip()}</b>"
+            self.subtext_label.setText(' | '.join(parts))
+            self.subtext_label.setProperty("sortCriteria", "true")
+        self.style().unpolish(self.subtext_label)
+        self.style().polish(self.subtext_label)
+
+    def reset_subtext_style(self):
+        self.update_subtext()
+        self.subtext_label.setProperty("sortCriteria", "false")
+        self.style().unpolish(self.subtext_label)
+        self.style().polish(self.subtext_label)
