@@ -54,6 +54,7 @@ class CustomItemDelegate(QStyledItemDelegate):
             size.setHeight(size.height() + 5)  # Make the "Manage Categories" option slightly taller
         return size
 
+
 class MainWindow(QMainWindow):
     def __init__(self, db_manager):
         super().__init__()
@@ -89,7 +90,7 @@ class MainWindow(QMainWindow):
         input_layout.addWidget(self.task_input)
 
         self.priority_combo = QComboBox()
-        self.priority_combo.addItems(["Low", "Med", "High"])
+        self.priority_combo.addItems(["Low", "Medium", "High"])  # Changed "Med" to "Medium"
         input_layout.addWidget(self.priority_combo)
 
         self.category_combo = CustomComboBox()
@@ -342,7 +343,7 @@ class MainWindow(QMainWindow):
     @Slot()
     def apply_filter_and_sort(self):
         filter_option = self.filter_combo.currentText()
-        sort_option = self.sort_combo.currentText()  # Remove .lower() and .replace()
+        sort_option = self.sort_combo.currentText()
         category_filter = self.category_filter_combo.currentText()
         sort_order = Qt.AscendingOrder if self.sort_order_button.arrowType() == Qt.UpArrow else Qt.DescendingOrder
 
@@ -356,7 +357,7 @@ class MainWindow(QMainWindow):
 
         sort_key = {
             "Due Date": lambda x: x.due_date or "9999-99-99",
-            "Priority": lambda x: {"High": 0, "Med": 1, "Low": 2}.get(x.priority, 3),
+            "Priority": lambda x: {"High": 0, "Medium": 1, "Med": 1, "Low": 2}.get(x.priority, 3),  # Handle both "Medium" and "Med"
             "Category": lambda x: x.category.lower()
         }[sort_option]
 

@@ -119,11 +119,12 @@ class TodoListWidget(QScrollArea):
                 self.add_task(task)
 
     def add_tasks_grouped_by_priority(self, tasks):
-        priority_order = {"High": 0, "Med": 1, "Low": 2}
-        grouped_tasks = {"High": [], "Med": [], "Low": []}
+        priority_order = {"High": 0, "Medium": 1, "Low": 2}
+        grouped_tasks = {"High": [], "Medium": [], "Low": []}
 
         for task in tasks:
-            grouped_tasks[task.priority].append(task)
+            priority = task.priority if task.priority in priority_order else "Medium"
+            grouped_tasks[priority].append(task)
 
         for priority in sorted(grouped_tasks.keys(), key=lambda x: priority_order[x]):
             if grouped_tasks[priority]:

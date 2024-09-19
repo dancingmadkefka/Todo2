@@ -20,7 +20,7 @@ class TaskEditDialog(QDialog):
         layout.addWidget(self.title_input)
 
         self.priority_combo = QComboBox()
-        self.priority_combo.addItems(["Low", "Med", "High"])
+        self.priority_combo.addItems(["Low", "Medium", "High"])
         self.priority_combo.setCurrentText(self.task.priority)
         layout.addWidget(QLabel("Priority:"))
         layout.addWidget(self.priority_combo)
