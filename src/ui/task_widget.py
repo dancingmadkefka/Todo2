@@ -10,9 +10,10 @@ class TaskWidget(QWidget):
     taskEdited = Signal(object)
     taskSelectedForDeletion = Signal(int, bool)
 
-    def __init__(self, task):
+    def __init__(self, task, date_format="%Y-%m-%d"):
         super().__init__()
         self.task = task
+        self.date_format = date_format
         self.is_selected_for_deletion = False
         self.delete_button = None
         self.setup_ui()
@@ -79,10 +80,7 @@ class TaskWidget(QWidget):
         if not due_date:
             return "No Date"
         date = datetime.strptime(due_date, "%Y-%m-%d")
-        current_year = datetime.now().year
-        if date.year == current_year:
-            return date.strftime("%d%b").lower()
-        return date.strftime("%d%b%y").lower()
+        return date.strftime(self.date_format)
 
     def set_button_icon(self, button, icon_name):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -174,3 +172,7 @@ class TaskWidget(QWidget):
         self.subtext_label.setProperty("sortCriteria", "false")
         self.style().unpolish(self.subtext_label)
         self.style().polish(self.subtext_label)
+
+    def set_date_format(self, date_format):
+        self.date_format = date_format
+        self.update_subtext()

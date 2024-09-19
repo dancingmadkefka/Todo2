@@ -46,6 +46,11 @@ def main():
     db_manager = DatabaseManager()
     db_manager.create_tables()
 
+    # Initialize date format if it doesn't exist
+    if not db_manager.get_date_format():
+        logging.info("Initializing default date format...")
+        db_manager.set_date_format("%Y-%m-%d")
+
     app = QApplication(sys.argv)
     logging.info("QApplication created")
 

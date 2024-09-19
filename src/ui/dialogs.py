@@ -3,12 +3,14 @@ from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLineEdit,
                                QListWidget, QPushButton, QInputDialog, QMessageBox,
                                QCalendarWidget)
 from PySide6.QtCore import QDate, Qt
+from datetime import datetime
 
 class TaskEditDialog(QDialog):
-    def __init__(self, task, categories, parent=None):
+    def __init__(self, task, categories, parent=None, date_format="%Y-%m-%d"):
         super().__init__(parent)
         self.task = task
         self.categories = categories
+        self.date_format = date_format
         self.setup_ui()
 
     def setup_ui(self):
@@ -62,14 +64,22 @@ class TaskEditDialog(QDialog):
 
     def set_date(self, date):
         formatted_date = date.toString("yyyy-MM-dd")
-        self.due_date_button.setText(formatted_date)
-        self.due_date_button.setToolTip(f"Due: {formatted_date}")
+        displayed_date = datetime.strptime(formatted_date, "%Y-%m-%d").strftime(self.date_format)
+        self.due_date_button.setText(displayed_date)
+        self.due_date_button.setToolTip(f"Due: {displayed_date}")
 
     def get_updated_task(self):
         self.task.title = self.title_input.text()
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
-        self.task.due_date = self.due_date_button.text()
+        # Convert the displayed date back to yyyy-MM-dd format for storage
+        displayed_date = self.due_date_button.text()
+        try:
+            parsed_date = datetime.strptime(displayed_date, self.date_format)
+            self.task.due_date = parsed_date.strftime("%Y-%m-%d")
+        except ValueError:
+            # If parsing fails, keep the original date
+            pass
         return self.task
 
 class CategoryManageDialog(QDialog):

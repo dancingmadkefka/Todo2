@@ -4,9 +4,9 @@ from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLineEdit, QComboBox,
                                QLabel, QMessageBox,
                                QStyledItemDelegate, QStyle,
-                               QToolButton, QCalendarWidget)
+                               QToolButton, QCalendarWidget, QInputDialog)
 from PySide6.QtCore import Qt, QSize, Slot, QDate, QSettings, QEvent, QTimer
-from PySide6.QtGui import QIcon, QColor
+from PySide6.QtGui import QIcon, QColor, QAction
 
 from models.task import Task
 from .todo_list_widget import TodoListWidget
@@ -61,6 +61,10 @@ class MainWindow(QMainWindow):
         self.db_manager = db_manager
         self.all_tasks = []
         self.categories = self.db_manager.get_all_categories()
+        
+        # Load date format
+        self.date_format = self.db_manager.get_date_format()
+        
         self.setup_ui()
         self.connect_signals()
         self.load_and_apply_stylesheet()
@@ -77,11 +81,23 @@ class MainWindow(QMainWindow):
         self.flash_timer.timeout.connect(self.flash_add_button)
         self.flash_state = True
 
+    # Load date format
+        self.date_format = self.db_manager.get_date_format()
+
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
+
+        # Create menu bar
+        menubar = self.menuBar()
+        settings_menu = menubar.addMenu('Settings')
+
+        # Add Date Format action to the Settings menu
+        date_format_action = QAction('Date Format', self)
+        date_format_action.triggered.connect(self.open_date_format_settings)
+        settings_menu.addAction(date_format_action)
 
         # Input area
         input_layout = QHBoxLayout()
@@ -336,7 +352,7 @@ class MainWindow(QMainWindow):
 
     @Slot(Task)
     def edit_task(self, task):
-        dialog = TaskEditDialog(task, self.categories, self)
+        dialog = TaskEditDialog(task, self.categories, self, date_format=self.date_format)
         if dialog.exec_():
             self.update_task(dialog.get_updated_task())
 
@@ -371,6 +387,7 @@ class MainWindow(QMainWindow):
             task_widget.taskDeleted.connect(lambda id: self.delete_tasks([id]))
             task_widget.taskEdited.connect(self.edit_task)
             task_widget.taskSelectedForDeletion.connect(self.on_task_selected_for_deletion)
+            task_widget.set_date_format(self.date_format)
 
     def update_categories(self, new_category):
         if new_category and new_category not in self.categories:
@@ -457,7 +474,8 @@ class MainWindow(QMainWindow):
 
     def on_date_selected(self, date):
         self.calendar_widget.hide()
-        self.due_date_button.setToolTip(f"Due: {date.toString('yyyy-MM-dd')}")
+        formatted_date = date.toString(self.date_format)
+        self.due_date_button.setToolTip(f"Due: {formatted_date}")
         self.update_add_button_icon()
 
     def eventFilter(self, obj, event):
@@ -528,3 +546,14 @@ class MainWindow(QMainWindow):
             self.category_filter_combo.addItem("All Categories")
             self.category_filter_combo.addItems(self.categories)
             self.category_filter_combo.setCurrentIndex(current_filter_index)
+
+    def open_date_format_settings(self):
+        current_format = self.date_format
+        new_format, ok = QInputDialog.getText(self, "Date Format Settings",
+                                              "Enter the new date format:\n"
+                                              "(%Y: year, %m: month, %d: day, %b: short month name, %B: full month name)",
+                                              text=current_format)
+        if ok and new_format:
+            self.date_format = new_format
+            self.db_manager.set_date_format(new_format)
+            self.apply_filter_and_sort()  # Refresh the task list with the new date format

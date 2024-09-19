@@ -40,6 +40,12 @@ class DatabaseManager:
                     name TEXT UNIQUE
                 )
             ''')
+            self.cursor.execute('''
+                CREATE TABLE IF NOT EXISTS settings (
+                    key TEXT PRIMARY KEY,
+                    value TEXT
+                )
+            ''')
             self.conn.commit()
         except sqlite3.Error as e:
             logging.error(f"Error creating tables: {e}")
@@ -166,3 +172,35 @@ class DatabaseManager:
             self.conn.rollback()
         finally:
             self.disconnect()
+
+    def set_setting(self, key: str, value: str):
+        self.connect()
+        try:
+            self.cursor.execute('''
+                INSERT OR REPLACE INTO settings (key, value)
+                VALUES (?, ?)
+            ''', (key, value))
+            self.conn.commit()
+        except sqlite3.Error as e:
+            logging.error(f"Error setting setting: {e}")
+            self.conn.rollback()
+        finally:
+            self.disconnect()
+
+    def get_setting(self, key: str, default: str = "") -> str:
+        self.connect()
+        try:
+            self.cursor.execute('SELECT value FROM settings WHERE key = ?', (key,))
+            result = self.cursor.fetchone()
+            return result[0] if result else default
+        except sqlite3.Error as e:
+            logging.error(f"Error getting setting: {e}")
+            return default
+        finally:
+            self.disconnect()
+
+    def get_date_format(self) -> str:
+        return self.get_setting("date_format", "%Y-%m-%d")
+
+    def set_date_format(self, date_format: str):
+        self.set_setting("date_format", date_format)
