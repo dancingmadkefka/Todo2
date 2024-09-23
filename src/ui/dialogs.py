@@ -1,8 +1,9 @@
-from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLineEdit,
+from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QTextEdit,
                                QComboBox, QLabel, QDialogButtonBox,
                                QListWidget, QPushButton, QInputDialog, QMessageBox,
                                QCalendarWidget)
-from PySide6.QtCore import QDate, Qt
+from PySide6.QtCore import QDate, Qt, QTimer, QSize
+from PySide6.QtGui import QTextOption
 from datetime import datetime
 
 class TaskEditDialog(QDialog):
@@ -12,12 +13,21 @@ class TaskEditDialog(QDialog):
         self.categories = categories
         self.date_format = date_format
         self.setup_ui()
+        self.resize_timer = QTimer(self)
+        self.resize_timer.setSingleShot(True)
+        self.resize_timer.timeout.connect(self.adjust_size)
+        self.setMinimumWidth(300)  # Set a minimum width for the dialog
 
     def setup_ui(self):
         self.setWindowTitle("Edit Task")
         layout = QVBoxLayout(self)
 
-        self.title_input = QLineEdit(self.task.title)
+        self.title_input = QTextEdit(self.task.title)
+        self.title_input.setAcceptRichText(False)
+        self.title_input.setWordWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)
+        self.title_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.title_input.textChanged.connect(self.on_text_changed)
+        self.title_input.setMinimumHeight(60)  # Set a minimum height for the QTextEdit
         layout.addWidget(QLabel("Title:"))
         layout.addWidget(self.title_input)
 
@@ -53,6 +63,8 @@ class TaskEditDialog(QDialog):
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
 
+        self.adjust_size()
+
     def show_calendar(self):
         button_pos = self.due_date_button.mapToGlobal(self.due_date_button.rect().bottomLeft())
         self.calendar_widget.move(button_pos)
@@ -69,7 +81,7 @@ class TaskEditDialog(QDialog):
         self.due_date_button.setToolTip(f"Due: {displayed_date}")
 
     def get_updated_task(self):
-        self.task.title = self.title_input.text()
+        self.task.title = self.title_input.toPlainText()
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
         # Convert the displayed date back to yyyy-MM-dd format for storage
@@ -81,6 +93,19 @@ class TaskEditDialog(QDialog):
             # If parsing fails, keep the original date
             pass
         return self.task
+
+    def on_text_changed(self):
+        self.resize_timer.start(100)  # Debounce resize events
+
+    def adjust_size(self):
+        document_height = self.title_input.document().size().height()
+        new_height = max(60, min(document_height, 200))  # Limit height between 60 and 200 pixels
+        self.title_input.setFixedHeight(new_height)
+        self.adjustSize()
+
+    def sizeHint(self):
+        # Provide a reasonable default size for the dialog
+        return QSize(400, 300)
 
 class CategoryManageDialog(QDialog):
     def __init__(self, db_manager, parent=None):
