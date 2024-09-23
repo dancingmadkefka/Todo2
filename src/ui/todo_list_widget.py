@@ -98,7 +98,6 @@ class TodoListWidget(QScrollArea):
             for task in tasks:
                 self.add_task(task)
 
-
     def add_tasks_grouped_by_due_date(self, tasks, sort_order):
         grouped_tasks = {}
         for task in tasks:
@@ -116,9 +115,8 @@ class TodoListWidget(QScrollArea):
                 self.add_bold_separator(f"Due: {date}")
 
             for task in grouped_tasks[date]:
-                self.add_task(task)
-
-
+                task_widget = self.add_task(task)
+                task_widget.update_sort_criteria_style("Due Date")
 
     def add_tasks_grouped_by_priority(self, tasks, sort_order):
         priority_order = {"High": 0, "Medium": 1, "Low": 2}
@@ -134,8 +132,8 @@ class TodoListWidget(QScrollArea):
             if grouped_tasks[priority]:
                 self.add_bold_separator(f"Priority: {priority}")
                 for task in grouped_tasks[priority]:
-                    self.add_task(task)
-
+                    task_widget = self.add_task(task)
+                    task_widget.update_sort_criteria_style("Priority")
 
     def add_tasks_grouped_by_category(self, tasks, sort_order):
         grouped_tasks = {}
@@ -150,8 +148,8 @@ class TodoListWidget(QScrollArea):
         for category in categories:
             self.add_bold_separator(f"Category: {category}")
             for task in grouped_tasks[category]:
-                self.add_task(task)
-
+                task_widget = self.add_task(task)
+                task_widget.update_sort_criteria_style("Category")
 
     def set_sort_criteria(self, criteria):
         self.current_sort_criteria = criteria

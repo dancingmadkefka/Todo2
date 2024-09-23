@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QTextEdit,
                                QComboBox, QLabel, QDialogButtonBox,
                                QListWidget, QPushButton, QInputDialog, QMessageBox,
-                               QCalendarWidget)
+                               QCalendarWidget, QLineEdit)
 from PySide6.QtCore import QDate, Qt, QTimer, QSize
 from PySide6.QtGui import QTextOption
 from datetime import datetime
@@ -42,6 +42,10 @@ class TaskEditDialog(QDialog):
         self.category_combo.setCurrentText(self.task.category)
         layout.addWidget(QLabel("Category:"))
         layout.addWidget(self.category_combo)
+
+        self.sub_category_input = QLineEdit(self.task.sub_category)
+        layout.addWidget(QLabel("Sub-category:"))
+        layout.addWidget(self.sub_category_input)
 
         self.due_date_button = QPushButton()
         self.due_date_button.clicked.connect(self.show_calendar)
@@ -84,6 +88,7 @@ class TaskEditDialog(QDialog):
         self.task.title = self.title_input.toPlainText()
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
+        self.task.sub_category = self.sub_category_input.text()
         # Convert the displayed date back to yyyy-MM-dd format for storage
         displayed_date = self.due_date_button.text()
         try:

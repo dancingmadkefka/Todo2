@@ -114,6 +114,10 @@ class MainWindow(QMainWindow):
         self.category_combo.addItems(self.categories)
         input_layout.addWidget(self.category_combo)
 
+        self.sub_category_input = QLineEdit()
+        self.sub_category_input.setPlaceholderText("Enter sub-category")
+        input_layout.addWidget(self.sub_category_input)
+
         # Create all buttons first
         self.due_date_button = QToolButton()
         self.add_button = QToolButton()
@@ -271,20 +275,24 @@ class MainWindow(QMainWindow):
                     category = ""  # Set to empty string if "Manage Categories" is selected
                 due_date_str = self.due_date_button.toolTip().split(": ")[-1]
                 due_date = QDate.fromString(due_date_str, "yyyy-MM-dd") if due_date_str != "Set due date" else QDate.currentDate()
+                sub_category = self.sub_category_input.text().strip()
                 task = Task(
                     id=self.db_manager.add_task(
                         title,
                         priority=self.priority_combo.currentText(),
                         category=category,
-                        due_date=due_date.toString("yyyy-MM-dd")
+                        due_date=due_date.toString("yyyy-MM-dd"),
+                        sub_category=sub_category
                     ),
                     title=title,
                     priority=self.priority_combo.currentText(),
                     category=category,
-                    due_date=due_date.toString("yyyy-MM-dd")
+                    due_date=due_date.toString("yyyy-MM-dd"),
+                    sub_category=sub_category
                 )
                 self.all_tasks.append(task)
                 self.task_input.clear()
+                self.sub_category_input.clear()
                 self.due_date_button.setToolTip("Set due date")
                 self.category_combo.setCurrentIndex(0)  # Reset category to "Manage Categories"
                 self.apply_filter_and_sort()
@@ -298,7 +306,7 @@ class MainWindow(QMainWindow):
     def update_task(self, task):
         try:
             self.db_manager.update_task(
-                task.id, task.title, task.completed, task.due_date, task.priority, task.category
+                task.id, task.title, task.completed, task.due_date, task.priority, task.category, task.sub_category
             )
             for i, t in enumerate(self.all_tasks):
                 if t.id == task.id:
@@ -353,7 +361,8 @@ class MainWindow(QMainWindow):
     def edit_task(self, task):
         dialog = TaskEditDialog(task, self.categories, self, date_format=self.date_format)
         if dialog.exec_():
-            self.update_task(dialog.get_updated_task())
+            updated_task = dialog.get_updated_task()
+            self.update_task(updated_task)
 
     @Slot()
     def apply_filter_and_sort(self):
@@ -373,14 +382,13 @@ class MainWindow(QMainWindow):
         sort_key = {
             "Due Date": lambda x: x.due_date or "9999-99-99",
             "Priority": lambda x: {"High": 0, "Medium": 1, "Med": 1, "Low": 2}.get(x.priority, 3),
-            "Category": lambda x: x.category.lower()
+            "Category": lambda x: (x.category.lower(), x.sub_category.lower())
         }[sort_option]
 
         filtered_tasks.sort(key=sort_key, reverse=(sort_order == Qt.DescendingOrder))
 
         self.todo_list.clear()
         self.todo_list.add_tasks(filtered_tasks, sort_criteria=sort_option, sort_order=sort_order)
-
 
         for task_widget in self.todo_list.findChildren(TaskWidget):
             task_widget.taskChanged.connect(self.update_task)

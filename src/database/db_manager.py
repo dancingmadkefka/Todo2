@@ -31,7 +31,8 @@ class DatabaseManager:
                     due_date TEXT,
                     priority TEXT,
                     completed INTEGER DEFAULT 0,
-                    category TEXT DEFAULT "Other"
+                    category TEXT DEFAULT "Other",
+                    sub_category TEXT DEFAULT ""
                 )
             ''')
             self.cursor.execute('''
@@ -53,13 +54,13 @@ class DatabaseManager:
         finally:
             self.disconnect()
 
-    def add_task(self, title: str, description: str = "", due_date: str = "", priority: str = "Med", category: str = "Other") -> int:
+    def add_task(self, title: str, description: str = "", due_date: str = "", priority: str = "Med", category: str = "Other", sub_category: str = "") -> int:
         self.connect()
         try:
             self.cursor.execute('''
-                INSERT INTO tasks (title, description, due_date, priority, category)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (title, description, due_date, priority, category))
+                INSERT INTO tasks (title, description, due_date, priority, category, sub_category)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (title, description, due_date, priority, category, sub_category))
             task_id = self.cursor.lastrowid
             self.conn.commit()
             return task_id
@@ -83,7 +84,8 @@ class DatabaseManager:
                     'due_date': task[3],
                     'priority': task[4],
                     'completed': bool(task[5]),
-                    'category': task[6]
+                    'category': task[6],
+                    'sub_category': task[7]
                 }
             return None
         except sqlite3.Error as e:
@@ -92,14 +94,14 @@ class DatabaseManager:
         finally:
             self.disconnect()
 
-    def update_task(self, task_id: int, title: str, completed: bool, due_date: str, priority: str, category: str, description: str = ""):
+    def update_task(self, task_id: int, title: str, completed: bool, due_date: str, priority: str, category: str, sub_category: str, description: str = ""):
         self.connect()
         try:
             self.cursor.execute('''
                 UPDATE tasks
-                SET title = ?, description = ?, due_date = ?, priority = ?, completed = ?, category = ?
+                SET title = ?, description = ?, due_date = ?, priority = ?, completed = ?, category = ?, sub_category = ?
                 WHERE id = ?
-            ''', (title, description, due_date, priority, int(completed), category, task_id))
+            ''', (title, description, due_date, priority, int(completed), category, sub_category, task_id))
             self.conn.commit()
         except sqlite3.Error as e:
             logging.error(f"Error updating task: {e}")
@@ -126,11 +128,12 @@ class DatabaseManager:
             return [{
                 'id': task[0],
                 'title': task[1],
-                'description': task[2],
-                'due_date': task[3],
-                'priority': task[4],
-                'completed': bool(task[5]),
-                'category': task[6]
+                'description': task[2] if len(task) > 2 else "",
+                'due_date': task[3] if len(task) > 3 else "",
+                'priority': task[4] if len(task) > 4 else "Med",
+                'completed': bool(task[5]) if len(task) > 5 else False,
+                'category': task[6] if len(task) > 6 else "Other",
+                'sub_category': task[7] if len(task) > 7 else ""
             } for task in tasks]
         except sqlite3.Error as e:
             logging.error(f"Error getting all tasks: {e}")

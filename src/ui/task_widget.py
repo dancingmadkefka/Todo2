@@ -74,7 +74,7 @@ class TaskWidget(QWidget):
 
     def update_subtext(self):
         due_date = self.format_due_date(self.task.due_date)
-        subtext = f"{self.task.priority} | {self.task.category or 'No Category'} | Due: {due_date}"
+        subtext = f"{self.task.priority} | {self.task.category} | {due_date} | {self.task.sub_category or 'No Sub-category'}"
         self.subtext_label.setText(subtext)
 
     def format_due_date(self, due_date):
@@ -126,7 +126,6 @@ class TaskWidget(QWidget):
             self.taskDeleted.emit(self.task.id)
 
     def toggle_selection_for_deletion(self):
-
         self.is_selected_for_deletion = not self.is_selected_for_deletion
         self.update_deletion_selection_style()
         self.taskSelectedForDeletion.emit(self.task.id, self.is_selected_for_deletion)
@@ -151,27 +150,26 @@ class TaskWidget(QWidget):
         self.update_deletion_selection_style()
 
     def update_sort_criteria_style(self, sort_criteria):
+        parts = self.subtext_label.text().split('|')
+        bold_font = QFont(self.subtext_label.font())
+        bold_font.setBold(True)
+        self.subtext_label.setFont(bold_font)
+
         if sort_criteria == "Priority":
-            self.bold_subtext_part(0)
+            index = 0
         elif sort_criteria == "Category":
-            self.bold_subtext_part(1)
+            index = 1
         elif sort_criteria == "Due Date":
-            self.bold_subtext_part(2)
+            index = 2
         else:
             self.reset_subtext_style()
+            return
 
-    def bold_subtext_part(self, index):
-        parts = self.subtext_label.text().split('|')
-        if 0 <= index < len(parts):
-            bold_font = QFont(self.subtext_label.font())
-            bold_font.setBold(True)
-            self.subtext_label.setFont(bold_font)
-            
-            parts[index] = parts[index].strip()
-            formatted_text = ' | '.join(parts[:index] + [f'<b>{parts[index]}</b>'] + parts[index+1:])
-            self.subtext_label.setText(formatted_text)
-            self.subtext_label.setProperty("sortCriteria", "true")
-        
+        parts[index] = parts[index].strip()
+        formatted_text = ' | '.join(parts[:index] + [f'<b>{self.task.sub_category or "No Sub-category"}</b>'] + parts[index+1:])
+        self.subtext_label.setText(formatted_text)
+        self.subtext_label.setProperty("sortCriteria", "true")
+
         self.style().unpolish(self.subtext_label)
         self.style().polish(self.subtext_label)
 
