@@ -236,7 +236,6 @@ class MainWindow(QMainWindow):
         if not icon.isNull():
             button.setIcon(icon)
             button.setIconSize(QSize(32, 32))
-            logging.info(f"Set icon for button: {icon_name}")
         else:
             logging.warning(f"Failed to set icon for button: {icon_name}")
 
@@ -373,14 +372,15 @@ class MainWindow(QMainWindow):
 
         sort_key = {
             "Due Date": lambda x: x.due_date or "9999-99-99",
-            "Priority": lambda x: {"High": 0, "Medium": 1, "Med": 1, "Low": 2}.get(x.priority, 3),  # Handle both "Medium" and "Med"
+            "Priority": lambda x: {"High": 0, "Medium": 1, "Med": 1, "Low": 2}.get(x.priority, 3),
             "Category": lambda x: x.category.lower()
         }[sort_option]
 
         filtered_tasks.sort(key=sort_key, reverse=(sort_order == Qt.DescendingOrder))
 
         self.todo_list.clear()
-        self.todo_list.add_tasks(filtered_tasks, sort_criteria=sort_option)
+        self.todo_list.add_tasks(filtered_tasks, sort_criteria=sort_option, sort_order=sort_order)
+
 
         for task_widget in self.todo_list.findChildren(TaskWidget):
             task_widget.taskChanged.connect(self.update_task)
@@ -491,6 +491,7 @@ class MainWindow(QMainWindow):
         else:
             self.sort_order_button.setArrowType(Qt.UpArrow)
             self.sort_order_button.setToolTip("Ascending Order")
+        
         self.apply_filter_and_sort()
 
     @Slot(bool)

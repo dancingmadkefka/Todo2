@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
 from PySide6.QtGui import QFont
 from .icon_utils import create_colored_icon
 from datetime import datetime
+import logging
 
 class TaskWidget(QWidget):
     taskChanged = Signal(object)
@@ -125,6 +126,7 @@ class TaskWidget(QWidget):
             self.taskDeleted.emit(self.task.id)
 
     def toggle_selection_for_deletion(self):
+
         self.is_selected_for_deletion = not self.is_selected_for_deletion
         self.update_deletion_selection_style()
         self.taskSelectedForDeletion.emit(self.task.id, self.is_selected_for_deletion)
@@ -161,14 +163,23 @@ class TaskWidget(QWidget):
     def bold_subtext_part(self, index):
         parts = self.subtext_label.text().split('|')
         if 0 <= index < len(parts):
-            parts[index] = f"<b>{parts[index].strip()}</b>"
-            self.subtext_label.setText(' | '.join(parts))
+            bold_font = QFont(self.subtext_label.font())
+            bold_font.setBold(True)
+            self.subtext_label.setFont(bold_font)
+            
+            parts[index] = parts[index].strip()
+            formatted_text = ' | '.join(parts[:index] + [f'<b>{parts[index]}</b>'] + parts[index+1:])
+            self.subtext_label.setText(formatted_text)
             self.subtext_label.setProperty("sortCriteria", "true")
+        
         self.style().unpolish(self.subtext_label)
         self.style().polish(self.subtext_label)
 
     def reset_subtext_style(self):
         self.update_subtext()
+        normal_font = QFont(self.subtext_label.font())
+        normal_font.setBold(False)
+        self.subtext_label.setFont(normal_font)
         self.subtext_label.setProperty("sortCriteria", "false")
         self.style().unpolish(self.subtext_label)
         self.style().polish(self.subtext_label)

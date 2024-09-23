@@ -1,14 +1,20 @@
 import sys
 import os
 import logging
+
 # Set up logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, 
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler("todo_app.log"),
+                        logging.StreamHandler()
+                    ])
 
 # Add the parent directory (project root) to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-print("Python path:", sys.path)
-print("Current working directory:", os.getcwd())
+logging.debug("Python path: %s", sys.path)
+logging.debug("Current working directory: %s", os.getcwd())
 
 from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QIcon
@@ -17,11 +23,11 @@ from database.db_manager import DatabaseManager
 
 try:
     import resources_rc
-    print("resources_rc imported successfully")
+    logging.debug("resources_rc imported successfully")
     resources_rc.qInitResources()
 except ImportError as e:
-    print(f"Failed to import resources_rc: {e}")
-    print(f"Looked in these locations: {sys.path}")
+    logging.error(f"Failed to import resources_rc: {e}")
+    logging.error(f"Looked in these locations: {sys.path}")
 
 def load_stylesheets():
     base_stylesheet = ""
@@ -31,11 +37,17 @@ def load_stylesheets():
     if os.path.exists(base_path):
         with open(base_path, "r") as f:
             base_stylesheet = f.read()
+        logging.debug("Base stylesheet loaded")
+    else:
+        logging.warning("Base stylesheet not found")
     
     user_path = os.path.join(os.path.dirname(__file__), "ui", "user_colors.qss")
     if os.path.exists(user_path):
         with open(user_path, "r") as f:
             user_stylesheet = f.read()
+        logging.debug("User stylesheet loaded")
+    else:
+        logging.debug("User stylesheet not found")
     
     return base_stylesheet + "\n" + user_stylesheet
 
