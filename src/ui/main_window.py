@@ -69,6 +69,9 @@ class MainWindow(QMainWindow):
         self.flash_timer.timeout.connect(self.flash_add_button)
         self.flash_state = True
 
+        for widget in [self.task_input, self.priority_combo, self.category_combo, self.sub_category_combo, self.due_date_button]:
+            widget.setProperty("filled", False)
+
     def setup_ui(self):
         self.setWindowTitle(WINDOW_TITLE)
         central_widget = QWidget()
@@ -165,6 +168,10 @@ class MainWindow(QMainWindow):
 
         self.update_customize_colors_button()
 
+        # Initialize "filled" property for input widgets
+        for widget in [self.task_input, self.priority_combo, self.category_combo, self.sub_category_combo]:
+            widget.setProperty("filled", False)
+
     def connect_signals(self):
         self.add_button.clicked.connect(self.add_task)
         self.category_combo.activated.connect(self.on_category_combo_changed)
@@ -175,8 +182,12 @@ class MainWindow(QMainWindow):
         self.sort_order_button.clicked.connect(self.apply_filter_and_sort)
         self.todo_list.taskDeleted.connect(self.delete_tasks)
         self.todo_list.multipleTasksSelected.connect(self.update_multi_delete_visibility)
-        self.task_input.textChanged.connect(self.update_add_button_icon)
-        self.due_date_button.clicked.connect(self.update_add_button_icon)
+        
+        self.task_input.textChanged.connect(self.check_task_input)
+        self.priority_combo.currentTextChanged.connect(self.check_dropdown)
+        self.category_combo.currentTextChanged.connect(self.check_dropdown)
+        self.sub_category_combo.currentTextChanged.connect(self.check_dropdown)
+        self.due_date_button.clicked.connect(self.show_date_picker)
 
     def set_button_icon(self, button, icon_name, icon_color=None):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -209,6 +220,51 @@ class MainWindow(QMainWindow):
     def load_tasks(self):
         self.all_tasks = [Task.from_dict(task_data) for task_data in self.db_manager.get_all_tasks()]
         self.apply_filter_and_sort()
+
+    def check_filled(self, widget, condition):
+        widget.setProperty("filled", condition)
+        widget.style().unpolish(widget)
+        widget.style().polish(widget)
+
+    def on_date_selected(self, date):
+        self.calendar_widget.hide()
+        self.due_date_button.setToolTip(f"Due: {date.toString(self.date_format)}")
+        self.check_filled(self.due_date_button, True)
+        self.update_add_button_icon()
+
+    def set_button_icon(self, button, icon_name, icon_color=None):
+        icon_path = f":icons/src/ui/icons/{icon_name}.svg"
+        base_color = self.palette().text().color()
+        background_color = self.palette().window().color()
+        
+        if button == self.due_date_button and button.property("filled"):
+            icon_color = QColor("#4CAF50")
+        
+        icon = create_colored_icon(icon_path, base_color, background_color, icon_color)
+        if icon.isNull():
+            logging.warning(f"Failed to set icon for button: {icon_name}")
+        else:
+            button.setIcon(icon)
+            button.setIconSize(QSize(32, 32))
+    
+    def check_task_input(self, text):
+        filled = len(text.strip()) > 3
+        self.task_input.setProperty("filled", filled)
+        self.task_input.style().unpolish(self.task_input)
+        self.task_input.style().polish(self.task_input)
+        self.update_add_button_icon()
+
+    def check_dropdown(self, text):
+        sender = self.sender()
+        filled = text != "" and text not in ["Manage Categories", "Manage Sub-Categories"]
+        sender.setProperty("filled", filled)
+        sender.style().unpolish(sender)
+        sender.style().polish(sender)
+        self.update_add_button_icon()
+
+        self.priority_combo.currentTextChanged.connect(self.check_dropdown)
+        self.category_combo.currentTextChanged.connect(self.check_dropdown)
+        self.sub_category_combo.currentTextChanged.connect(self.check_dropdown)
 
     @Slot()
     def add_task(self):
@@ -465,15 +521,17 @@ class MainWindow(QMainWindow):
             self.update_multi_delete_visibility(False)
 
     def update_add_button_icon(self):
-        task_text_filled = bool(self.task_input.text().strip())
+        task_text_filled = len(self.task_input.text().strip()) > 3
         due_date_selected = self.due_date_button.toolTip() != "Set due date"
-
+        
         if task_text_filled and due_date_selected:
             self.flash_timer.start(500)
         else:
             self.flash_timer.stop()
             icon_color = QColor('orange') if task_text_filled else None
             self.set_button_icon(self.add_button, "add", icon_color)
+        
+        self.set_button_icon(self.due_date_button, "calendar", QColor('green') if due_date_selected else None)
 
     def flash_add_button(self):
         self.flash_state = not self.flash_state

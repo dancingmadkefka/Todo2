@@ -215,3 +215,23 @@ QComboBox::down-arrow {
     width: 12px;
     height: 12px;
 }
+
+
+QLineEdit[filled="true"], QComboBox[filled="true"], QDateEdit[filled="true"] {
+    border: 2px solid #4CAF50;
+}
+
+/* New style for filled due date button */
+QToolButton#dueDateButton[filled="true"] {
+    background-color: #E8F5E9;
+}
+
+/* Consistent styling for all combo boxes, including sub-category */
+QComboBox {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+}
+
+QLineEdit[filled="true"], QComboBox[filled="true"], QDateEdit[filled="true"] {
+    border: 2px solid #4CAF50;
+}
