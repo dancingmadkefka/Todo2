@@ -193,28 +193,24 @@ QWidget#TaskWidget[selected="true"] {
     background-color: #F0F0F0;
 }
 
-/* New styles for sub-category */
-QLabel#subtextLabel span.sub-category {
-    color: #4CAF50;
-    font-weight: bold;
+/* Removed special styling for sub-category */
+
+/* Consistent styling for all combo boxes, including sub-category */
+QComboBox {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
 }
 
-/* Style for the sub-category combobox */
-QComboBox#subCategoryCombo {
-    background-color: #E8F5E9;
-    border: 1px solid #A5D6A7;
+QComboBox:hover {
+    border-color: #AAAAAA;
 }
 
-QComboBox#subCategoryCombo:hover {
-    background-color: #C8E6C9;
-}
-
-QComboBox#subCategoryCombo::drop-down {
+QComboBox::drop-down {
     border: none;
     width: 20px;
 }
 
-QComboBox#subCategoryCombo::down-arrow {
+QComboBox::down-arrow {
     image: url(:/icons/src/ui/icons/dropdown_arrow.svg);
     width: 12px;
     height: 12px;
