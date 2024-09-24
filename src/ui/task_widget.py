@@ -74,7 +74,8 @@ class TaskWidget(QWidget):
 
     def update_subtext(self):
         due_date = self.format_due_date(self.task.due_date)
-        subtext = f"{self.task.priority} | {self.task.category} | {due_date} | {self.task.sub_category or 'No Sub-category'}"
+        sub_category = self.task.sub_category or 'No Sub-category'
+        subtext = f"{self.task.priority} | {self.task.category} | {due_date} | <span class='sub-category'>{sub_category}</span>"
         self.subtext_label.setText(subtext)
 
     def format_due_date(self, due_date):
@@ -161,12 +162,14 @@ class TaskWidget(QWidget):
             index = 1
         elif sort_criteria == "Due Date":
             index = 2
+        elif sort_criteria == "Sub-Category":
+            index = 3
         else:
             self.reset_subtext_style()
             return
 
-        parts[index] = parts[index].strip()
-        formatted_text = ' | '.join(parts[:index] + [f'<b>{self.task.sub_category or "No Sub-category"}</b>'] + parts[index+1:])
+        parts[index] = f'<b>{parts[index].strip()}</b>'
+        formatted_text = ' | '.join(parts)
         self.subtext_label.setText(formatted_text)
         self.subtext_label.setProperty("sortCriteria", "true")
 

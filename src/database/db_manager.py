@@ -7,6 +7,8 @@ class DatabaseManager:
         self.db_name = db_name
         self.conn = None
         self.cursor = None
+        self.create_tables()
+        self.update_schema()
 
     def connect(self):
         try:
@@ -17,7 +19,7 @@ class DatabaseManager:
             raise
 
     def disconnect(self):
-        if self.conn:
+        if self.conn:   
             self.conn.close()
 
     def create_tables(self):
@@ -42,6 +44,12 @@ class DatabaseManager:
                 )
             ''')
             self.cursor.execute('''
+                CREATE TABLE IF NOT EXISTS sub_categories (
+                    id INTEGER PRIMARY KEY,
+                    name TEXT UNIQUE
+                )
+            ''')
+            self.cursor.execute('''
                 CREATE TABLE IF NOT EXISTS settings (
                     key TEXT PRIMARY KEY,
                     value TEXT
@@ -50,6 +58,21 @@ class DatabaseManager:
             self.conn.commit()
         except sqlite3.Error as e:
             logging.error(f"Error creating tables: {e}")
+            self.conn.rollback()
+        finally:
+            self.disconnect()
+
+    def update_schema(self):
+        self.connect()
+        try:
+            self.cursor.execute("PRAGMA table_info(tasks)")
+            columns = [column[1] for column in self.cursor.fetchall()]
+            if "sub_category" not in columns:
+                self.cursor.execute("ALTER TABLE tasks ADD COLUMN sub_category TEXT DEFAULT ''")
+                self.conn.commit()
+                print("Added sub_category column to tasks table")
+        except sqlite3.Error as e:
+            logging.error(f"Error updating schema: {e}")
             self.conn.rollback()
         finally:
             self.disconnect()
@@ -172,6 +195,41 @@ class DatabaseManager:
             self.conn.commit()
         except sqlite3.Error as e:
             logging.error(f"Error deleting category: {e}")
+            self.conn.rollback()
+        finally:
+            self.disconnect()
+
+    def add_sub_category(self, name: str):
+        self.connect()
+        try:
+            self.cursor.execute('INSERT OR IGNORE INTO sub_categories (name) VALUES (?)', (name,))
+            self.conn.commit()
+        except sqlite3.Error as e:
+            logging.error(f"Error adding sub-category: {e}")
+            self.conn.rollback()
+        finally:
+            self.disconnect()
+
+    def get_all_sub_categories(self) -> List[str]:
+        self.connect()
+        try:
+            self.cursor.execute('SELECT name FROM sub_categories')
+            sub_categories = [row[0] for row in self.cursor.fetchall()]
+            return sub_categories
+        except sqlite3.Error as e:
+            logging.error(f"Error getting sub-categories: {e}")
+            return []
+        finally:
+            self.disconnect()
+
+    def delete_sub_category(self, name: str):
+        self.connect()
+        try:
+            self.cursor.execute('DELETE FROM sub_categories WHERE name = ?', (name,))
+            self.cursor.execute('UPDATE tasks SET sub_category = "" WHERE sub_category = ?', (name,))
+            self.conn.commit()
+        except sqlite3.Error as e:
+            logging.error(f"Error deleting sub-category: {e}")
             self.conn.rollback()
         finally:
             self.disconnect()

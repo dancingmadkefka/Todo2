@@ -94,6 +94,8 @@ class TodoListWidget(QScrollArea):
             self.add_tasks_grouped_by_priority(tasks, sort_order)
         elif sort_criteria == "Category":
             self.add_tasks_grouped_by_category(tasks, sort_order)
+        elif sort_criteria == "Sub-Category":
+            self.add_tasks_grouped_by_sub_category(tasks, sort_order)
         else:
             for task in tasks:
                 self.add_task(task)
@@ -150,6 +152,22 @@ class TodoListWidget(QScrollArea):
             for task in grouped_tasks[category]:
                 task_widget = self.add_task(task)
                 task_widget.update_sort_criteria_style("Category")
+
+    def add_tasks_grouped_by_sub_category(self, tasks, sort_order):
+        grouped_tasks = {}
+        for task in tasks:
+            sub_category = task.sub_category if task.sub_category else "No Sub-Category"
+            if sub_category not in grouped_tasks:
+                grouped_tasks[sub_category] = []
+            grouped_tasks[sub_category].append(task)
+
+        sub_categories = sorted(grouped_tasks.keys(), reverse=(sort_order == Qt.DescendingOrder))
+
+        for sub_category in sub_categories:
+            self.add_bold_separator(f"Sub-Category: {sub_category}")
+            for task in grouped_tasks[sub_category]:
+                task_widget = self.add_task(task)
+                task_widget.update_sort_criteria_style("Sub-Category")
 
     def set_sort_criteria(self, criteria):
         self.current_sort_criteria = criteria

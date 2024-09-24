@@ -7,10 +7,11 @@ from PySide6.QtGui import QTextOption
 from datetime import datetime
 
 class TaskEditDialog(QDialog):
-    def __init__(self, task, categories, parent=None, date_format="%Y-%m-%d"):
+    def __init__(self, task, categories, sub_categories, parent=None, date_format="%Y-%m-%d"):
         super().__init__(parent)
         self.task = task
         self.categories = categories
+        self.sub_categories = sub_categories
         self.date_format = date_format
         self.setup_ui()
         self.resize_timer = QTimer(self)
@@ -32,20 +33,25 @@ class TaskEditDialog(QDialog):
         layout.addWidget(self.title_input)
 
         self.priority_combo = QComboBox()
+        self.priority_combo.addItem("")  # Empty item
         self.priority_combo.addItems(["Low", "Medium", "High"])
         self.priority_combo.setCurrentText(self.task.priority)
         layout.addWidget(QLabel("Priority:"))
         layout.addWidget(self.priority_combo)
 
         self.category_combo = QComboBox()
+        self.category_combo.addItem("")  # Empty item
         self.category_combo.addItems(self.categories)
         self.category_combo.setCurrentText(self.task.category)
         layout.addWidget(QLabel("Category:"))
         layout.addWidget(self.category_combo)
 
-        self.sub_category_input = QLineEdit(self.task.sub_category)
+        self.sub_category_combo = QComboBox()
+        self.sub_category_combo.addItem("")  # Empty item
+        self.sub_category_combo.addItems(self.sub_categories)
+        self.sub_category_combo.setCurrentText(self.task.sub_category)
         layout.addWidget(QLabel("Sub-category:"))
-        layout.addWidget(self.sub_category_input)
+        layout.addWidget(self.sub_category_combo)
 
         self.due_date_button = QPushButton()
         self.due_date_button.clicked.connect(self.show_calendar)
@@ -88,7 +94,7 @@ class TaskEditDialog(QDialog):
         self.task.title = self.title_input.toPlainText()
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
-        self.task.sub_category = self.sub_category_input.text()
+        self.task.sub_category = self.sub_category_combo.currentText()
         # Convert the displayed date back to yyyy-MM-dd format for storage
         displayed_date = self.due_date_button.text()
         try:
@@ -113,14 +119,15 @@ class TaskEditDialog(QDialog):
         return QSize(400, 300)
 
 class CategoryManageDialog(QDialog):
-    def __init__(self, db_manager, parent=None):
+    def __init__(self, db_manager, parent=None, is_sub_category=False):
         super().__init__(parent)
         self.db_manager = db_manager
-        self.categories = self.db_manager.get_all_categories()
+        self.is_sub_category = is_sub_category
+        self.categories = self.db_manager.get_all_sub_categories() if is_sub_category else self.db_manager.get_all_categories()
         self.setup_ui()
 
     def setup_ui(self):
-        self.setWindowTitle("Manage Categories")
+        self.setWindowTitle("Manage Sub-Categories" if self.is_sub_category else "Manage Categories")
         layout = QVBoxLayout(self)
 
         self.category_list = QListWidget()
@@ -128,11 +135,11 @@ class CategoryManageDialog(QDialog):
         layout.addWidget(self.category_list)
 
         button_layout = QHBoxLayout()
-        self.add_button = QPushButton("Add Category")
+        self.add_button = QPushButton(f"Add {'Sub-' if self.is_sub_category else ''}Category")
         self.add_button.clicked.connect(self.add_category)
         button_layout.addWidget(self.add_button)
 
-        self.remove_button = QPushButton("Remove Category")
+        self.remove_button = QPushButton(f"Remove {'Sub-' if self.is_sub_category else ''}Category")
         self.remove_button.clicked.connect(self.remove_category)
         button_layout.addWidget(self.remove_button)
 
@@ -144,14 +151,17 @@ class CategoryManageDialog(QDialog):
         layout.addWidget(button_box)
 
     def add_category(self):
-        category, ok = QInputDialog.getText(self, "Add Category", "Enter new category name:")
+        category, ok = QInputDialog.getText(self, f"Add {'Sub-' if self.is_sub_category else ''}Category", f"Enter new {'sub-' if self.is_sub_category else ''}category name:")
         if ok and category:
             if category not in self.categories:
-                self.db_manager.add_category(category)
+                if self.is_sub_category:
+                    self.db_manager.add_sub_category(category)
+                else:
+                    self.db_manager.add_category(category)
                 self.category_list.addItem(category)
                 self.categories.append(category)
             else:
-                QMessageBox.warning(self, "Warning", "Category already exists.")
+                QMessageBox.warning(self, "Warning", f"{'Sub-' if self.is_sub_category else ''}Category already exists.")
 
     def remove_category(self):
         current_item = self.category_list.currentItem()
@@ -161,8 +171,11 @@ class CategoryManageDialog(QDialog):
                                          f"Are you sure you want to delete '{category}'?",
                                          QMessageBox.Yes | QMessageBox.No)
             if reply == QMessageBox.Yes:
-                self.db_manager.delete_category(category)
+                if self.is_sub_category:
+                    self.db_manager.delete_sub_category(category)
+                else:
+                    self.db_manager.delete_category(category)
                 self.category_list.takeItem(self.category_list.row(current_item))
                 self.categories.remove(category)
         else:
-            QMessageBox.warning(self, "Warning", "Please select a category to delete.")
+            QMessageBox.warning(self, "Warning", f"Please select a {'sub-' if self.is_sub_category else ''}category to delete.")

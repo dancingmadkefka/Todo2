@@ -11,6 +11,7 @@ pyside6-rcc resources.qrc -o resources_rc.py
         <file>src/ui/icons/add.svg</file>
         <file>src/ui/icons/calendar.svg</file>
         <file>src/ui/icons/check.svg</file>
+        <file>src/ui/icons/dropdown_arrow.svg</file>
         </qresource>
 </RCC>
 
