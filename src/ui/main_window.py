@@ -119,6 +119,15 @@ class MainWindow(QMainWindow):
 
         main_layout.addLayout(input_layout)
 
+        # Add search layout
+        search_layout = QHBoxLayout()
+        search_label = QLabel("Search:")
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Search tasks...")
+        search_layout.addWidget(search_label)
+        search_layout.addWidget(self.search_input)
+        main_layout.addLayout(search_layout)
+
         self.filter_combo = QComboBox()
         self.filter_combo.addItems(["All", "Active", "Completed"])
         self.sort_combo = QComboBox()
@@ -188,6 +197,9 @@ class MainWindow(QMainWindow):
         self.category_combo.currentTextChanged.connect(self.check_dropdown)
         self.sub_category_combo.currentTextChanged.connect(self.check_dropdown)
         self.due_date_button.clicked.connect(self.show_date_picker)
+        
+        # Connect search input
+        self.search_input.textChanged.connect(self.apply_filter_and_sort)
 
     def set_button_icon(self, button, icon_name, icon_color=None):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
@@ -360,7 +372,9 @@ class MainWindow(QMainWindow):
         category_filter = self.category_filter_combo.currentText()
         sub_category_filter = self.sub_category_filter_combo.currentText()
         sort_order = Qt.AscendingOrder if self.sort_order_button.arrowType() == Qt.UpArrow else Qt.DescendingOrder
+        search_text = self.search_input.text().lower()
 
+        # First, apply completion status and category filters
         filtered_tasks = [
             task for task in self.all_tasks
             if (filter_option == "All" or
@@ -370,6 +384,11 @@ class MainWindow(QMainWindow):
                (sub_category_filter == "All Sub-Categories" or task.sub_category == sub_category_filter)
         ]
 
+        # Then apply search filter if there's search text
+        if search_text:
+            filtered_tasks = [task for task in filtered_tasks if search_text in task.title.lower()]
+
+        # Sort the filtered tasks
         sort_key = {
             "Due Date": lambda x: x.due_date or "9999-99-99",
             "Priority": lambda x: {"High": 0, "Medium": 1, "Med": 1, "Low": 2}.get(x.priority, 3),
@@ -379,8 +398,32 @@ class MainWindow(QMainWindow):
 
         filtered_tasks.sort(key=sort_key, reverse=(sort_order == Qt.DescendingOrder))
 
+        # Separate tasks into active and completed
+        active_tasks = [task for task in filtered_tasks if not task.completed]
+        completed_tasks = [task for task in filtered_tasks if task.completed]
+
+        # Clear and add tasks to the list
         self.todo_list.clear()
-        self.todo_list.add_tasks(filtered_tasks, sort_criteria=sort_option, sort_order=sort_order)
+        
+        # Add headers and tasks
+        if search_text:
+            if active_tasks:
+                self.todo_list.add_bold_separator("Active Tasks - Search Results")
+                for task in active_tasks:
+                    self.todo_list.add_task(task)
+            
+            if completed_tasks:
+                if active_tasks:  # Add extra separator if we had active tasks
+                    self.todo_list.add_bold_separator("")  # Empty separator for spacing
+                self.todo_list.add_bold_separator("Completed Tasks - Search Results")
+                for task in completed_tasks:
+                    self.todo_list.add_task(task)
+        else:
+            # If no search text, just add tasks normally
+            for task in active_tasks:
+                self.todo_list.add_task(task)
+            for task in completed_tasks:
+                self.todo_list.add_task(task)
 
         for task_widget in self.todo_list.findChildren(TaskWidget):
             task_widget.taskChanged.connect(self.update_task)
