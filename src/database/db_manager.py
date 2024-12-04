@@ -34,7 +34,8 @@ class DatabaseManager:
                     priority TEXT,
                     completed INTEGER DEFAULT 0,
                     category TEXT DEFAULT "Other",
-                    sub_category TEXT DEFAULT ""
+                    sub_category TEXT DEFAULT "",
+                    notes TEXT DEFAULT ""
                 )
             ''')
             self.cursor.execute('''
@@ -71,19 +72,23 @@ class DatabaseManager:
                 self.cursor.execute("ALTER TABLE tasks ADD COLUMN sub_category TEXT DEFAULT ''")
                 self.conn.commit()
                 print("Added sub_category column to tasks table")
+            if "notes" not in columns:
+                self.cursor.execute("ALTER TABLE tasks ADD COLUMN notes TEXT DEFAULT ''")
+                self.conn.commit()
+                print("Added notes column to tasks table")
         except sqlite3.Error as e:
             logging.error(f"Error updating schema: {e}")
             self.conn.rollback()
         finally:
             self.disconnect()
 
-    def add_task(self, title: str, description: str = "", due_date: str = "", priority: str = "Med", category: str = "Other", sub_category: str = "") -> int:
+    def add_task(self, title: str, description: str = "", due_date: str = "", priority: str = "Med", category: str = "Other", sub_category: str = "", notes: str = "") -> int:
         self.connect()
         try:
             self.cursor.execute('''
-                INSERT INTO tasks (title, description, due_date, priority, category, sub_category)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (title, description, due_date, priority, category, sub_category))
+                INSERT INTO tasks (title, description, due_date, priority, category, sub_category, notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (title, description, due_date, priority, category, sub_category, notes))
             task_id = self.cursor.lastrowid
             self.conn.commit()
             return task_id
@@ -108,7 +113,8 @@ class DatabaseManager:
                     'priority': task[4],
                     'completed': bool(task[5]),
                     'category': task[6],
-                    'sub_category': task[7]
+                    'sub_category': task[7],
+                    'notes': task[8]
                 }
             return None
         except sqlite3.Error as e:
@@ -117,14 +123,14 @@ class DatabaseManager:
         finally:
             self.disconnect()
 
-    def update_task(self, task_id: int, title: str, completed: bool, due_date: str, priority: str, category: str, sub_category: str, description: str = ""):
+    def update_task(self, task_id: int, title: str, completed: bool, due_date: str, priority: str, category: str, sub_category: str, description: str = "", notes: str = ""):
         self.connect()
         try:
             self.cursor.execute('''
                 UPDATE tasks
-                SET title = ?, description = ?, due_date = ?, priority = ?, completed = ?, category = ?, sub_category = ?
+                SET title = ?, description = ?, due_date = ?, priority = ?, completed = ?, category = ?, sub_category = ?, notes = ?
                 WHERE id = ?
-            ''', (title, description, due_date, priority, int(completed), category, sub_category, task_id))
+            ''', (title, description, due_date, priority, int(completed), category, sub_category, notes, task_id))
             self.conn.commit()
         except sqlite3.Error as e:
             logging.error(f"Error updating task: {e}")
@@ -156,7 +162,8 @@ class DatabaseManager:
                 'priority': task[4] if len(task) > 4 else "Med",
                 'completed': bool(task[5]) if len(task) > 5 else False,
                 'category': task[6] if len(task) > 6 else "Other",
-                'sub_category': task[7] if len(task) > 7 else ""
+                'sub_category': task[7] if len(task) > 7 else "",
+                'notes': task[8] if len(task) > 8 else ""
             } for task in tasks]
         except sqlite3.Error as e:
             logging.error(f"Error getting all tasks: {e}")

@@ -68,6 +68,14 @@ class TaskEditDialog(QDialog):
         else:
             self.set_date(QDate.currentDate())
 
+        # Add notes field
+        layout.addWidget(QLabel("Notes:"))
+        self.notes_input = QTextEdit(self.task.notes)
+        self.notes_input.setAcceptRichText(False)
+        self.notes_input.setPlaceholderText("Add notes here...")
+        self.notes_input.setMinimumHeight(100)  # Set a reasonable minimum height
+        layout.addWidget(self.notes_input)
+
         button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
@@ -95,6 +103,7 @@ class TaskEditDialog(QDialog):
         self.task.priority = self.priority_combo.currentText()
         self.task.category = self.category_combo.currentText()
         self.task.sub_category = self.sub_category_combo.currentText()
+        self.task.notes = self.notes_input.toPlainText()  # Get notes content
         # Convert the displayed date back to yyyy-MM-dd format for storage
         displayed_date = self.due_date_button.text()
         try:
@@ -116,7 +125,7 @@ class TaskEditDialog(QDialog):
 
     def sizeHint(self):
         # Provide a reasonable default size for the dialog
-        return QSize(400, 300)
+        return QSize(400, 500)  # Increased height to accommodate notes field
 
 class CategoryManageDialog(QDialog):
     def __init__(self, db_manager, parent=None, is_sub_category=False):

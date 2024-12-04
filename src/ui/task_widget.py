@@ -20,6 +20,7 @@ class TaskWidget(QWidget):
         self.setup_ui()
         self.update_text_style()
         self.installEventFilter(self)
+        self.update_tooltip()
 
     def setup_ui(self):
         layout = QHBoxLayout(self)
@@ -37,10 +38,19 @@ class TaskWidget(QWidget):
 
         text_layout = QVBoxLayout()
         text_layout.setSpacing(2)
+        
+        title_layout = QHBoxLayout()
         self.title_label = QLabel(self.task.title)
         self.title_label.setWordWrap(True)
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        text_layout.addWidget(self.title_label)
+        title_layout.addWidget(self.title_label)
+        
+        if self.task.notes:
+            self.notes_indicator = QLabel("📝")
+            self.notes_indicator.setObjectName("notesIndicator")
+            title_layout.addWidget(self.notes_indicator)
+        
+        text_layout.addLayout(title_layout)
 
         self.subtext_label = QLabel()
         self.subtext_label.setObjectName("subtextLabel")
@@ -94,6 +104,23 @@ class TaskWidget(QWidget):
         button.setIcon(icon)
         button.setIconSize(QSize(32, 32))
 
+    def update_tooltip(self):
+        tooltip_text = f"Title: {self.task.title}\n"
+        if self.task.description:
+            tooltip_text += f"Description: {self.task.description}\n"
+        if self.task.notes:
+            # Show first 100 characters of notes with ellipsis if longer
+            notes_preview = self.task.notes[:100] + ("..." if len(self.task.notes) > 100 else "")
+            tooltip_text += f"Notes: {notes_preview}\n"
+        tooltip_text += f"Priority: {self.task.priority}\n"
+        tooltip_text += f"Category: {self.task.category}\n"
+        if self.task.sub_category:
+            tooltip_text += f"Sub-category: {self.task.sub_category}\n"
+        if self.task.due_date:
+            tooltip_text += f"Due: {self.format_due_date(self.task.due_date)}"
+        
+        self.setToolTip(tooltip_text)
+
     @Slot(bool)
     def on_check_button_clicked(self, checked):
         self.task.completed = checked
@@ -117,6 +144,8 @@ class TaskWidget(QWidget):
             font.setStrikeOut(False)
         self.title_label.setFont(font)
         self.subtext_label.setFont(font)
+        if hasattr(self, 'notes_indicator'):
+            self.notes_indicator.setFont(font)
 
     @Slot()
     def on_delete_clicked(self):

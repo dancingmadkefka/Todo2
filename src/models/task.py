@@ -11,7 +11,8 @@ class Task:
     priority: str = "Medium"
     completed: bool = False
     category: str = "Other"
-    sub_category: str = ""  # New field for sub-category
+    sub_category: str = ""
+    notes: str = ""
     tags: List[str] = field(default_factory=list)
 
     def __post_init__(self):
@@ -27,7 +28,8 @@ class Task:
             "priority": self.priority,
             "completed": self.completed,
             "category": self.category,
-            "sub_category": self.sub_category,  # Include sub_category in to_dict
+            "sub_category": self.sub_category,
+            "notes": self.notes,
             "tags": self.tags
         }
 
@@ -41,7 +43,8 @@ class Task:
             priority=data.get("priority", "Medium"),
             completed=data.get("completed", False),
             category=data.get("category", "Other"),
-            sub_category=data.get("sub_category", ""),  # Include sub_category in from_dict
+            sub_category=data.get("sub_category", ""),
+            notes=data.get("notes", ""),
             tags=data.get("tags", [])
         )
 
@@ -50,7 +53,8 @@ class Task:
         due_date_str = f", Due: {self.due_date}" if self.due_date else ""
         tags_str = f", Tags: {', '.join(self.tags)}" if self.tags else ""
         sub_category_str = f" - {self.sub_category}" if self.sub_category else ""
-        return f"[{self.priority}] {self.title} ({status}{due_date_str}) - {self.category}{sub_category_str}{tags_str}"
+        notes_indicator = " 📝" if self.notes else ""  # Add notes indicator
+        return f"[{self.priority}] {self.title}{notes_indicator} ({status}{due_date_str}) - {self.category}{sub_category_str}{tags_str}"
 
     def is_overdue(self):
         if self.due_date:
