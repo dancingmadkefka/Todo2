@@ -166,6 +166,20 @@ QToolButton#editButton:hover, QToolButton#deleteButton:hover {
     border-radius: 20px;
 }
 
+/* Notes section styling */
+QTextEdit {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 13px;
+    margin: 0;
+}
+
+QTextEdit:focus {
+    border-color: #4CAF50;
+}
+
 /* Styles for bold separators and group headers */
 QFrame#BoldTaskSeparator {
     background-color: #999999;
@@ -193,9 +207,7 @@ QWidget#TaskWidget[selected="true"] {
     background-color: #F0F0F0;
 }
 
-/* Removed special styling for sub-category */
-
-/* Consistent styling for all combo boxes, including sub-category */
+/* Consistent styling for all combo boxes */
 QComboBox {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -216,7 +228,6 @@ QComboBox::down-arrow {
     height: 12px;
 }
 
-
 QLineEdit[filled="true"], QComboBox[filled="true"], QDateEdit[filled="true"] {
     border: 2px solid #4CAF50;
 }
@@ -226,12 +237,9 @@ QToolButton#dueDateButton[filled="true"] {
     background-color: #E8F5E9;
 }
 
-/* Consistent styling for all combo boxes, including sub-category */
-QComboBox {
-    background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-}
-
-QLineEdit[filled="true"], QComboBox[filled="true"], QDateEdit[filled="true"] {
-    border: 2px solid #4CAF50;
+/* Notes indicator styling */
+QLabel#notesIndicator {
+    font-size: 16px;
+    color: #666666;
+    margin-left: 5px;
 }

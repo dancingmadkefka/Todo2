@@ -1,5 +1,6 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QSizePolicy, QApplication
-from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent
+from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QLabel, 
+                                    QToolButton, QSizePolicy, QApplication, QTextEdit)
+from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QFont
 from .icon_utils import create_colored_icon
 from datetime import datetime
@@ -17,15 +18,23 @@ class TaskWidget(QWidget):
         self.date_format = date_format
         self.is_selected_for_deletion = False
         self.delete_button = None
+        self.is_expanded = False
         self.setup_ui()
         self.update_text_style()
         self.installEventFilter(self)
         self.update_tooltip()
+        self.setObjectName("TaskWidget")
 
     def setup_ui(self):
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(5, 5, 5, 5)
-        layout.setSpacing(10)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        # Task content
+        task_widget = QWidget()
+        task_layout = QHBoxLayout(task_widget)
+        task_layout.setContentsMargins(5, 5, 5, 5)
+        task_layout.setSpacing(10)
 
         self.check_button = QToolButton()
         self.check_button.setObjectName("checkButton")
@@ -34,12 +43,18 @@ class TaskWidget(QWidget):
         self.check_button.setChecked(self.task.completed)
         self.check_button.clicked.connect(self.on_check_button_clicked)
         self.check_button.setFixedSize(32, 32)
-        layout.addWidget(self.check_button)
+        task_layout.addWidget(self.check_button)
 
-        text_layout = QVBoxLayout()
-        text_layout.setSpacing(2)
+        # Main content area (clickable)
+        content_widget = QWidget()
+        content_widget.setCursor(Qt.PointingHandCursor)
+        content_widget.mousePressEvent = self.on_content_clicked
+        content_layout = QVBoxLayout(content_widget)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(2)
         
         title_layout = QHBoxLayout()
+        title_layout.setContentsMargins(0, 0, 0, 0)
         self.title_label = QLabel(self.task.title)
         self.title_label.setWordWrap(True)
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
@@ -50,17 +65,16 @@ class TaskWidget(QWidget):
             self.notes_indicator.setObjectName("notesIndicator")
             title_layout.addWidget(self.notes_indicator)
         
-        text_layout.addLayout(title_layout)
+        content_layout.addLayout(title_layout)
 
         self.subtext_label = QLabel()
         self.subtext_label.setObjectName("subtextLabel")
         self.subtext_label.setWordWrap(True)
         self.subtext_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        text_layout.addWidget(self.subtext_label)
+        content_layout.addWidget(self.subtext_label)
 
         self.update_subtext()
-
-        layout.addLayout(text_layout, 1)
+        task_layout.addWidget(content_widget, 1)
 
         button_layout = QHBoxLayout()
         button_layout.setSpacing(5)
@@ -78,9 +92,61 @@ class TaskWidget(QWidget):
         self.delete_button.setFixedSize(40, 40)
         button_layout.addWidget(self.delete_button)
 
-        layout.addLayout(button_layout)
+        task_layout.addLayout(button_layout)
+        layout.addWidget(task_widget)
+
+        # Notes editor
+        self.notes_editor = QTextEdit()
+        self.notes_editor.setVisible(False)
+        self.notes_editor.setMinimumHeight(0)
+        self.notes_editor.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        if self.task.notes:
+            self.notes_editor.setPlainText(self.task.notes)
+        self.notes_editor.focusOutEvent = self.on_notes_focus_lost
+        layout.addWidget(self.notes_editor)
 
         self.setMinimumWidth(300)
+
+    def on_content_clicked(self, event):
+        if event.button() == Qt.LeftButton:
+            self.toggle_notes_section()
+
+    def toggle_notes_section(self):
+        if not hasattr(self, 'animation'):
+            self.animation = QPropertyAnimation(self.notes_editor, b"minimumHeight")
+            self.animation.setDuration(200)
+            self.animation.setEasingCurve(QEasingCurve.InOutQuad)
+
+        if self.animation.state() == QPropertyAnimation.Running:
+            return
+
+        if not self.is_expanded:
+            self.notes_editor.setVisible(True)
+            self.animation.setStartValue(0)
+            self.animation.setEndValue(100)
+        else:
+            self.animation.setStartValue(100)
+            self.animation.setEndValue(0)
+            self.animation.finished.connect(lambda: self.notes_editor.setVisible(False))
+
+        self.animation.start()
+        self.is_expanded = not self.is_expanded
+
+    def on_notes_focus_lost(self, event):
+        super(QTextEdit, self.notes_editor).focusOutEvent(event)
+        new_notes = self.notes_editor.toPlainText()
+        if new_notes != self.task.notes:
+            self.task.notes = new_notes
+            self.taskChanged.emit(self.task)
+            
+            # Update notes indicator
+            if self.task.notes and not hasattr(self, 'notes_indicator'):
+                self.notes_indicator = QLabel("📝")
+                self.notes_indicator.setObjectName("notesIndicator")
+                self.title_label.parent().layout().addWidget(self.notes_indicator)
+            elif not self.task.notes and hasattr(self, 'notes_indicator'):
+                self.notes_indicator.deleteLater()
+                delattr(self, 'notes_indicator')
 
     def update_subtext(self):
         due_date = self.format_due_date(self.task.due_date)
