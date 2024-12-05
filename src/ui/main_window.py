@@ -320,7 +320,7 @@ class MainWindow(QMainWindow):
     def update_task(self, task):
         try:
             self.db_manager.update_task(
-                task.id, task.title, task.completed, task.due_date, task.priority, task.category, task.sub_category
+                task.id, task.title, task.completed, task.due_date, task.priority, task.category, task.sub_category, task.description, task.notes
             )
             for i, t in enumerate(self.all_tasks):
                 if t.id == task.id:
