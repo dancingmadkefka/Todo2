@@ -111,6 +111,10 @@ class TaskWidget(QWidget):
         if event.button() == Qt.LeftButton:
             self.toggle_notes_section()
 
+    def on_animation_finished(self):
+        if not self.is_expanded:
+            self.notes_editor.setVisible(False)
+
     def toggle_notes_section(self):
         if not hasattr(self, 'animation'):
             self.animation = QPropertyAnimation(self.notes_editor, b"minimumHeight")
@@ -120,6 +124,12 @@ class TaskWidget(QWidget):
         if self.animation.state() == QPropertyAnimation.Running:
             return
 
+        # Disconnect any existing finished connections
+        try:
+            self.animation.finished.disconnect()
+        except:
+            pass
+
         if not self.is_expanded:
             self.notes_editor.setVisible(True)
             self.animation.setStartValue(0)
@@ -127,7 +137,7 @@ class TaskWidget(QWidget):
         else:
             self.animation.setStartValue(100)
             self.animation.setEndValue(0)
-            self.animation.finished.connect(lambda: self.notes_editor.setVisible(False))
+            self.animation.finished.connect(self.on_animation_finished)
 
         self.animation.start()
         self.is_expanded = not self.is_expanded
