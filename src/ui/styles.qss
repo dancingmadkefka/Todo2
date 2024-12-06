@@ -149,6 +149,28 @@ QToolButton#editButton, QToolButton#deleteButton {
     border: none;
 }
 
+/* Multi-delete button styling */
+QToolButton#multi_delete_button {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #FF0000;
+    background-color: transparent;
+    border: 1px solid #FF0000;
+    border-radius: 3px;
+}
+
+QToolButton#multi_delete_button:hover {
+    background-color: #FFE6E6;
+}
+
+/* Delete button shift-held state */
+QToolButton#deleteButton[shift-held="true"] {
+    background-color: #FFE6E6;
+    border-radius: 20px;
+}
+
 QLabel#subtextLabel {
     font-size: 12px;
     font-weight: normal;

@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
         self.multi_delete_button = QToolButton()
         self.set_button_icon(self.multi_delete_button, "delete")
         self.multi_delete_button.setVisible(False)
-        self.multi_delete_button.clicked.connect(self.on_multi_delete_clicked)
+        self.multi_delete_button.clicked.connect(lambda: self.delete_tasks([task.task.id for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion]))
         self.multi_delete_layout.addWidget(self.multi_delete_label)
         self.multi_delete_layout.addWidget(self.multi_delete_button)
         filter_sort_layout.addLayout(self.multi_delete_layout)
@@ -547,19 +547,23 @@ class MainWindow(QMainWindow):
         self.multi_delete_label.setVisible(not visible)
         if visible:
             count = len([task for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion])
-            self.multi_delete_button.setText(f"x {count}")
-
-    @Slot()
-    def on_multi_delete_clicked(self):
-        selected_tasks = [task.task.id for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion]
-        self.delete_tasks(selected_tasks)
+            # Update the multi-delete button with counter
+            self.multi_delete_button.setText(f"×{count}")  # Using multiplication symbol
+            self.multi_delete_button.setStyleSheet("""
+                QToolButton {
+                    padding-right: 5px;
+                    text-align: right;
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+            """)
 
     @Slot(int, bool)
     def on_task_selected_for_deletion(self, task_id, selected):
         self.update_multi_delete_visibility(True)
         count = len([task for task in self.todo_list.findChildren(TaskWidget) if task.is_selected_for_deletion])
         if count > 0:
-            self.multi_delete_button.setText(f"x {count}")
+            self.multi_delete_button.setText(f"×{count}")  # Using multiplication symbol
         else:
             self.update_multi_delete_visibility(False)
 

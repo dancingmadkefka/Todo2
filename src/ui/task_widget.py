@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QLabel, 
                                     QToolButton, QSizePolicy, QApplication, QTextEdit)
 from PySide6.QtCore import Qt, Signal, Slot, QSize, QEvent, QPropertyAnimation, QEasingCurve
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QColor
 from .icon_utils import create_colored_icon
 from datetime import datetime
 import logging
@@ -19,6 +19,7 @@ class TaskWidget(QWidget):
         self.is_selected_for_deletion = False
         self.delete_button = None
         self.is_expanded = False
+        self.shift_held = False
         self.setup_ui()
         self.update_text_style()
         self.installEventFilter(self)
@@ -174,11 +175,20 @@ class TaskWidget(QWidget):
         icon_path = f":icons/src/ui/icons/{icon_name}.svg"
         base_color = self.palette().text().color()
         background_color = self.palette().window().color()
-        if hasattr(self, 'delete_button') and button == self.delete_button and self.is_selected_for_deletion:
-            base_color = base_color.lighter(150)
-        icon = create_colored_icon(icon_path, base_color, background_color)
-        button.setIcon(icon)
-        button.setIconSize(QSize(32, 32))
+        icon_color = None
+        
+        if button == self.delete_button:
+            if self.shift_held:
+                icon_color = QColor("#FF0000")  # Red color for shift-held state
+            elif self.is_selected_for_deletion:
+                icon_color = base_color.lighter(150)
+                
+        icon = create_colored_icon(icon_path, base_color, background_color, icon_color)
+        if not icon.isNull():
+            button.setIcon(icon)
+            button.setIconSize(QSize(32, 32))
+        else:
+            logging.warning(f"Failed to set icon for button: {icon_name}")
 
     def update_tooltip(self):
         tooltip_text = f"Title: {self.task.title}\n"
@@ -247,8 +257,15 @@ class TaskWidget(QWidget):
         self.taskEdited.emit(self.task)
 
     def eventFilter(self, obj, event):
-        if obj == self and event.type() == QEvent.PaletteChange:
-            self.update_icon_colors()
+        if obj == self:
+            if event.type() == QEvent.KeyPress and event.key() == Qt.Key_Shift:
+                self.shift_held = True
+                self.update_icon_colors()
+            elif event.type() == QEvent.KeyRelease and event.key() == Qt.Key_Shift:
+                self.shift_held = False
+                self.update_icon_colors()
+            elif event.type() == QEvent.PaletteChange:
+                self.update_icon_colors()
         return super().eventFilter(obj, event)
 
     def set_selected_for_deletion(self, selected):
