@@ -53,19 +53,19 @@ class TaskWidget(QWidget):
         content_layout = QVBoxLayout(content_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
         content_layout.setSpacing(2)
-        
+
         title_layout = QHBoxLayout()
         title_layout.setContentsMargins(0, 0, 0, 0)
         self.title_label = QLabel(self.task.title)
         self.title_label.setWordWrap(True)
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         title_layout.addWidget(self.title_label)
-        
+
         if self.task.notes:
             self.notes_indicator = QLabel("📝")
             self.notes_indicator.setObjectName("notesIndicator")
             title_layout.addWidget(self.notes_indicator)
-        
+            
         content_layout.addLayout(title_layout)
 
         self.subtext_label = QLabel()
@@ -125,12 +125,6 @@ class TaskWidget(QWidget):
         if self.animation.state() == QPropertyAnimation.Running:
             return
 
-        # Disconnect any existing finished connections
-        try:
-            self.animation.finished.disconnect()
-        except:
-            pass
-
         if not self.is_expanded:
             self.notes_editor.setVisible(True)
             self.animation.setStartValue(0)
@@ -149,7 +143,7 @@ class TaskWidget(QWidget):
         if new_notes != self.task.notes:
             self.task.notes = new_notes
             self.taskChanged.emit(self.task)
-            
+
             # Update notes indicator
             if self.task.notes and not hasattr(self, 'notes_indicator'):
                 self.notes_indicator = QLabel("📝")
@@ -176,13 +170,13 @@ class TaskWidget(QWidget):
         base_color = self.palette().text().color()
         background_color = self.palette().window().color()
         icon_color = None
-        
+
         if button == self.delete_button:
             if self.shift_held:
                 icon_color = QColor("#FF0000")  # Red color for shift-held state
             elif self.is_selected_for_deletion:
                 icon_color = base_color.lighter(150)
-                
+
         icon = create_colored_icon(icon_path, base_color, background_color, icon_color)
         if not icon.isNull():
             button.setIcon(icon)
@@ -204,7 +198,7 @@ class TaskWidget(QWidget):
             tooltip_text += f"Sub-category: {self.task.sub_category}\n"
         if self.task.due_date:
             tooltip_text += f"Due: {self.format_due_date(self.task.due_date)}"
-        
+
         self.setToolTip(tooltip_text)
 
     @Slot(bool)
@@ -310,3 +304,4 @@ class TaskWidget(QWidget):
     def set_date_format(self, date_format):
         self.date_format = date_format
         self.update_subtext()
+
