@@ -11750,3 +11750,393 @@
 2024-12-04 23:35:06,386 - root - INFO - Creating main window
 2024-12-04 23:35:06,818 - root - INFO - Showing main window
 2024-12-04 23:35:06,937 - root - INFO - Entering main event loop
+2024-12-04 23:54:06,148 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-04 23:54:06,148 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-04 23:54:06,287 - root - DEBUG - resources_rc imported successfully
+2024-12-04 23:54:06,288 - root - INFO - Starting the application...
+2024-12-04 23:54:06,288 - root - INFO - Initializing database...
+2024-12-04 23:54:06,304 - root - INFO - QApplication created
+2024-12-04 23:54:06,304 - root - INFO - Setting application style to Fusion
+2024-12-04 23:54:06,305 - root - INFO - Setting application icon
+2024-12-04 23:54:06,317 - root - INFO - Loading stylesheets
+2024-12-04 23:54:06,317 - root - DEBUG - Base stylesheet loaded
+2024-12-04 23:54:06,318 - root - DEBUG - User stylesheet loaded
+2024-12-04 23:54:06,318 - root - INFO - Creating main window
+2024-12-04 23:54:06,780 - root - INFO - Showing main window
+2024-12-04 23:54:06,912 - root - INFO - Entering main event loop
+2024-12-05 00:06:08,436 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:06:08,436 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:06:08,550 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:06:08,550 - root - INFO - Starting the application...
+2024-12-05 00:06:08,550 - root - INFO - Initializing database...
+2024-12-05 00:06:08,568 - root - INFO - QApplication created
+2024-12-05 00:06:08,568 - root - INFO - Setting application style to Fusion
+2024-12-05 00:06:08,568 - root - INFO - Setting application icon
+2024-12-05 00:06:08,580 - root - INFO - Loading stylesheets
+2024-12-05 00:06:08,587 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:06:08,588 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:06:08,588 - root - INFO - Creating main window
+2024-12-05 00:06:09,237 - root - INFO - Showing main window
+2024-12-05 00:06:09,380 - root - INFO - Entering main event loop
+2024-12-05 00:10:50,476 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:10:50,476 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:10:50,594 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:10:50,594 - root - INFO - Starting the application...
+2024-12-05 00:10:50,594 - root - INFO - Initializing database...
+2024-12-05 00:10:50,611 - root - INFO - QApplication created
+2024-12-05 00:10:50,611 - root - INFO - Setting application style to Fusion
+2024-12-05 00:10:50,612 - root - INFO - Setting application icon
+2024-12-05 00:10:50,624 - root - INFO - Loading stylesheets
+2024-12-05 00:10:50,631 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:10:50,631 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:10:50,631 - root - INFO - Creating main window
+2024-12-05 00:10:51,222 - root - INFO - Showing main window
+2024-12-05 00:10:51,354 - root - INFO - Entering main event loop
+2024-12-05 00:16:30,809 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:16:30,810 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:16:30,917 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:16:30,917 - root - INFO - Starting the application...
+2024-12-05 00:16:30,917 - root - INFO - Initializing database...
+2024-12-05 00:16:30,947 - root - INFO - QApplication created
+2024-12-05 00:16:30,947 - root - INFO - Setting application style to Fusion
+2024-12-05 00:16:30,948 - root - INFO - Setting application icon
+2024-12-05 00:16:30,960 - root - INFO - Loading stylesheets
+2024-12-05 00:16:30,967 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:16:30,968 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:16:30,968 - root - INFO - Creating main window
+2024-12-05 00:17:36,086 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:17:36,086 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:17:36,188 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:17:36,188 - root - INFO - Starting the application...
+2024-12-05 00:17:36,188 - root - INFO - Initializing database...
+2024-12-05 00:17:36,216 - root - INFO - QApplication created
+2024-12-05 00:17:36,217 - root - INFO - Setting application style to Fusion
+2024-12-05 00:17:36,217 - root - INFO - Setting application icon
+2024-12-05 00:17:36,233 - root - INFO - Loading stylesheets
+2024-12-05 00:17:36,234 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:17:36,234 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:17:36,234 - root - INFO - Creating main window
+2024-12-05 00:17:36,798 - root - INFO - Showing main window
+2024-12-05 00:17:36,924 - root - INFO - Entering main event loop
+2024-12-05 00:21:37,435 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:21:37,436 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:21:37,540 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:21:37,540 - root - INFO - Starting the application...
+2024-12-05 00:21:37,540 - root - INFO - Initializing database...
+2024-12-05 00:21:37,558 - root - INFO - QApplication created
+2024-12-05 00:21:37,559 - root - INFO - Setting application style to Fusion
+2024-12-05 00:21:37,559 - root - INFO - Setting application icon
+2024-12-05 00:21:37,571 - root - INFO - Loading stylesheets
+2024-12-05 00:21:37,577 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:21:37,577 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:21:37,577 - root - INFO - Creating main window
+2024-12-05 00:21:38,157 - root - INFO - Showing main window
+2024-12-05 00:21:38,288 - root - INFO - Entering main event loop
+2024-12-05 00:23:58,660 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:23:58,660 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:23:58,776 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:23:58,776 - root - INFO - Starting the application...
+2024-12-05 00:23:58,776 - root - INFO - Initializing database...
+2024-12-05 00:23:58,794 - root - INFO - QApplication created
+2024-12-05 00:23:58,794 - root - INFO - Setting application style to Fusion
+2024-12-05 00:23:58,795 - root - INFO - Setting application icon
+2024-12-05 00:23:58,807 - root - INFO - Loading stylesheets
+2024-12-05 00:23:58,808 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:23:58,808 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:23:58,808 - root - INFO - Creating main window
+2024-12-05 00:23:59,382 - root - INFO - Showing main window
+2024-12-05 00:23:59,505 - root - INFO - Entering main event loop
+2024-12-05 00:25:33,353 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:25:33,353 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:25:33,458 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:25:33,458 - root - INFO - Starting the application...
+2024-12-05 00:25:33,459 - root - INFO - Initializing database...
+2024-12-05 00:25:33,477 - root - INFO - QApplication created
+2024-12-05 00:25:33,477 - root - INFO - Setting application style to Fusion
+2024-12-05 00:25:33,477 - root - INFO - Setting application icon
+2024-12-05 00:25:33,490 - root - INFO - Loading stylesheets
+2024-12-05 00:25:33,490 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:25:33,490 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:25:33,491 - root - INFO - Creating main window
+2024-12-05 00:25:34,075 - root - INFO - Showing main window
+2024-12-05 00:25:34,198 - root - INFO - Entering main event loop
+2024-12-05 00:27:49,014 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:27:49,014 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:27:49,121 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:27:49,122 - root - INFO - Starting the application...
+2024-12-05 00:27:49,122 - root - INFO - Initializing database...
+2024-12-05 00:27:49,137 - root - INFO - QApplication created
+2024-12-05 00:27:49,138 - root - INFO - Setting application style to Fusion
+2024-12-05 00:27:49,138 - root - INFO - Setting application icon
+2024-12-05 00:27:49,149 - root - INFO - Loading stylesheets
+2024-12-05 00:27:49,150 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:27:49,150 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:27:49,150 - root - INFO - Creating main window
+2024-12-05 00:27:49,676 - root - INFO - Showing main window
+2024-12-05 00:27:49,809 - root - INFO - Entering main event loop
+2024-12-05 00:29:33,435 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:29:33,436 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:29:33,545 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:29:33,546 - root - INFO - Starting the application...
+2024-12-05 00:29:33,546 - root - INFO - Initializing database...
+2024-12-05 00:29:33,566 - root - INFO - QApplication created
+2024-12-05 00:29:33,566 - root - INFO - Setting application style to Fusion
+2024-12-05 00:29:33,567 - root - INFO - Setting application icon
+2024-12-05 00:29:33,579 - root - INFO - Loading stylesheets
+2024-12-05 00:29:33,579 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:29:33,579 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:29:33,580 - root - INFO - Creating main window
+2024-12-05 00:29:34,159 - root - INFO - Showing main window
+2024-12-05 00:29:34,285 - root - INFO - Entering main event loop
+2024-12-05 00:31:21,645 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:31:21,646 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:31:21,745 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:31:21,745 - root - INFO - Starting the application...
+2024-12-05 00:31:21,745 - root - INFO - Initializing database...
+2024-12-05 00:31:21,764 - root - INFO - QApplication created
+2024-12-05 00:31:21,764 - root - INFO - Setting application style to Fusion
+2024-12-05 00:31:21,765 - root - INFO - Setting application icon
+2024-12-05 00:31:21,777 - root - INFO - Loading stylesheets
+2024-12-05 00:31:21,778 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:31:21,778 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:31:21,778 - root - INFO - Creating main window
+2024-12-05 00:31:22,335 - root - INFO - Showing main window
+2024-12-05 00:31:22,468 - root - INFO - Entering main event loop
+2024-12-05 00:36:10,547 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-05 00:36:10,547 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-05 00:36:10,657 - root - DEBUG - resources_rc imported successfully
+2024-12-05 00:36:10,657 - root - INFO - Starting the application...
+2024-12-05 00:36:10,657 - root - INFO - Initializing database...
+2024-12-05 00:36:10,688 - root - INFO - QApplication created
+2024-12-05 00:36:10,688 - root - INFO - Setting application style to Fusion
+2024-12-05 00:36:10,689 - root - INFO - Setting application icon
+2024-12-05 00:36:10,704 - root - INFO - Loading stylesheets
+2024-12-05 00:36:10,705 - root - DEBUG - Base stylesheet loaded
+2024-12-05 00:36:10,705 - root - DEBUG - User stylesheet loaded
+2024-12-05 00:36:10,705 - root - INFO - Creating main window
+2024-12-05 00:36:11,342 - root - INFO - Showing main window
+2024-12-05 00:36:11,468 - root - INFO - Entering main event loop
+2024-12-06 00:33:22,109 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:33:22,110 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:33:22,397 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:33:22,397 - root - INFO - Starting the application...
+2024-12-06 00:33:22,397 - root - INFO - Initializing database...
+2024-12-06 00:33:22,416 - root - INFO - QApplication created
+2024-12-06 00:33:22,417 - root - INFO - Setting application style to Fusion
+2024-12-06 00:33:22,417 - root - INFO - Setting application icon
+2024-12-06 00:33:22,439 - root - INFO - Loading stylesheets
+2024-12-06 00:33:22,439 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:33:22,446 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:33:22,446 - root - INFO - Creating main window
+2024-12-06 00:33:23,094 - root - INFO - Showing main window
+2024-12-06 00:33:23,225 - root - INFO - Entering main event loop
+2024-12-06 00:34:53,671 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:34:53,671 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:34:53,761 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:34:53,761 - root - INFO - Starting the application...
+2024-12-06 00:34:53,761 - root - INFO - Initializing database...
+2024-12-06 00:34:53,776 - root - INFO - QApplication created
+2024-12-06 00:34:53,776 - root - INFO - Setting application style to Fusion
+2024-12-06 00:34:53,777 - root - INFO - Setting application icon
+2024-12-06 00:34:53,788 - root - INFO - Loading stylesheets
+2024-12-06 00:34:53,788 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:34:53,788 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:34:53,788 - root - INFO - Creating main window
+2024-12-06 00:34:54,308 - root - INFO - Showing main window
+2024-12-06 00:34:54,431 - root - INFO - Entering main event loop
+2024-12-06 00:35:09,613 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:35:09,613 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:35:09,707 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:35:09,707 - root - INFO - Starting the application...
+2024-12-06 00:35:09,707 - root - INFO - Initializing database...
+2024-12-06 00:35:09,724 - root - INFO - QApplication created
+2024-12-06 00:35:09,724 - root - INFO - Setting application style to Fusion
+2024-12-06 00:35:09,725 - root - INFO - Setting application icon
+2024-12-06 00:35:09,738 - root - INFO - Loading stylesheets
+2024-12-06 00:35:09,739 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:35:09,739 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:35:09,739 - root - INFO - Creating main window
+2024-12-06 00:35:10,278 - root - INFO - Showing main window
+2024-12-06 00:35:10,402 - root - INFO - Entering main event loop
+2024-12-06 00:38:11,714 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:38:11,714 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:38:11,811 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:38:11,811 - root - INFO - Starting the application...
+2024-12-06 00:38:11,811 - root - INFO - Initializing database...
+2024-12-06 00:38:11,830 - root - INFO - QApplication created
+2024-12-06 00:38:11,830 - root - INFO - Setting application style to Fusion
+2024-12-06 00:38:11,831 - root - INFO - Setting application icon
+2024-12-06 00:38:11,842 - root - INFO - Loading stylesheets
+2024-12-06 00:38:11,843 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:38:11,843 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:38:11,843 - root - INFO - Creating main window
+2024-12-06 00:38:12,392 - root - INFO - Showing main window
+2024-12-06 00:38:12,511 - root - INFO - Entering main event loop
+2024-12-06 00:42:37,578 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:42:37,579 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:42:37,682 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:42:37,682 - root - INFO - Starting the application...
+2024-12-06 00:42:37,682 - root - INFO - Initializing database...
+2024-12-06 00:42:37,702 - root - INFO - QApplication created
+2024-12-06 00:42:37,702 - root - INFO - Setting application style to Fusion
+2024-12-06 00:42:37,703 - root - INFO - Setting application icon
+2024-12-06 00:42:37,715 - root - INFO - Loading stylesheets
+2024-12-06 00:42:37,715 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:42:37,716 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:42:37,716 - root - INFO - Creating main window
+2024-12-06 00:42:38,290 - root - INFO - Showing main window
+2024-12-06 00:42:38,413 - root - INFO - Entering main event loop
+2024-12-06 00:45:19,602 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 00:45:19,602 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 00:45:19,697 - root - DEBUG - resources_rc imported successfully
+2024-12-06 00:45:19,697 - root - INFO - Starting the application...
+2024-12-06 00:45:19,697 - root - INFO - Initializing database...
+2024-12-06 00:45:19,714 - root - INFO - QApplication created
+2024-12-06 00:45:19,714 - root - INFO - Setting application style to Fusion
+2024-12-06 00:45:19,715 - root - INFO - Setting application icon
+2024-12-06 00:45:19,726 - root - INFO - Loading stylesheets
+2024-12-06 00:45:19,727 - root - DEBUG - Base stylesheet loaded
+2024-12-06 00:45:19,727 - root - DEBUG - User stylesheet loaded
+2024-12-06 00:45:19,727 - root - INFO - Creating main window
+2024-12-06 00:45:20,691 - root - INFO - Showing main window
+2024-12-06 00:45:20,819 - root - INFO - Entering main event loop
+2024-12-06 01:13:35,396 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 01:13:35,397 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 01:13:35,494 - root - DEBUG - resources_rc imported successfully
+2024-12-06 01:13:35,494 - root - INFO - Starting the application...
+2024-12-06 01:13:35,495 - root - INFO - Initializing database...
+2024-12-06 01:13:35,510 - root - INFO - QApplication created
+2024-12-06 01:13:35,510 - root - INFO - Setting application style to Fusion
+2024-12-06 01:13:35,511 - root - INFO - Setting application icon
+2024-12-06 01:13:35,523 - root - INFO - Loading stylesheets
+2024-12-06 01:13:35,524 - root - DEBUG - Base stylesheet loaded
+2024-12-06 01:13:35,524 - root - DEBUG - User stylesheet loaded
+2024-12-06 01:13:35,524 - root - INFO - Creating main window
+2024-12-06 01:13:36,481 - root - INFO - Showing main window
+2024-12-06 01:13:36,604 - root - INFO - Entering main event loop
+2024-12-06 01:27:21,792 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 01:27:21,793 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 01:27:21,890 - root - DEBUG - resources_rc imported successfully
+2024-12-06 01:27:21,890 - root - INFO - Starting the application...
+2024-12-06 01:27:21,890 - root - INFO - Initializing database...
+2024-12-06 01:27:21,906 - root - INFO - QApplication created
+2024-12-06 01:27:21,906 - root - INFO - Setting application style to Fusion
+2024-12-06 01:27:21,907 - root - INFO - Setting application icon
+2024-12-06 01:27:21,918 - root - INFO - Loading stylesheets
+2024-12-06 01:27:21,918 - root - DEBUG - Base stylesheet loaded
+2024-12-06 01:27:21,918 - root - DEBUG - User stylesheet loaded
+2024-12-06 01:27:21,918 - root - INFO - Creating main window
+2024-12-06 01:27:22,887 - root - INFO - Showing main window
+2024-12-06 01:27:23,011 - root - INFO - Entering main event loop
+2024-12-06 01:30:32,102 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 01:30:32,102 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 01:30:32,197 - root - DEBUG - resources_rc imported successfully
+2024-12-06 01:30:32,197 - root - INFO - Starting the application...
+2024-12-06 01:30:32,197 - root - INFO - Initializing database...
+2024-12-06 01:30:32,214 - root - INFO - QApplication created
+2024-12-06 01:30:32,214 - root - INFO - Setting application style to Fusion
+2024-12-06 01:30:32,214 - root - INFO - Setting application icon
+2024-12-06 01:30:32,226 - root - INFO - Loading stylesheets
+2024-12-06 01:30:32,227 - root - DEBUG - Base stylesheet loaded
+2024-12-06 01:30:32,227 - root - DEBUG - User stylesheet loaded
+2024-12-06 01:30:32,227 - root - INFO - Creating main window
+2024-12-06 01:30:33,159 - root - INFO - Showing main window
+2024-12-06 01:30:33,282 - root - INFO - Entering main event loop
+2024-12-06 01:50:28,943 - root - DEBUG - Python path: ['C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python312\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python312\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python312', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages', 'C:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 01:50:28,943 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 01:50:37,437 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 01:50:37,437 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 01:50:37,541 - root - DEBUG - resources_rc imported successfully
+2024-12-06 01:50:37,542 - root - INFO - Starting the application...
+2024-12-06 01:50:37,542 - root - INFO - Initializing database...
+2024-12-06 01:50:37,557 - root - INFO - QApplication created
+2024-12-06 01:50:37,557 - root - INFO - Setting application style to Fusion
+2024-12-06 01:50:37,557 - root - INFO - Setting application icon
+2024-12-06 01:50:37,575 - root - INFO - Loading stylesheets
+2024-12-06 01:50:37,575 - root - DEBUG - Base stylesheet loaded
+2024-12-06 01:50:37,575 - root - DEBUG - User stylesheet loaded
+2024-12-06 01:50:37,575 - root - INFO - Creating main window
+2024-12-06 01:50:38,138 - root - INFO - Showing main window
+2024-12-06 01:50:38,264 - root - INFO - Entering main event loop
+2024-12-06 02:01:46,601 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:01:46,601 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:01:46,713 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:01:46,713 - root - INFO - Starting the application...
+2024-12-06 02:01:46,713 - root - INFO - Initializing database...
+2024-12-06 02:01:46,714 - root - INFO - QApplication created
+2024-12-06 02:01:46,714 - root - INFO - Setting application style to Fusion
+2024-12-06 02:01:46,714 - root - INFO - Setting application icon
+2024-12-06 02:01:46,736 - root - INFO - Loading stylesheets
+2024-12-06 02:01:46,746 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:01:46,746 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:01:46,746 - root - INFO - Creating main window
+2024-12-06 02:03:41,013 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:03:41,013 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:03:41,111 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:03:41,111 - root - INFO - Starting the application...
+2024-12-06 02:03:41,116 - root - INFO - Initializing database...
+2024-12-06 02:03:41,131 - root - INFO - QApplication created
+2024-12-06 02:03:41,131 - root - INFO - Setting application style to Fusion
+2024-12-06 02:03:41,131 - root - INFO - Setting application icon
+2024-12-06 02:03:41,142 - root - INFO - Loading stylesheets
+2024-12-06 02:03:41,143 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:03:41,143 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:03:41,143 - root - INFO - Creating main window
+2024-12-06 02:03:41,651 - root - INFO - Showing main window
+2024-12-06 02:03:41,774 - root - INFO - Entering main event loop
+2024-12-06 02:06:09,353 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:06:09,354 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:06:09,450 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:06:09,450 - root - INFO - Starting the application...
+2024-12-06 02:06:09,450 - root - INFO - Initializing database...
+2024-12-06 02:06:09,467 - root - INFO - QApplication created
+2024-12-06 02:06:09,467 - root - INFO - Setting application style to Fusion
+2024-12-06 02:06:09,467 - root - INFO - Setting application icon
+2024-12-06 02:06:09,480 - root - INFO - Loading stylesheets
+2024-12-06 02:06:09,480 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:06:09,480 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:06:09,480 - root - INFO - Creating main window
+2024-12-06 02:06:09,979 - root - INFO - Showing main window
+2024-12-06 02:06:10,098 - root - INFO - Entering main event loop
+2024-12-06 02:06:28,073 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:06:28,073 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:06:28,167 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:06:28,167 - root - INFO - Starting the application...
+2024-12-06 02:06:28,167 - root - INFO - Initializing database...
+2024-12-06 02:06:28,183 - root - INFO - QApplication created
+2024-12-06 02:06:28,183 - root - INFO - Setting application style to Fusion
+2024-12-06 02:06:28,183 - root - INFO - Setting application icon
+2024-12-06 02:06:28,195 - root - INFO - Loading stylesheets
+2024-12-06 02:06:28,195 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:06:28,195 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:06:28,195 - root - INFO - Creating main window
+2024-12-06 02:06:28,688 - root - INFO - Showing main window
+2024-12-06 02:06:28,808 - root - INFO - Entering main event loop
+2024-12-06 02:17:52,914 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:17:52,914 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:17:53,019 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:17:53,019 - root - INFO - Starting the application...
+2024-12-06 02:17:53,019 - root - INFO - Initializing database...
+2024-12-06 02:17:53,038 - root - INFO - QApplication created
+2024-12-06 02:17:53,039 - root - INFO - Setting application style to Fusion
+2024-12-06 02:17:53,039 - root - INFO - Setting application icon
+2024-12-06 02:17:53,050 - root - INFO - Loading stylesheets
+2024-12-06 02:17:53,051 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:17:53,051 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:17:53,051 - root - INFO - Creating main window
+2024-12-06 02:17:53,548 - root - INFO - Showing main window
+2024-12-06 02:17:53,681 - root - INFO - Entering main event loop
+2024-12-06 02:23:35,375 - root - DEBUG - Python path: ['c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app\\src', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\python311.zip', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\DLLs', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311', 'C:\\Users\\daniel\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages', 'c:\\Users\\daniel\\VSCodeProjects\\Todo2\\todo_app']
+2024-12-06 02:23:35,375 - root - DEBUG - Current working directory: C:\Users\daniel\VSCodeProjects\Todo2\todo_app
+2024-12-06 02:23:35,488 - root - DEBUG - resources_rc imported successfully
+2024-12-06 02:23:35,488 - root - INFO - Starting the application...
+2024-12-06 02:23:35,488 - root - INFO - Initializing database...
+2024-12-06 02:23:35,509 - root - INFO - QApplication created
+2024-12-06 02:23:35,509 - root - INFO - Setting application style to Fusion
+2024-12-06 02:23:35,510 - root - INFO - Setting application icon
+2024-12-06 02:23:35,523 - root - INFO - Loading stylesheets
+2024-12-06 02:23:35,523 - root - DEBUG - Base stylesheet loaded
+2024-12-06 02:23:35,523 - root - DEBUG - User stylesheet loaded
+2024-12-06 02:23:35,523 - root - INFO - Creating main window
+2024-12-06 02:23:36,019 - root - INFO - Showing main window
+2024-12-06 02:23:36,150 - root - INFO - Entering main event loop

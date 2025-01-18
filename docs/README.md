@@ -1,175 +1,147 @@
-# Todo App
+# Todo2 - A Modern Desktop Task Manager
 
-## Project Overview
+Todo2 is a feature-rich desktop task management application built with Python and PySide6. It offers a clean, intuitive interface while providing powerful organization features and customization options.
 
-This Todo App is a desktop application built using Python and PySide6 (Qt for Python). It provides a user-friendly interface for managing tasks, including features such as task creation, editing, deletion, filtering, and sorting. The app also supports task categories and priority levels.
+## ✨ Key Features
 
-## Installation
+- 🗂️ **Smart Organization**
+  - Organize tasks with categories and subcategories
+  - Filter and sort tasks by multiple criteria
+  - Quick task creation with keyboard shortcuts
+  - Multi-select tasks for batch operations
 
-1. Ensure you have Python 3.7+ installed on your system.
-2. Clone this repository:
+- 📅 **Date Management**
+  - Set due dates for tasks
+  - Customizable date format
+  - Visual indicators for overdue tasks
+
+- 🎨 **Customization**
+  - Fully customizable color themes
+  - Dark/light mode support
+  - Adjustable UI elements
+
+- 📝 **Rich Task Details**
+  - Add detailed notes to tasks
+  - Priority levels
+  - Task completion tracking
+  - Task descriptions
+
+- 💾 **Data Management**
+  - Automatic saving
+  - SQLite database backend
+  - Efficient data handling
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.7 or higher
+- PySide6 (Qt for Python)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/Todo2.git
+   cd Todo2/todo_app
    ```
-   git clone https://github.com/yourusername/todo-app.git
-   cd todo-app
-   ```
-3. Install the required dependencies:
-   ```
+
+2. Install dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+3. Run the application:
+   ```bash
+   python src/main.py
+   ```
 
-To run the Todo App, execute the following command from the project root directory:
+### Building from Source
 
-```
-python src/main.py
-```
+For detailed instructions on building a standalone executable, see [BUILD_GUIDE.md](docs/BUILD_GUIDE.md).
 
-## Project Structure
+## 🎯 Usage
 
-The project is organized as follows:
+1. **Adding Tasks**
+   - Type your task in the input field
+   - Set priority, category, and due date (optional)
+   - Press Enter or click the add button
 
-```
-todo_app/
-│
-├── src/
-│   ├── database/
-│   │   ├── __init__.py
-│   │   └── db_manager.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── task.py
-│   ├── ui/
-│   │   ├── icons/
-│   │   │   ├── add.png
-│   │   │   ├── categories.png
-│   │   │   ├── delete.png
-│   │   │   └── edit.png
-│   │   │   └── app_icon.ico
-│   │   ├── __init__.py
-│   │   ├── main_window.py
-│   │   └── styles.qss
-│   ├── __init__.py
-│   └── main.py
-├── todo.db
-└── README.md
-```
+2. **Managing Tasks**
+   - Click the checkbox to mark tasks as complete
+   - Use the edit button to modify task details
+   - Hold Shift to select multiple tasks for deletion
+   - Filter tasks using the dropdown menus
+   - Sort tasks by due date, priority, or category
 
-### Key Components
+3. **Customization**
+   - Click "Customize Colors" to change the application theme
+   - Adjust date formats through Settings > Date Format
+   - Manage categories and subcategories through their respective dropdowns
 
-1. `main.py`: The entry point of the application. It initializes the database, sets up the GUI, and runs the main event loop.
+For detailed UI customization information, see [UI_STYLING_GUIDE.md](docs/UI_STYLING_GUIDE.md).
 
-2. `database/db_manager.py`: Handles all database operations, including CRUD operations for tasks and categories.
+## 🤝 Contributing
 
-3. `models/task.py`: Defines the Task data model used throughout the application.
+Contributions are welcome! This project is perfect for both beginners and experienced developers. Here's how you can help:
 
-4. `ui/main_window.py`: Contains the main window class and related widgets for the application's user interface.
+### Areas for Contribution
 
-5. `ui/styles.qss`: Defines the CSS-like styles for the application's UI components.
+- 🐛 Bug fixes and improvements
+- ✨ New features
+- 🎨 UI/UX enhancements
+- 📝 Documentation improvements
+- 🌐 Internationalization
 
-## Developer's Guide
+### Getting Started with Development
 
-### Main Application Flow
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
 
-1. The application starts in `main.py`, which initializes the database and creates the main window.
-2. The `MainWindow` class in `ui/main_window.py` sets up the user interface and handles user interactions.
-3. Tasks are stored in an SQLite database (`todo.db`) and managed through the `DatabaseManager` class in `database/db_manager.py`.
-4. The `Task` class in `models/task.py` represents individual tasks and provides methods for task manipulation.
+See our [contribution guidelines](CONTRIBUTING.md) for more details.
 
-### Key Classes and Their Responsibilities
+## 🗺️ Roadmap
 
-1. `DatabaseManager` (in `db_manager.py`):
-   - Handles all database operations (CRUD for tasks and categories)
-   - Manages database connections and table creation
+Future development plans include:
 
-2. `Task` (in `task.py`):
-   - Represents a single task with properties like title, description, due date, priority, etc.
-   - Provides methods for task serialization and deserialization
+- [ ] Task reminders and notifications
+- [ ] Cloud sync capabilities
+- [ ] Mobile companion app
+- [ ] Task sharing and collaboration
+- [ ] Data import/export features
+- [ ] Advanced task filtering and search
+- [ ] Custom task fields
+- [ ] Task templates
 
-3. `MainWindow` (in `main_window.py`):
-   - Sets up the main application window and UI components
-   - Handles user interactions and updates the UI accordingly
-   - Manages task filtering and sorting
+## 🛠️ Technical Details
 
-4. `TaskWidget` (in `main_window.py`):
-   - Represents a single task in the UI
-   - Handles task-specific interactions like marking as complete, editing, and deleting
+- **Backend**: Python with SQLite database
+- **Frontend**: PySide6 (Qt for Python)
+- **Architecture**: MVC pattern
+- **Build System**: PyInstaller for creating standalone executables
 
-5. `TodoListWidget` (in `main_window.py`):
-   - Custom QListWidget for displaying tasks
-   - Manages the list of TaskWidget items
+## 📄 License
 
-6. `TaskEditDialog` (in `main_window.py`):
-   - Dialog for editing task details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-7. `CategoryManageDialog` (in `main_window.py`):
-   - Dialog for managing categories (add, edit, delete)
+## 🙏 Acknowledgments
 
-### UI/Styling Guide
+- Built with [PySide6](https://wiki.qt.io/Qt_for_Python)
+- Icons from [Material Design Icons](https://materialdesignicons.com/)
+- Community contributors and testers
 
-The application's user interface is styled using Qt Style Sheets (QSS), which is similar to CSS. The styles are defined in `ui/styles.qss`. Here's a guide to help you understand and modify the UI:
+## 📸 Screenshots
+*Main application interface with task list and controls*
+![Main Interface](screenshots/main.png)
 
-1. **Global Styles**: 
-   - Font family, size, and colors are set for all QWidget instances
-   - Background color for the main window is set to white
+*Category management interface*
+![Category Management](screenshots/categories.png)
 
-2. **Input Area Styles**:
-   - Styles for QLineEdit, QComboBox, and QDateEdit (padding, border, border-radius)
-   - Focus styles for input elements
-   - Button styles (background color, hover and pressed states)
+*Color customization dialog*
+![Color Customization](screenshots/colors.png)
 
-3. **Task List Styles**:
-   - Styles for the QListWidget that displays tasks
-   - Item padding and border styles
 
-4. **Task Widget Styles**:
-   - Styles for individual task widgets
-   - Completed task styles (gray color and strike-through text)
-
-5. **Priority Label Styles**:
-   - Color-coded labels for different priority levels (Low: green, Medium: yellow, High: red)
-
-6. **Scrollbar Styles**:
-   - Custom scrollbar appearance
-
-7. **Dialog Styles**:
-   - Styles for QDialog (used in task editing and category management)
-
-8. **Checkbox Styles**:
-   - Custom checkbox appearance
-
-To modify the UI:
-
-- **Colors**: Look for color codes (e.g., #4a90e2) and change them to your desired colors
-- **Sizes**: Adjust pixel values for padding, margins, and sizes
-- **Fonts**: Modify font-family, font-size, and font-weight properties
-- **Layout**: Adjust padding, margin, and border properties to change spacing and layout
-
-Example: To change the primary button color, find this section in `styles.qss`:
-
-```qss
-QPushButton {
-    background-color: #4a90e2;
-}
-```
-
-And change the color code to your desired color:
-
-```qss
-QPushButton {
-    background-color: #00a86b;
-}
-```
-
-Remember to restart the application after making changes to the QSS file to see the effects.
-
-## Extending the Application
-
-To add new features or modify existing ones:
-
-1. **New Task Properties**: Update the `Task` class in `models/task.py` and modify the database schema in `database/db_manager.py`.
-2. **UI Changes**: Modify `ui/main_window.py` to add new widgets or change the layout. Update `ui/styles.qss` for styling.
-3. **New Functionality**: Add new methods to `MainWindow` or create new dialog classes as needed.
-4. **Database Changes**: Update `DatabaseManager` in `db_manager.py` to add new database operations.
-
-Always ensure that changes are reflected across all relevant components (model, database, and UI) to maintain consistency.
+---
