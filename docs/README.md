@@ -1,6 +1,6 @@
 # Todo2 - A Modern Desktop Task Manager
 
-Todo2 is a feature-rich desktop task management application built with Python and PySide6. It offers a clean, intuitive interface while providing powerful organization features and customization options.
+Todo2 is a feature-rich desktop task management application built with Python and PySide6. It offers a clean, intuitive interface while providing powerful organization features and customization options. I made it with the help of Claude 3.5 Sonnet with the goal of using it in work on my Windows laptop.
 
 ## ✨ Key Features
 
@@ -90,7 +90,7 @@ Contributions are welcome! This project is perfect for both beginners and experi
 - ✨ New features
 - 🎨 UI/UX enhancements
 - 📝 Documentation improvements
-- 🌐 Internationalization
+-  General code improvements
 
 ### Getting Started with Development
 
@@ -109,12 +109,8 @@ Future development plans include:
 
 - [ ] Task reminders and notifications
 - [ ] Cloud sync capabilities
-- [ ] Mobile companion app
-- [ ] Task sharing and collaboration
 - [ ] Data import/export features
-- [ ] Advanced task filtering and search
-- [ ] Custom task fields
-- [ ] Task templates
+
 
 ## 🛠️ Technical Details
 
@@ -130,8 +126,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Built with [PySide6](https://wiki.qt.io/Qt_for_Python)
-- Icons from [Material Design Icons](https://materialdesignicons.com/)
-- Community contributors and testers
 
 ## 📸 Screenshots
 *Main application interface with task list and controls*
