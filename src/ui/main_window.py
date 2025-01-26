@@ -287,8 +287,8 @@ class MainWindow(QMainWindow):
                 category = "" if category == "Manage Categories" else category
                 sub_category = self.sub_category_combo.currentText()
                 sub_category = "" if sub_category == "Manage Sub-Categories" else sub_category
-                due_date_str = self.due_date_button.toolTip().split(": ")[-1]
-                due_date = QDate.fromString(due_date_str, "yyyy-MM-dd") if due_date_str != "Set due date" else QDate.currentDate()
+                # Get selected date directly from calendar widget
+                due_date = self.calendar_widget.selectedDate() if self.due_date_button.toolTip() != "Set due date" else QDate.currentDate()
                 task = Task(
                     id=self.db_manager.add_task(
                         title,
